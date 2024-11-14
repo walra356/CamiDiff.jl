@@ -1,5 +1,5 @@
 name = "CamiDiff"
-#uuid = "8158483f-66fa-4647-b7e5-8803d6f3c019"
+uuid = "2453a446-82e3-4664-a8e3-5851c117fba8"
 authors = ["= <walra356@planet.nl> and contributors"]
 version = "0.0.1" 
  
