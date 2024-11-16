@@ -69,7 +69,8 @@ end
 ```math
     f[n] = h(n-1)
 ```
-* `ID = 4`: polynomial grid function of degree `p = length(c)` based on `polynom` ``c = [c_1,c_2,⋯\ c_p]``,
+* `ID = 4`: polynomial grid function of degree `p = length(c)` defined by its coefficients 
+(its `polynom` vector) ``c = [c_1,c_2,⋯\ c_p]``,
 ```math
     f[n] = c_1h(n-1) + c_2(h(n-1))^2 + ⋯ + c_p(h(n-1))^p
 ```
