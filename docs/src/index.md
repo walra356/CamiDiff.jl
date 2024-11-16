@@ -14,7 +14,6 @@ A package for finite-difference analysis
 
 ## Introduction
 
-
 ## Grid
 
 The `Grid` object is the backbone for the numerical procedure on a non-uniform
