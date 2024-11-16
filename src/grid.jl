@@ -55,7 +55,7 @@ function _linear_gridfunction(n::Int, h::T; deriv=0) where T <: Real
 end
 
 @doc raw"""
-    gridfunction(ID::Int, n::Int, h::T; p=5, coords=[0,1], deriv=0) where T <: Real
+    gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
 * `ID = 1`: exponential grid function,
 ```math
@@ -88,16 +88,16 @@ r = [gridfunction(3, n-1, h) for n=1:5]              # linear
 r′= [gridfunction(3, n-1, h; deriv=1) for n=1:5]     # linear (first derivative)
    [0.1, 0.1, 0.1, 0.1, 0.1]
 
-  r = [gridfunction(4, n-1, h; coords = [0,1,1/2,1/6,1/24]) for n=1:5]  # polynomial of degree 4)
+  r = [gridfunction(4, n-1, h; polynom = [0,1,1/2,1/6,1/24]) for n=1:5]  # polynomial of degree 4)
    [0.0, 0.10517083333333334, 0.2214, 0.3498375000000001, 0.49173333333333336]
 ```
 """
-function gridfunction(ID::Int, n::Int, h::T; p=5, coords=[0,1], deriv=0) where T <: Real
+function gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
     return  ID == 1 ? _walterjohnson(n, h; deriv) :
             ID == 2 ? _jw_gridfunction(n, h; deriv, p) :
             ID == 3 ? _linear_gridfunction(n, h; deriv) :
-            ID == 4 ? CamiMath.polynomial(coords, h*n; deriv) : throw(DomainError(ID, "unknown gridfunction"))
+            ID == 4 ? CamiMath.polynomial(polynom, h*n; deriv) : throw(DomainError(ID, "unknown gridfunction"))
 
 end
 
@@ -124,14 +124,14 @@ function gridname(ID::Int)
    
 end
     
-# .............. _gridspecs(ID, N, mytype, h, r0; p=5, coords=[0,1]) ...........
+# .............. _gridspecs(ID, N, mytype, h, r0; p=5, polynom=[0,1]) ...........
     
-function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, coords=[0,1], epn=5, k=5, msg=true)
+function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=5, msg=true)
     
     Rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
            ID == 2 ? r0 * _jw_gridfunction(N, h; p) :
            ID == 3 ? r0 * _linear_gridfunction(N, h)  :
-           ID == 4 ? r0 * CamiMath.polynomial(coords, h*N) : throw(DomainError(ID, "unknown gridfunction"))
+           ID == 4 ? r0 * CamiMath.polynomial(polynom, h*N) : throw(DomainError(ID, "unknown gridfunction"))
 
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
     name = gridname(ID::Int)
@@ -143,7 +143,7 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, coords=[0,1],
     return ID == 1 ? strA * "h = " * str_h * ", r0 = " * str_r0 :
            ID == 2 ? strA * "p = $p, h = " * str_h * ", r0 = " * str_r0 :
            ID == 3 ? strA * "p = 1, h = " * str_h * ", r0 = " * str_r0 :
-           ID == 4 ? strA * "coords = $(coords), h = " * str_h * ", r0 = " * str_r0 : throw(DomainError(ID, "unknown gridfunction"))
+           ID == 4 ? strA * "polynom = $(polynom), h = " * str_h * ", r0 = " * str_r0 : throw(DomainError(ID, "unknown gridfunction"))
     
 end
     
@@ -180,10 +180,10 @@ struct Grid{T}
     k::Int
 end
 
-# ====== castGrid(ID, T, N; h=1, r0=0.01,  p=5, coords=[0,1], epn=5, k=7) ====
+# ====== castGrid(ID, T, N; h=1, r0=0.01,  p=5, polynom=[0,1], epn=5, k=7) ====
 
 """
-    castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, coords=[0,1], epn=5, k=7, msg=false)
+    castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
 
 Method to create the Grid object
 
@@ -209,27 +209,27 @@ julia> grid.r′
  0.1
  0.1
 
-julia> grid = castGrid(4, 4, Float64; coords=[0, 1, 1/2, 1/6, 1/24], h = 0.1, r0 = 1.0, msg=true);
-Grid created: polynomial, Float64, Rmax = 0.491733 a.u., Ntot = 4, coords = [0.0, 1.0, 0.5, 0.16666666666666666, 0.041666666666666664], h = 0.1, r0 = 1.0
+julia> grid = castGrid(4, 4, Float64; polynom=[0, 1, 1/2, 1/6, 1/24], h = 0.1, r0 = 1.0, msg=true);
+Grid created: polynomial, Float64, Rmax = 0.491733 a.u., Ntot = 4, polynom = [0.0, 1.0, 0.5, 0.16666666666666666, 0.041666666666666664], h = 0.1, r0 = 1.0
  
 ```
 """
-function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, coords=[0,1], epn=5, k=5, msg=false)
+function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=5, msg=false)
 # ==============================================================================
 #  castGrid: creates the grid object
 # ==============================================================================
     h = convert(T, h)
     r0 = convert(T, r0)
-    coords = convert.(T, coords)
+    polynom = convert.(T, polynom)
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
     name = gridname(ID)
 
-    r = r0 * [gridfunction(ID, n-1, h; p, coords) for n=1:N]
-    r′= r0 * [gridfunction(ID, n-1, h; p, coords, deriv=1) for n=1:N]     # r′= dr/dn
+    r = r0 * [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
+    r′= r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
 
     r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
 
-    msg && println(_gridspecs(ID, N, T; h, r0,  p, coords, epn, k, msg))
+    msg && println(_gridspecs(ID, N, T; h, r0,  p, polynom, epn, k, msg))
 
     return Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
 
