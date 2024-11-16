@@ -14,6 +14,23 @@ A package for finite-difference analysis
 
 ## Introduction
 
+
+## Grid
+
+The `Grid` object is the backbone for the numerical procedure on a non-uniform
+grid. Its principal fields are `grid.r` and `grid.r′`, which are discrete
+functions of `N` elements representing the grid function and its derivative.
+
+```@docs
+Grid{T}
+gridname(ID::Int)
+gridfunction(ID::Int, n::Int, h::T; p=5, coords=[0,1], deriv=0) where T <: Real
+castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, coords=[0,1], epn=5, k=7, msg=true)
+findIndex(rval::T, grid::Grid{T}) where T<:Number
+grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
+grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
+```
+
 ## Finite-difference methods
 
 ### Finite differences
