@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 
-# author: Jook Walraven - 16-11-2024
+# author: Jook Walraven - 18-11-2024
 
 # ==============================================================================
 #                               grid.jl
@@ -28,7 +28,7 @@ Type with fields:
 * `.k`:     finite-difference order (`::Int`)
 The object `Grid` is best created with the function [`castGrid`](@ref).
 """
-struct Grid{T}
+struct Grid1{T}
 ID::Int
 name::String
 T::Type
@@ -87,26 +87,40 @@ function _linear_gridfunction(n::Int, h::T; deriv=0) where T <: Real
     return f
     
 end
+# ..............................................................................     
+function _polynomial_gridfunction(n::Int, h::T; polynom=[0,1], deriv=0) where T <: Real
+# ==============================================================================
+#  polynomial_gridfunction(n, h; deriv) 
+# ==============================================================================
+    p = length(polynom) - 1
+    deriv ≥ 0 || return T(0)
+    deriv ≤ p || return T(0)
+
+    f = deriv > 0 ? h^(deriv) * CamiMath.polynomial(polynom, n*h; deriv) :
+                                CamiMath.polynomial(polynom, n*h)
+    return f
+    
+end
 # ..............................................................................
 @doc raw"""
     gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
 * `ID = 1`: exponential grid function,
 ```math
-    f[n] = \text{exp}(h * (n-1)) - 1.0
+    f[n] = \text{exp}(h(n-1)) - 1.0
 ```
 * `ID = 2`: quasi-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
-    f[n] = h(n-1) + \frac{1}{2}(h * (n-1))^2 + ⋯ + \frac{1}{p!}(h * (n-1))^p
+    f[n] = h(n-1) + \frac{1}{2}(h(n-1))^2 + ⋯ + \frac{1}{p!}(h(n-1))^p
 ```
 * `ID = 3`: linear grid function,
 ```math
     f[n] = h(n-1)
 ```
-* `ID = 4`: polynomial grid function of degree `p = length(c) - 1` defined by its coefficients 
-(its `polynom` vector) ``c = [c_0, c_1,⋯\ c_p]``,
+* `ID = 4`: polynomial grid function of degree `p = length(c)` defined by its coefficients 
+(its `polynom` vector) ``c = [c_1,c_2,⋯\ c_p]``,
 ```math
-    f[n] = c_h * (n-1) + c_2 * (h * (n-1))^2 + ⋯ + c_p * (h * (n-1))^p
+    f[n] = c_1h(n-1) + c_2(h(n-1))^2 + ⋯ + c_p(h(n-1))^p
 ```
 #### Examples:
 ```
@@ -132,7 +146,7 @@ function gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where 
     return  ID == 1 ? _walterjohnson(n, h; deriv) :
             ID == 2 ? _jw_gridfunction(n, h; deriv, p) :
             ID == 3 ? _linear_gridfunction(n, h; deriv) :
-            ID == 4 ? CamiMath.polynomial(polynom, h*n; deriv) : throw(DomainError(ID, "unknown gridfunction"))
+            ID == 4 ? _polynomial_gridfunction(n, h; polynom, deriv) : throw(DomainError(ID, "unknown gridfunction"))
 
 end
 
@@ -142,17 +156,17 @@ end
     
 function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001, rmax=0, p=5, polynom=[0,1], epn=5, k=5, msg=true)
     
-    Rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
+    rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
            ID == 2 ? r0 * _jw_gridfunction(N, h; p) :
            ID == 3 ? r0 * _linear_gridfunction(N, h)  :
-           ID == 4 ? r0 * CamiMath.polynomial(polynom, h*N) : throw(DomainError(ID, "unknown gridfunction"))
+           ID == 4 ? r0 * _polynomial_gridfunction(N, h; polynom) : throw(DomainError(ID, "unknown gridfunction"))
 
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
     name = gridname(ID::Int)
     str_h = repr(h, context=:compact => true)
     str_r0 = repr(r0, context=:compact => true)
     str_rmax = repr(rmax, context=:compact => true)
-    strA = "Grid created: $(name), $(T), rmax = "  * str_rmax * " a.u., Ntot = $N, "
+    strA = "Grid created: $(name), $(T), rmax = "  * str_rmax * ", Ntot = $N, "
     
     return ID == 1 ? strA * "h = " * str_h * ", r0 = " * str_r0 :
            ID == 2 ? strA * "p = $p, h = " * str_h * ", r0 = " * str_r0 :
@@ -204,18 +218,19 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001, p=5, polynom=[0,1], e
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
     name = gridname(ID)
 
-    r  = r0 * [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
-    r′ = r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
-    r′′= r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d2r/dn2
+    r  = r0 .* [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
+    r′ = r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
+    r′′= r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d2r/dn2
 
     r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
     rmax = r[N]
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
-    return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
+    return Grid1(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
 
 end
+
 # ........................ gridname(ID) ........................................
 @doc raw"""
     gridname(ID::Int)
