@@ -4,9 +4,46 @@
 
 # ==============================================================================
 #                               grid.jl
-# ==============================================================================
+# ============================================================================== 
 
-# ======================== gridfunction(n, h; deriv=0) =========================
+# ------------------------------------------------------------------------------
+#           Grid (ID, name, Type, N, r, r′, h, r0, epn, epw, k)
+# ------------------------------------------------------------------------------
+
+"""
+Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
+
+Type with fields:
+* `.ID`:   grid identifer name (`::Int`)
+* `.name`: grid identifer name (`::String`)
+* `.T`:    gridType (`::Type`)
+* `.N`:    number of grid points (`::Int`)
+* `.r `:   tabulated grid function (`::Vector{T}`)
+* `.r′`:   tabulated derivative of grid function (`::Vector{T}`)
+* `.h` :   grid step multiplyer (`::T`)
+* `.r0`:   grid scale factor (`::T`)
+* `.epn`:  number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
+* `.epw`:  trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
+* `.k`:    Adams-Moulton order (`::Int`)
+The object `Grid` is best created with the function [`castGrid`](@ref).
+"""
+struct Grid{T}
+ID::Int
+name::String
+T::Type
+N::Int
+r ::Vector{T}
+r′::Vector{T}
+h::T
+r0::T
+epn::Int
+epw::Vector{Vector{T}}
+k::Int
+end
+
+# ------------------------------------------------------------------------------
+#                        gridfunction(n, h; deriv=0)
+# ------------------------------------------------------------------------------
 
 function _walterjohnson(n::Int, h::T; deriv=0) where T <: Real
 # ==============================================================================
@@ -19,9 +56,7 @@ function _walterjohnson(n::Int, h::T; deriv=0) where T <: Real
     return f
     
 end
-    
-    # ..............................................................................
-    
+# ..............................................................................    
 function _jw_gridfunction(n::Int, h::T; p=5, deriv=0) where T <: Real
 # ==============================================================================
 # jw_gridfunction(n, h [; p=5[, deriv=0]]) based on truncated exponential 
@@ -37,9 +72,7 @@ function _jw_gridfunction(n::Int, h::T; p=5, deriv=0) where T <: Real
 return f
     
 end
-    
-# ..............................................................................
-    
+# ..............................................................................     
 function _linear_gridfunction(n::Int, h::T; deriv=0) where T <: Real
 # ==============================================================================
 #  linear_gridfunction(n, h; deriv) = n * h
@@ -52,7 +85,7 @@ function _linear_gridfunction(n::Int, h::T; deriv=0) where T <: Real
     return f
     
 end
-
+# ..............................................................................
 @doc raw"""
     gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
@@ -101,30 +134,9 @@ function gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where 
 
 end
 
-# ........................ gridname(ID) ........................................
-@doc raw"""
-    gridname(ID::Int)
-    
-Name corresponding to the grid ID.
-#### Example:
-```
-julia> gridname(2)
-"quasi-exponential"
-```
-"""
-function gridname(ID::Int)
-# ==============================================================================
-#  Name used for `Grid` of given `grid.ID`
-# ==============================================================================
-    
-    return ID == 1 ? "exponential" :
-           ID == 2 ? "quasi-exponential" :
-           ID == 3 ? "linear (uniform)" :
-           ID == 4 ? "polynomial" : throw(DomainError(ID, "unknown gridfunction"))
-   
-end
-    
-# .............. _gridspecs(ID, N, mytype, h, r0; p=5, polynom=[0,1]) ...........
+# ------------------------------------------------------------------------------
+#            castGrid(ID, T, N; h=1, r0=0.01,  p=5, polynom=[0,1], epn=5, k=7)
+# ------------------------------------------------------------------------------
     
 function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=5, msg=true)
     
@@ -146,44 +158,10 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1]
            ID == 4 ? strA * "polynom = $(polynom), h = " * str_h * ", r0 = " * str_r0 : throw(DomainError(ID, "unknown gridfunction"))
     
 end
-    
-# ========== Grid (ID, name, Type, N, r, r′, h, r0, epn, epw, k) ===============
-
-"""
-    Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
-
-Type with fields:
-* `.ID`:   grid identifer name (`::Int`)
-* `.name`: grid identifer name (`::String`)
-* `.T`:    gridType (`::Type`)
-* `.N`:    number of grid points (`::Int`)
-* `.r `:   tabulated grid function (`::Vector{T}`)
-* `.r′`:   tabulated derivative of grid function (`::Vector{T}`)
-* `.h` :   grid step multiplyer (`::T`)
-* `.r0`:   grid scale factor (`::T`)
-* `.epn`:  number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
-* `.epw`:  trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
-* `.k`:    Adams-Moulton order (`::Int`)
-The object `Grid` is best created with the function [`castGrid`](@ref).
-"""
-struct Grid{T}
-    ID::Int
-    name::String
-    T::Type
-    N::Int
-    r ::Vector{T}
-    r′::Vector{T}
-    h::T
-    r0::T
-    epn::Int
-    epw::Vector{Vector{T}}
-    k::Int
-end
-
-# ====== castGrid(ID, T, N; h=1, r0=0.01,  p=5, polynom=[0,1], epn=5, k=7) ====
-
-"""
+# ..............................................................................
+@doc raw"""
     castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
+    castGrid(1, N::Int, T::Type [; h=1 [, r0=1 [, [epn=5 [, k=7 [, msg=false]]]]]])
 
 Method to create the Grid object
 
@@ -233,6 +211,28 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], 
 
     return Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
 
+end
+# ........................ gridname(ID) ........................................
+@doc raw"""
+    gridname(ID::Int)
+    
+Name corresponding to the grid ID.
+#### Example:
+```
+julia> gridname(2)
+"quasi-exponential"
+```
+"""
+function gridname(ID::Int)
+# ==============================================================================
+#  Name used for `Grid` of given `grid.ID`
+# ==============================================================================
+    
+    return ID == 1 ? "exponential" :
+           ID == 2 ? "quasi-exponential" :
+           ID == 3 ? "linear (uniform)" :
+           ID == 4 ? "polynomial" : throw(DomainError(ID, "unknown gridfunction"))
+   
 end
 
 # =============== findIndex(rval, grid) ========================================

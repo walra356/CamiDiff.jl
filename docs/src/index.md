@@ -27,8 +27,8 @@ julia> using CamiMath
 `CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*, 
 which we shall denote by ``f(x)``. 
 
-The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, ``f(x) ↦ f[n]``, 
-which involves a map
+The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, ``f(x) ↦ f[n]``. 
+This involves the map
 ```math
 n ↦ x
 ```
