@@ -14,8 +14,8 @@ A [Julia](http://julialang.org) package for finite-difference analysis
 
 ## Introduction
 
-In [`CamiDiff`](@ref) we present general purpose tools for the finite difference analysis 
-of [`Real`](@ref) analytic functions of a single variable, which we denote by ``f(x)``. 
+In `CamiDiff` we present general purpose tools for the finite difference analysis 
+of *Real* analytic functions of a single variable, which we denote by ``f(x)``. 
 
 The finite-difference analysis starts by discretization of ``f(x)`` onto a grid of ``N`` points,
 ```math
@@ -36,7 +36,7 @@ f[n] = r0 g(t[n]),
 where ``g(t)`` is a (generally nonlinear) function, the *grid function*, and ``r0`` the 
 *scaling factor*.
 
-[`CamiDiff`](@ref) was developped for the use of spherical coordinates, i.e., for case of 
+`CamiDiff` was developped for the use of spherical coordinates, i.e., for case of 
 zero offset (``x0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``, with
 ```math
 r = t(n) ≡ (n−1) * h.
