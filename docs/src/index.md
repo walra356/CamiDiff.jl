@@ -4,9 +4,19 @@ CurrentModule = CamiDiff
 
 # CamiDiff.jl
 
-A [Julia](http://julialang.org) package for finite-difference analysis
+A [Julia](http://julialang.org) package for one-dimensional finite-difference analysis
 
 ---
+
+## Install
+
+The package is installed using the Julia package manager
+
+```
+julia> using Pkg; Pkg.add("CamiMath")
+
+julia> using CamiMath
+```
 ## Table of contents
 
 ```@contents
