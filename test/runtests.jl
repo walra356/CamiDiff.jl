@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: MIT
 
-using Pkg
 using CamiDiff
 using CamiMath
 
