@@ -15,31 +15,31 @@ A [Julia](http://julialang.org) package for finite-difference analysis
 ## Introduction
 
 In `CamiDiff` we present general purpose tools for the finite difference analysis 
-of *Real* analytic functions of a single variable, which we denote by ``f(x)``. 
+of *Real analytic functions of a single variable*, which we denote by ``f(x)``. 
 
-The finite-difference analysis starts by discretization of ``f(x)`` onto a grid of ``N`` points,
+Finite-difference analysis starts by discretization of ``f(x)`` onto a grid of ``N`` points,
 ```math
 f(x) ↦ f[n],
 ```
 where ``f[n]`` is a discrete function representing the function ``f`` at position 
 ```math
-x = t(n) ≡ (n−u) * h + x0.
+x = x(n) ≡ (n−u) * h + x0.
 ```
-Here the *linear function* ``t(n)`` is called the *step function*, with ``u`` the *index base*, 
-``h`` the *step size* and ``x0`` the *offset* of the grid. As [Julia](http://julialang.org) is a unit-based 
-language (``u == 1``), we have ``f[1] = f(x0)``. 
+Here the *linear function* ``x(n)`` is called the *step function*, with ``u`` the *index base*, 
+``h`` the *step size* and ``x_0`` the *offset* of the grid. As [Julia](http://julialang.org) is a unit-based 
+language (``u = 1``), we have ``f[1] = f(x_0)``. 
 
 The discretization map is defined by 
 ```math
-f[n] = r0 g(t[n]),
+f[n] = s_0 g(t[n]),
 ```
-where ``g(t)`` is a (generally nonlinear) function, the *grid function*, and ``r0`` the 
+where ``g(t)`` is a (generally nonlinear) function, the *grid function*, and ``s_0`` the 
 *scaling factor*.
 
-`CamiDiff` was developped for the use of spherical coordinates, i.e., for case of 
-zero offset (``x0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``, with
+NB. `CamiDiff` was developped for the use of spherical coordinates, i.e., for case of 
+zero offset (``x_0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``, with
 ```math
-r = t(n) ≡ (n−1) * h.
+r = r(n) ≡ (n−1) * h.
 ```
 
 ## Grid
