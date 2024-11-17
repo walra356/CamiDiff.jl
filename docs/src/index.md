@@ -51,7 +51,8 @@ we recognize in ``f[n]`` a discrete function representing the (continuous) funct
 As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
-and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``.
+and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather 
+than ``f(x)``, with ``r ≥ 0``.
 
 ## Grid
 
