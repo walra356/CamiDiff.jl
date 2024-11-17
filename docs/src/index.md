@@ -17,24 +17,24 @@ A [Julia](http://julialang.org) package for finite-difference analysis
 In `CamiDiff` we present general purpose tools for the finite difference analysis 
 of *Real analytic functions of a single variable*, which we denote by ``f(x)``. 
 
-Finite-difference analysis starts by discretization of ``f(x)`` onto a [`Grid`]@ref() of ``N`` points,
+Finite-difference analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points,
 ```math
-f(x) ↦ f[n],
+f(x) ↦ f[n].
 ```
-where ``f[n]`` is a discrete function representing the function ``f`` at position 
+Here, ``f[n]`` is a discrete function representing the function ``f`` at position 
 ```math
-x = x(n) ≡ (n−u) * h + x0.
+x[n] = s_0 * g(t[n]) + x_0,
 ```
-Here the *linear function* ``x(n)`` is called the *step function*, with ``u`` the *index base*, 
-``h`` the *step size* and ``x_0`` the *offset* of the grid. As [Julia](http://julialang.org) is a unit-based 
-language (``u = 1``), we have ``f[1] = f(x_0)``. 
+where ``g(t)``, with ``g(0) = 0``, is called the *grid function*, with *scaling factor* ``s_0`` and *offset* ``x_0``. 
+The grid function is a (generally nonlinear) function running  through the origin, (), 
+of the *ticks* function
+```math
+t(n) ≡ (n−u) * h,
+```
+which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*. As 
+[Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(0)``. 
 
 The discretization map is defined by 
-```math
-f[n] = s_0 * g(t[n]),
-```
-where ``g(t)`` is a (generally nonlinear) function, the *grid function*, and ``s_0`` the 
-*scaling factor*.
 
 NB. `CamiDiff` was developped for the use of spherical coordinates, i.e., for case of 
 zero offset (``x_0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``, with
