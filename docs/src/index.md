@@ -17,7 +17,7 @@ A [Julia](http://julialang.org) package for finite-difference analysis
 In `CamiDiff` we present general purpose tools for the finite difference analysis 
 of *Real analytic functions of a single variable*, which we denote by ``f(x)``. 
 
-Finite-difference analysis starts by discretization of ``f(x)`` onto a grid of ``N`` points,
+Finite-difference analysis starts by discretization of ``f(x)`` onto a [`Grid`]@ref() of ``N`` points,
 ```math
 f(x) ↦ f[n],
 ```
@@ -31,7 +31,7 @@ language (``u = 1``), we have ``f[1] = f(x_0)``.
 
 The discretization map is defined by 
 ```math
-f[n] = s_0 g(t[n]),
+f[n] = s_0 * g(t[n]),
 ```
 where ``g(t)`` is a (generally nonlinear) function, the *grid function*, and ``s_0`` the 
 *scaling factor*.
@@ -42,6 +42,7 @@ zero offset (``x_0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``,
 r = r(n) ≡ (n−1) * h.
 ```
 
+
 ## Grid
 
 The `Grid` object is the backbone for the numerical procedure on a non-uniform
@@ -50,9 +51,9 @@ functions of `N` elements representing the grid function and its derivative.
 
 ```@docs
 Grid{T}
-gridname(ID::Int)
-gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=7, msg=true)
+gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
+gridname(ID::Int)
 findIndex(rval::T, grid::Grid{T}) where T<:Number
 grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
 grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real

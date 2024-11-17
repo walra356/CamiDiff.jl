@@ -9,33 +9,32 @@
 # ======================== gridfunction(n, h; deriv=0) =========================
 
 function _walterjohnson(n::Int, h::T; deriv=0) where T <: Real
-    # ==============================================================================
-    #  gridfunction(n, h) = (exp((n-1) * h)-1.0) # gridfunction from Walter Johnson
-    # ==============================================================================
-        deriv ≥ 0 || return 0.0
+# ==============================================================================
+#  gridfunction(n, h) = (exp((n-1) * h)-1.0) # gridfunction from Walter Johnson
+# ==============================================================================
+    deriv ≥ 0 || return 0.0
     
-        f = deriv > 0 ? h^(deriv)*exp(n*h) : exp(n*h)-1
+    f = deriv > 0 ? h^(deriv)*exp(n*h) : exp(n*h)-1
     
-        return f
+    return f
     
-    end
+end
     
     # ..............................................................................
     
 function _jw_gridfunction(n::Int, h::T; p=5, deriv=0) where T <: Real
-    # ==============================================================================
-    # jw_gridfunction(n, h [; p=5[, deriv=0]]) based on truncated exponential 
-    # ==============================================================================
-        deriv ≥ 0 || return T(0)
-        deriv ≤ p || return T(0)
+# ==============================================================================
+# jw_gridfunction(n, h [; p=5[, deriv=0]]) based on truncated exponential 
+# ==============================================================================
+    deriv ≥ 0 || return T(0)
+    deriv ≤ p || return T(0)
     
-        nul = T(0)
+    nul = T(0)
     
-        f = deriv > 0 ? h^(deriv)*CamiMath.texp(n*h, nul, p-deriv) : 
-                                  CamiMath.texp(n*h, nul, p) - 1  
-                                   # note: texp() not exp()
+    f = deriv > 0 ? h^(deriv)*CamiMath.texp(n*h, nul, p-deriv) : 
+                    CamiMath.texp(n*h, nul, p) - 1  # note: texp() not exp()
     
-        return f
+return f
     
 end
     
