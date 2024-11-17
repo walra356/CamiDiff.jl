@@ -36,26 +36,21 @@ which we define by the discrete function
 x[n] = s_0 * g(t[n]) + x_0,
 ```
 where ``g(t)`` is called the *grid function*, with *scaling factor* ``s_0`` and *offset* ``x_0``. 
-The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``, 
-and defined on the domain ``[0, ∞). Its argument is the *ticks function*
+The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``. 
+Its argument is the *ticks function*
 ```math
 t[n] ≡ (n−u) * h,
 ```
-which is a *linear* function, with ``u`` its *index base* and ``h`` iys *step size*.
+which is a *linear* function, with ``u`` its *index base* and ``h`` its *step size*.
 Writing
 ```math
 f[n] = f(x[n]),
 ```
-we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f`` at position ``x[n]``. As 
-[Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
+we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f`` at position ``x[n]``. 
+As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
 
-The discretization map is defined by 
-
-NB. `CamiDiff` was developped for use with spherical coordinates. For this case we write ``f(r)`` rather than ``f(x)``, with
-```math
-r = r(n) ≡ (n−1) * h.
-```
-
+NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
+and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``.
 
 ## Grid
 
