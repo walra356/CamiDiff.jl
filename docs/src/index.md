@@ -27,21 +27,22 @@ julia> using CamiMath
 `CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*, 
 which we shall denote by ``f(x)``. 
 
-The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, which involves a map
+The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, ``f(x) ↦ f[n]``, 
+which involves a map
 ```math
-n ↦ x ⇒ f(x) ↦ f[n]
+n ↦ x
 ```
 which we define by the discrete function
 ```math
 x[n] = s_0 * g(t[n]) + x_0,
 ```
-where ``g(t)`` is called the *grid function*, with *scaling factor* ``s_0`` and *offset* ``x_0``. 
+where ``g(t)`` is called the *grid function*, ``s_0`` the *scaling factor* and ``x_0`` the *offset* . 
 The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``. 
 Its argument is the *ticks function*
 ```math
 t[n] ≡ (n−u) * h,
 ```
-which is a *linear* function, with ``u`` its *index base* and ``h`` its *step size*.
+which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*.
 Writing
 ```math
 f[n] = f(x[n]),
@@ -67,8 +68,6 @@ findIndex(rval::T, grid::Grid{T}) where T<:Number
 grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
 grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
 ```
-
-
 
 ## Finite-difference methods
 
