@@ -28,7 +28,7 @@ Type with fields:
 * `.k`:     finite-difference order (`::Int`)
 The object `Grid` is best created with the function [`castGrid`](@ref).
 """
-struct Grid1{T}
+struct Grid{T}
 ID::Int
 name::String
 T::Type
