@@ -7,24 +7,25 @@
 # ============================================================================== 
 
 # ------------------------------------------------------------------------------
-#           Grid (ID, name, Type, N, r, r′, h, r0, epn, epw, k)
+#           Grid (ID, name, Type, N, r, r′, r′′, h, r0, epn, epw, k)
 # ------------------------------------------------------------------------------
 
 """
 Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
 
 Type with fields:
-* `.ID`:   grid identifer name (`::Int`)
-* `.name`: grid identifer name (`::String`)
-* `.T`:    gridType (`::Type`)
-* `.N`:    number of grid points (`::Int`)
-* `.r `:   tabulated grid function (`::Vector{T}`)
-* `.r′`:   tabulated derivative of grid function (`::Vector{T}`)
-* `.h` :   grid step multiplyer (`::T`)
-* `.r0`:   grid scale factor (`::T`)
-* `.epn`:  number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
-* `.epw`:  trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
-* `.k`:    Adams-Moulton order (`::Int`)
+* `.ID`:    grid identifer name (`::Int`)
+* `.name`:  grid identifer name (`::String`)
+* `.T`:     gridType (`::Type`)
+* `.N`:     number of grid points (`::Int`)
+* `.r  `:   tabulated grid function (`::Vector{T}`)
+* `.r′ `:   tabulated derivative of grid function (`::Vector{T}`)
+* `.r′′`:   tabulated derivative of grid function (`::Vector{T}`)
+* `.h` :    grid step multiplyer (`::T`)
+* `.r0`:    grid scale factor (`::T`)
+* `.epn`:   number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
+* `.epw`:   trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
+* `.k`:     finite-difference order (`::Int`)
 The object `Grid` is best created with the function [`castGrid`](@ref).
 """
 struct Grid{T}
@@ -34,6 +35,7 @@ T::Type
 N::Int
 r ::Vector{T}
 r′::Vector{T}
+r′′::Vector{T}
 h::T
 r0::T
 epn::Int
@@ -138,7 +140,7 @@ end
 #            castGrid(ID, T, N; h=1, r0=0.01,  p=5, polynom=[0,1], epn=5, k=7)
 # ------------------------------------------------------------------------------
     
-function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=5, msg=true)
+function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001, rmax=0, p=5, polynom=[0,1], epn=5, k=5, msg=true)
     
     Rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
            ID == 2 ? r0 * _jw_gridfunction(N, h; p) :
@@ -149,8 +151,8 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1]
     name = gridname(ID::Int)
     str_h = repr(h, context=:compact => true)
     str_r0 = repr(r0, context=:compact => true)
-    str_Rmax = repr(Rmax, context=:compact => true)
-    strA = "Grid created: $(name), $(T), Rmax = "  * str_Rmax * " a.u., Ntot = $N, "
+    str_rmax = repr(rmax, context=:compact => true)
+    strA = "Grid created: $(name), $(T), rmax = "  * str_rmax * " a.u., Ntot = $N, "
     
     return ID == 1 ? strA * "h = " * str_h * ", r0 = " * str_r0 :
            ID == 2 ? strA * "p = $p, h = " * str_h * ", r0 = " * str_r0 :
@@ -161,7 +163,7 @@ end
 # ..............................................................................
 @doc raw"""
     castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
-    castGrid(1, N::Int, T::Type [; h=1 [, r0=1 [, [epn=5 [, k=7 [, msg=false]]]]]])
+    castGrid(name::String, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
 
 Method to create the Grid object
 
@@ -192,7 +194,7 @@ Grid created: polynomial, Float64, Rmax = 0.491733 a.u., Ntot = 4, polynom = [0.
  
 ```
 """
-function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=5, msg=false)
+function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001, p=5, polynom=[0,1], epn=5, k=5, msg=false)
 # ==============================================================================
 #  castGrid: creates the grid object
 # ==============================================================================
@@ -202,14 +204,16 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], 
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
     name = gridname(ID)
 
-    r = r0 * [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
-    r′= r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
+    r  = r0 * [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
+    r′ = r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
+    r′′= r0 * [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d2r/dn2
 
     r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
+    rmax = r[N]
 
-    msg && println(_gridspecs(ID, N, T; h, r0,  p, polynom, epn, k, msg))
+    msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
-    return Grid(ID, name, T, N, r, r′, h, r0, epn, epw, k)
+    return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
 
 end
 # ........................ gridname(ID) ........................................
