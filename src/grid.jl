@@ -227,7 +227,7 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001, p=5, polynom=[0,1], e
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
-    return Grid1(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
+    return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
 
 end
 
