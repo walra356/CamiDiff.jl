@@ -24,30 +24,34 @@ julia> using CamiMath
 
 ## Introduction
 
-In `CamiDiff` we present general purpose tools for the finite difference analysis 
-of *Real analytic functions of a single variable*, which we denote by ``f(x)``. 
+`CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*, 
+which we shall denote by ``f(x)``. 
 
-Finite-difference analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points,
+The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, which involves a map
 ```math
-f(x) ↦ f[n].
+n ↦ x ⇒ f(x) ↦ f[n]
 ```
-Here, ``f[n]`` is a discrete function representing the function ``f`` at position 
+which we define by the discrete function
 ```math
 x[n] = s_0 * g(t[n]) + x_0,
 ```
-where ``g(t)``, with ``g(0) = 0``, is called the *grid function*, with *scaling factor* ``s_0`` and *offset* ``x_0``. 
-The grid function is a (generally nonlinear) function running  through the origin, (), 
-of the *ticks* function
+where ``g(t)`` is called the *grid function*, with *scaling factor* ``s_0`` and *offset* ``x_0``. 
+The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``, 
+and defined on the domain ``[0, ∞). Its argument is the *ticks function*
 ```math
-t(n) ≡ (n−u) * h,
+t[n] ≡ (n−u) * h,
 ```
-which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*. As 
-[Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(0)``. 
+which is a *linear* function, with ``u`` its *index base* and ``h`` iys *step size*.
+Writing
+```math
+f[n] = f(x[n]),
+```
+we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f`` at position ``x[n]``. As 
+[Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
 
 The discretization map is defined by 
 
-NB. `CamiDiff` was developped for the use of spherical coordinates, i.e., for case of 
-zero offset (``x_0 = 0``). For this case we write ``f(r)`` rather than ``f(x)``, with
+NB. `CamiDiff` was developped for use with spherical coordinates. For this case we write ``f(r)`` rather than ``f(x)``, with
 ```math
 r = r(n) ≡ (n−1) * h.
 ```
