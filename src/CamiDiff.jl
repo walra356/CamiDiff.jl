@@ -22,6 +22,14 @@ using LinearAlgebra
 #export isforward
 #export isregular
 
+export Grid
+export gridname
+export gridfunction
+export castGrid
+export findIndex
+export grid_differentiation
+export grid_integration
+
 export fdiff_weight
 export fdiff_expansion_weights
 export fdiff_expansion
