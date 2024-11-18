@@ -135,7 +135,7 @@ julia> w = create_adams_moulton_weights(k; rationalize=false); println(w)
 """
 function create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, T=Int)
 
-    β = CamiXon.fdiff_adams_moulton_expansion_coeffs(k; T)
+    β = CamiDiff.fdiff_adams_moulton_expansion_coeffs(k; T)
 
     o = fdiff_expansion_weights(β)
 
@@ -165,7 +165,7 @@ function _abe_BigInt(k)
 
     a = Base.ones(Rational{BigInt},1+k)
     
-    b = CamiXon.fdiff_adams_moulton_expansion_coeffs(k; msg=false)
+    b = CamiDiff.fdiff_adams_moulton_expansion_coeffs(k; msg=false)
     o = CamiMath.polynom_product_expansion(a, b, k)
 
     return o  # Note that D = denominator(gcd(o))
@@ -262,7 +262,7 @@ julia> w = create_adams_bashford_weights(k; rationalize=false); println(w)
 """
 function create_adams_bashford_weights(k::Int; rationalize=false, devisor=false, T=Int)
 
-B = CamiXon.fdiff_adams_bashford_expansion_coeffs(k; T)
+B = CamiDiff.fdiff_adams_bashford_expansion_coeffs(k; T)
 
 o = fdiff_expansion_weights(B)
 

@@ -8,7 +8,7 @@ using CamiMath
 using LinearAlgebra
 using Test
 
-@testset "CamiXon.jl" begin 
+@testset "CamiDiff.jl" begin 
     @test fdiff_interpolation_expansion_coeffs(-1, 5) == [1, 1, 1, 1, 1, 1]
     coeffs = fdiff_interpolation_expansion_coeffs(-1, 5);
     @test fdiff_interpolation_expansion_weights(coeffs) ==  [-1, 6, -15, 20, -15, 6]
