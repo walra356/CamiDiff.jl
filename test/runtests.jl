@@ -20,6 +20,29 @@ using Test
     @test_throws DomainError findIndex(100.0, grid1) == 220
     @test_throws DomainError castGrid(5, 1000, Float64)
     @test_throws DomainError gridname(5) 
+#   -----------------------------------------------------------------------------------------
+    ff(r) = sqrt(2.0/π) * exp(-r^2/2.0);
+    grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
+    grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=false);
+    r1 = grid1.r;
+    r2 = grid2.r;
+    r3 = grid3.r;
+    r4 = grid4.r;
+    f1 = [ff(r1[n]) for n=1:grid1.N];
+    f2 = [ff(r2[n]) for n=1:grid2.N];
+    f3 = [ff(r3[n]) for n=1:grid3.N];
+    f4 = [ff(r4[n]) for n=1:grid4.N];
+    o1 = grid_integration(f1, grid1);
+    o2 = grid_integration(f2, grid2);
+    o3 = grid_integration(f3, grid3);
+    o4 = grid_integration(f4, grid4);
+    @test o1 ≈ 1.0
+    @test o2 ≈ 1.0
+    @test o3 ≈ 1.0
+    @test o4 ≈ 1.0
+#   -----------------------------------------------------------------------------------------
 
     @test fdiff_interpolation_expansion_coeffs(-1, 5) == [1, 1, 1, 1, 1, 1]
     coeffs = fdiff_interpolation_expansion_coeffs(-1, 5);

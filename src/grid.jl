@@ -356,20 +356,45 @@ where the latter integral corresponds to the optimized trapezoidal rule for a
 uniform grid (see [`trapezoidal_integration`](@ref)). The rule is exact for
 polynonials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
 For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
-#### Example:
-```
-julia> f1s(r) = 2.0*r*exp(-r);  # hydrogen 1s wavefunction (reduced and unit normalized)
-julia> N = 1000;
-julia> grid = castGrid(1, N, Float64; h=0.01, r0=0.005, msg=true);
-Grid created: exponential, Float64, Rmax = 110.127 a.u., Ntot = 1000, h = 0.01, r0 = 0.005
+#### Examples:
+julia> ff(r) = sqrt(2.0/π) * exp(-r^2/2.0);
 
-julia> r = grid.r;
-julia> f2 = [f1s(r[n])^2 for n=1:N];
-julia> grid_integration(f2, grid) == grid_integration(f2, grid, 1:N) == grid_integration(f2, grid, 1, N)
-true
+julia> grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
+Grid created: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
 
-julia> norm = grid_integration(f2, grid)
-1.0
+julia> grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
+Grid created: quasi-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
+
+julia> grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
+Grid created: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
+
+julia> grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=true);
+Grid created: polynomial, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001
+
+julia> r1 = grid1.r;
+julia> r2 = grid2.r;
+julia> r3 = grid3.r;
+julia> r4 = grid4.r;
+julia> f1 = [ff(r1[n]) for n=1:grid1.N];
+julia> f2 = [ff(r2[n]) for n=1:grid2.N];
+julia> f3 = [ff(r3[n]) for n=1:grid3.N];
+julia> f4 = [ff(r4[n]) for n=1:grid4.N];
+julia> o1 = grid_integration(f1, grid1);
+julia> o2 = grid_integration(f2, grid2);
+julia> o3 = grid_integration(f3, grid3);
+julia> o4 = grid_integration(f4, grid4);
+
+julia> println("integral on $(grid1.name) grid = $o1")
+integral on exponential grid = 1.0
+
+julia> println("integral on $(grid2.name) grid = $o2")
+integral on quasi-exponential grid: 1.0
+
+julia> println("integral on $(grid3.name) grid = $o3")
+integral on linear (uniform) grid = 1.000000000000003
+
+julia> println("integral on $(grid4.name) grid = $o4")
+integral on polynomial grid: 1.0000000000000013
 ```
 """
 function grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
