@@ -16,7 +16,8 @@ using Test
     @test [grid2.r, grid2.r′, grid2.r′′] ≈ [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]
     @test [grid1.r, grid1.r′, grid1.r′′] == [[2.220446049250313e-16, 0.21034183615129542, 0.4428055163203397, 0.6997176151520064], [0.2, 0.22103418361512955, 0.244280551632034, 0.26997176151520064], [0.020000000000000004, 0.022103418361512958, 0.024428055163203403, 0.02699717615152007]]
     @test grid1.name == "exponential"
-    @test findIndex(0.0042, grid) == 220
+    @test findIndex(0.25, grid1) == 2
+    @test_throws DomainError findIndex(100.0, grid1) == 220
     @test_throws DomainError castGrid(5, 1000, Float64)
     @test_throws DomainError gridname(5) 
 

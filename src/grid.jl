@@ -280,7 +280,7 @@ function findIndex(rval::T, grid::Grid{T}) where T<:Number
     N = grid.N
     r = grid.r
 
-    r[1] ≤ rval ≤ r[end] || error("Error: radial distance in a.u. outside grid range")
+    r[1] ≤ rval ≤ r[end] || throw(DomainError(rval, "rval outside grid range"))
 
     n = N
     while rval < r[n]     # below classical threshhold
