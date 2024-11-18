@@ -384,16 +384,16 @@ julia> o2 = grid_integration(f2, grid2);
 julia> o3 = grid_integration(f3, grid3);
 julia> o4 = grid_integration(f4, grid4);
 
-julia> println("integral on $(grid1.name) grid = $o1")
+julia> println("integral on " * grid1.name * " grid = $o1")
 integral on exponential grid = 1.0
 
-julia> println("integral on $(grid2.name) grid = $o2")
+julia> println("integral on " * grid2.name * " grid = $o2")
 integral on quasi-exponential grid: 1.0
 
-julia> println("integral on $(grid3.name) grid = $o3")
+julia> println("integral on " * grid2.name * " grid = $o3")
 integral on linear (uniform) grid = 1.000000000000003
 
-julia> println("integral on $(grid4.name) grid = $o4")
+julia> println("integral on " * grid2.name * " grid = $o4")
 integral on polynomial grid: 1.0000000000000013
 ```
 """
