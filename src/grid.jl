@@ -382,8 +382,8 @@ julia> f3 = [ff(r3[n]) for n=1:grid3.N];
 julia> f4 = [ff(r4[n]) for n=1:grid4.N];
 julia> o1 = grid_integration(f1, grid1);
 julia> o2 = grid_integration(f2, grid2);
-julia> o3 = grid_integration(f3, grid3);
-julia> o4 = grid_integration(f4, grid4);
+julia> o3 = grid_integration(f3, grid3, 1:900);
+julia> o4 = grid_integration(f4, grid4, 1:900);
 
 julia> println("integral on " * grid1.name * " grid = ", o1)
 integral on exponential grid = 1.0
