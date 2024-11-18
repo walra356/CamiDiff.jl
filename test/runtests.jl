@@ -42,6 +42,14 @@ using Test
     @test o2 ≈ 1.0
     @test o3 ≈ 1.0
     @test o4 ≈ 1.0
+    o1 = grid_integration(f1, grid1, 1:900);
+    o2 = grid_integration(f2, grid2, 1:900);
+    o3 = grid_integration(f3, grid3, 1:900);
+    o4 = grid_integration(f4, grid4, 1:900);
+    @test o1 ≈ 1.0
+    @test o2 ≈ 1.0
+    @test o3 ≈ 1.0
+    @test o4 ≈ 1.0
 #   -----------------------------------------------------------------------------------------
 
     @test fdiff_interpolation_expansion_coeffs(-1, 5) == [1, 1, 1, 1, 1, 1]
