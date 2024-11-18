@@ -357,6 +357,7 @@ uniform grid (see [`trapezoidal_integration`](@ref)). The rule is exact for
 polynonials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
 For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
 #### Examples:
+```
 julia> ff(r) = sqrt(2.0/π) * exp(-r^2/2.0);
 
 julia> grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
