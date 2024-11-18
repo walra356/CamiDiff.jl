@@ -514,3 +514,133 @@ create_lagrange_differentiation_matrix(k::Int)
 trapezoidal_epw(k::Int; rationalize=false, devisor=false)
 trapezoidal_integration(f, x1, x2, weights)
 ```
+
+
+### Adams Method
+
+#### Adams-Bashford expansion
+
+The *Adams-Bashford integration step* is given by the expansion
+
+```math
+y[n+1]-y[n] = -\frac{h ∇}{(1-∇)ln(1-∇)}f[n+1]=h (\sum_{p=0}^{\infty}B_p∇^p)f[n+1].
+```
+
+A closed expression for the *Adams-Bashford expansion coefficients*, ``B_k``,
+is not available. As we already have a finite-difference expansion for the
+operator ``(1-∇)^{-1}``,
+
+```math
+\frac{1}{1-∇}\equiv\sum_{p=0}^{\infty}∇^p,
+```
+
+we ask for the expansion of
+
+```math
+-\frac{∇}{ln(1-∇)}
+=(1-\frac{1}{2}∇-\frac{1}{24}∇^2-\frac{1}{12}∇^3+⋯)f[n+1]
+= (\sum_{p=0}^{\infty}b_p∇^p)f[n+1].
+```
+
+This is known as the *Adams-Moulton expansion*. Its expansion coefficients are
+calculated numerically by the function
+[`fdiff_adams_moulton_expansion_coeffs(k)`](@ref). The *Adams-Bashford expansion* is
+obtained as the polynomial product of the two expansions,
+
+```math
+(\sum_{p=0}^{\infty}B_p∇^p)f[n+1]
+=(\sum_{p=0}^{\infty}∇^p)(\sum_{p=0}^{\infty}b_p∇^p)f[n+1]
+=\ ( 1 + \frac{1}{2}∇ + \frac{5}{12}∇^2 + ⋯)f[n+1]
+```
+
+where the vector ``β = [B_0,⋯\ B_k]`` contains the *Adams-Bashford expansion coefficients*,
+rational numbers generated numerically by the function
+[`fdiff_adams_bashford_expansion_coeffs(k)`](@ref). Evaluating the finite-difference
+expansion up to order ``k`` we obtain (after changing dummy index bring the
+summation in forward order)
+
+```math
+\sum_{p=0}^{k}B_p∇^pf[n]
+=\sum_{p=0}^{k}B_p\sum_{j=0}^{p} c_j^if[n-j]
+= \sum_{j=0}^{k}A_j^kf[n-j]
+= \sum_{j=0}^{k}A_{k-j}^kf[n-k+j],
+```
+
+where the ``A_j^k= \sum_{p=j}^{k} B_pc_j^p`` are the ``(k+1)``-point
+*Adams-Bashford integration weights*.
+
+Function:
+
+`β` = [`fdiff_adams_bashford_expansion_coeffs(k)`](@ref)
+``→ [B_0,⋯\ B_k]``
+
+`adams_bashford_weights`
+= [`fdiff_expansion_weights(β, bwd, rev)`](@ref)
+ ``→ [A_k^k,⋯\ A_0^k]``
+
+`adams_bashford_weights` = [`create_adams_bashford_weights(k)`](@ref)
+``→ [A_k^k,⋯\ A_0^k]``
+
+```@docs
+fdiff_adams_bashford_expansion_coeffs(k::Int; T=Int, msg=true)
+create_adams_bashford_weights(k::Int; rationalize=false, devisor=false, T=Int)
+```
+
+### Adams-Moulton expansion
+
+The *Adams-Moulton integration* step is given by the expansion
+
+```math
+y[n+1]-y[n]
+= -\frac{∇}{ln(1-∇)}f[n+1]
+= ( 1 - \frac{1}{2}∇ - \frac{1}{12}∇^2 - \frac{1}{24}∇^3 +⋯)f[n+1].
+```
+
+For the evaluation of the integration step we limit the summation to ``k+1``
+terms (order ``k``),
+
+```math
+y[n+1]-y[n]= (\sum_{p=0}^{k}b_p∇^p)f[n+1]+⋯.
+```
+
+where the vector ``β = [b_0,⋯\ b_k]`` contains the *Adams-Moulton expansion coefficients*,
+rational numbers generated numerically by the function
+[`fdiff_adams_moulton_expansion_coeffs(k)`](@ref). Extracting the greatest
+common denominator, ``1/D``, the step becomes
+
+```math
+y[n+1]-y[n]= \frac{1}{D}(\sum_{p=0}^{k}b_p^{\prime}∇^p)f[n+1]+⋯,
+```
+
+where ``b_0^{\prime},⋯\ b_k^{\prime}`` are integers and
+``b_p=b_p^{\prime}/D``. In practice the expansion is restricted to ``k<18``
+(as limited by integer overflow). Note that this limit is much higher than
+values used in calculations (typically up to ``k = 10``). Evaluating the
+finite-difference expansion up to order ``k`` we obtain (after changing
+dummy index bring the summation in forward order)
+
+```math
+\sum_{p=0}^{k}b_p∇^pf[n]
+=\sum_{p=0}^{k}b_p\sum_{j=0}^{p} c_j^if[n-j]
+= \sum_{j=0}^{k}a_j^kf[n-j]
+= \sum_{j=0}^{k}a_{k-j}^kf[n-k+j],
+```
+
+where the ``a_j^k= \sum_{p=j}^{k} b_pc_j^p`` are the ``(k+1)``-point
+*Adams-Moulton integration weights*.
+
+Functions:
+
+`β` = [`fdiff_adams_moulton_expansion_coeffs(k)`](@ref) ``→ [b_0,⋯\ b_k]``
+
+`adams_moulton_weights`
+= [`fdiff_expansion_weights(β, bwd, rev)`](@ref)
+``→ [a_k^k,⋯\ a_0^k]``.
+
+`adams_moulton_weights` = [`create_adams_moulton_weights(k)`](@ref)
+``→ [a_k^k,⋯\ a_0^k]``
+
+```@docs
+fdiff_adams_moulton_expansion_coeffs(k::Int; T=Int, msg=true)
+create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, T=Int)
+```
