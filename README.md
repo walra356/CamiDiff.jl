@@ -1,5 +1,7 @@
 # CamiDiff.jl
-A package for finite difference methods
+A [Julia](http://julialang.org) package for one-dimensional finite-difference analysis
+
+NB. The present version is under review and not stable. Testing of full code coverage is underway.
 
 | **Documentation**                         | **Build status**                         | **Code coverage**                               
 |:-----------------------------------------:|:----------------------------------------:|:-----------------------------------------------:
