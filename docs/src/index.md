@@ -515,8 +515,7 @@ trapezoidal_epw(k::Int; rationalize=false, devisor=false)
 trapezoidal_integration(f, x1, x2, weights)
 ```
 
-
-### Adams Method
+## Adams Method
 
 #### Adams-Bashford expansion
 
