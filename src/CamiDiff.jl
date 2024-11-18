@@ -51,6 +51,7 @@ export trapezoidal_integration
 
 
 include("finite_differences.jl")
+include("finite_difference_adams.jl")
 include("grid.jl")
 
 
