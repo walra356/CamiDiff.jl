@@ -117,22 +117,18 @@ end
 ```math
     g(t) = t
 ```
-* `ID = 4`: polynomial grid function of degree `p = length(c)-1` defined by its coefficients 
-(its `polynom` vector) ``c = [c_0, c_1,c_2,⋯\ c_p]``,
+* `ID = 4`: polynomial grid function of degree `p = length(c)-1` defined by its [`CamiMath.polynom`](@reg) vector ``c = [c_0, c_1,c_2,⋯\ c_p]``,
 ```math
-    g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p
+    g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p,
 ```
-where ``c_0 ≡ 0`` (by defnition the grid functions run through the origin, g(0) = 0). 
+with ``c_0 ≡ 0`` because grid functions are defined to run through the origin, ``g(0) = 0``. 
 
 The actual grid is given by 
 ```math
-    r[n] = r_0 * g(t[n]),
+    x[n] = r_0 * g(t[n]),
 ```
-where
-```math
-    t[n] = (n-1) * h.
-```
-is the *ticks function*.
+where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array convention. 
+NB. Note that ``x[1] = 0`` for all grid functions.
 #### Examples:
 ```
 h = 0.1
