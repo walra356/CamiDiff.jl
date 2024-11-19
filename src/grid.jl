@@ -107,21 +107,32 @@ end
 
 * `ID = 1`: exponential grid function,
 ```math
-    f[n] = \text{exp}(h(n-1)) - 1.0
+    g(t) = e^t - 1.0
 ```
 * `ID = 2`: quasi-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
-    f[n] = h(n-1) + \frac{1}{2}(h(n-1))^2 + ⋯ + \frac{1}{p!}(h(n-1))^p
+    g(t) = t + \frac{1}{2}t^2 + ⋯ + \frac{1}{p!}t^p
 ```
 * `ID = 3`: linear grid function,
 ```math
-    f[n] = h(n-1)
+    g(t) = t
 ```
-* `ID = 4`: polynomial grid function of degree `p = length(c)` defined by its coefficients 
-(its `polynom` vector) ``c = [c_1,c_2,⋯\ c_p]``,
+* `ID = 4`: polynomial grid function of degree `p = length(c)-1` defined by its coefficients 
+(its `polynom` vector) ``c = [c_0, c_1,c_2,⋯\ c_p]``,
 ```math
-    f[n] = c_1h(n-1) + c_2(h(n-1))^2 + ⋯ + c_p(h(n-1))^p
+    g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p
 ```
+where ``c_0 ≡ 0`` (by defnition the grid functions run through the origin, g(0) = 0). 
+
+The actual grid is given by 
+```math
+    r[n] = r_0 * g(t[n]),
+```
+where
+```math
+    t[n] = (n-1) * h.
+```
+is the *ticks function*.
 #### Examples:
 ```
 h = 0.1
