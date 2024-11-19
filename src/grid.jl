@@ -117,7 +117,7 @@ end
 ```math
     g(t) = t
 ```
-* `ID = 4`: polynomial grid function of degree `p = length(c)-1` defined by its [`polynom`](https://walra356.github.io/CamiMath.jl/dev@ref) vector ``c = [c_0, c_1,c_2,⋯\ c_p]``,
+* `ID = 4`: polynomial grid function of degree `p = length(c)-1` defined by its [`polynom`](https://github.com/walra356/CamiMath.jl/blob/main/docs/src/index.md@ref) vector ``c = [c_0, c_1,c_2,⋯\ c_p]``,
 ```math
     g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p,
 ```
