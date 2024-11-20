@@ -166,19 +166,23 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001, rmax=0, p=5, polyno
     rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
            ID == 2 ? r0 * _jw_gridfunction(N, h; p) :
            ID == 3 ? r0 * _linear_gridfunction(N, h)  :
-           ID == 4 ? r0 * _polynomial_gridfunction(N, h; polynom) : throw(DomainError(ID, "unknown gridfunction"))
+           ID == 4 ? r0 * _polynomial_gridfunction(N, h; polynom) : 
+                           throw(DomainError(ID, "unknown gridfunction"))
 
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
-    name = gridname(ID::Int)
+    str_d = ID == 4 ? "of degree $(length(polynom)-1)" : nothing
+    name = ID == 4 ? gridname(ID::Int) * " of degree $(length(polynom)-1)" : gridname(ID::Int)
     str_h = repr(h, context=:compact => true)
     str_r0 = repr(r0, context=:compact => true)
     str_rmax = repr(rmax, context=:compact => true)
-    strA = "Grid created: $(name), $(T), rmax = "  * str_rmax * ", Ntot = $N, "
+
+    strA = "Grid: $(name), $(T), rmax = "  * str_rmax * ", Ntot = $N, "
     
     return ID == 1 ? strA * "h = " * str_h * ", r0 = " * str_r0 :
            ID == 2 ? strA * "p = $p, h = " * str_h * ", r0 = " * str_r0 :
            ID == 3 ? strA * "p = 1, h = " * str_h * ", r0 = " * str_r0 :
-           ID == 4 ? strA * "polynom = $(polynom), h = " * str_h * ", r0 = " * str_r0 : throw(DomainError(ID, "unknown gridfunction"))
+           ID == 4 ? strA * "polynom = $(polynom), h = " * str_h * ", r0 = " * str_r0 : 
+                             throw(DomainError(ID, "unknown gridfunction"))
     
 end
 # ..............................................................................
@@ -194,28 +198,44 @@ Method to create the Grid object
 `ID = 4`: polynomial grid
 #### Examples:
 ```
-julia> grid = castGrid(1, 4, Float64; h = 0.1, r0 = 1.0, msg=true);
-Grid created: exponential, Float64, Rmax = 0.491825 a.u., Ntot = 4, h = 0.1, r0 = 1.0
+julia> grid = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
+Grid: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
 
-julia> grid = castGrid(2, 4, Float64; p = 4, h = 0.1, r0 = 1.0, msg=true);
-Grid created: quasi-exponential, Float64, Rmax = 0.491733 a.u., Ntot = 4, p = 4, h = 0.1, r0 = 1.0
+julia> grid = castGrid("exponential", 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
+Grid: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
 
-julia> grid = castGrid(3, 4, Float64; h = 0.1, r0 = 1.0, msg=true);
-Grid created: linear (uniform), Float64, Rmax = 0.4 a.u., Ntot = 4, p = 1, h = 0.1, r0 = 1.0
+julia> grid = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
+Grid: quasi-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
 
-julia> grid.r′
+julia> grid = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
+Grid: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
+
+julia> grid = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=true);
+Grid: polynomial of degree 2, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001
+
+julia> grid.r[1:4]
 4-element Vector{Float64}:
- 0.1
- 0.1
- 0.1
- 0.1
+ 2.220446049250313e-16
+ 1.0000000000000003e-5
+ 4.000000000000001e-5
+ 9.000000000000003e-5
 
-julia> grid = castGrid(4, 4, Float64; polynom=[0, 1, 1/2, 1/6, 1/24], h = 0.1, r0 = 1.0, msg=true);
-Grid created: polynomial, Float64, Rmax = 0.491733 a.u., Ntot = 4, polynom = [0.0, 1.0, 0.5, 0.16666666666666666, 0.041666666666666664], h = 0.1, r0 = 1.0
- 
+julia> grid.r′[1:4]
+4-element Vector{Float64}:
+ 0.0
+ 2.0000000000000005e-5
+ 4.000000000000001e-5
+ 6.0000000000000015e-5
+
+julia> grid.r′′[1:4]
+4-element Vector{Float64}:
+ 2.0000000000000005e-5
+ 2.0000000000000005e-5
+ 2.0000000000000005e-5
+ 2.0000000000000005e-5 
 ```
 """
-function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
 # ==============================================================================
 #  castGrid: creates the grid object
 # ==============================================================================
@@ -236,6 +256,16 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001, p=5, polynom=[0,1], e
 
     return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
 
+end
+function castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+    
+    ID = name == "exponential" ? 1 :
+         name == "quasi-exponential" ? 2 :
+         name == "linear" ? 3 :
+         name == "polynomial" ? 4 : throw(DomainError(ID, "unknown gridfunction"))
+
+    return castGrid(ID, N, T; h, r0, p, polynom, epn, k, msg)
+   
 end
 
 # ........................ gridname(ID) ........................................

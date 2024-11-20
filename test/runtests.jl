@@ -21,7 +21,7 @@ using Test
     @test_throws DomainError castGrid(5, 1000, Float64)
     @test_throws DomainError gridname(5) 
 #   -----------------------------------------------------------------------------------------
-    ff(r) = sqrt(2.0/π) * exp(-r^2/2.0);
+    ftest(r) = sqrt(2.0/π) * exp(-r^2/2.0);
     grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
     grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=false);
     grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=false);
@@ -30,10 +30,10 @@ using Test
     r2 = grid2.r;
     r3 = grid3.r;
     r4 = grid4.r;
-    f1 = [ff(r1[n]) for n=1:grid1.N];
-    f2 = [ff(r2[n]) for n=1:grid2.N];
-    f3 = [ff(r3[n]) for n=1:grid3.N];
-    f4 = [ff(r4[n]) for n=1:grid4.N];
+    f1 = [ftest(r1[n]) for n=1:grid1.N];
+    f2 = [ftest(r2[n]) for n=1:grid2.N];
+    f3 = [ftest(r3[n]) for n=1:grid3.N];
+    f4 = [ftest(r4[n]) for n=1:grid4.N];
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);

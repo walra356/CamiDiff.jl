@@ -10,18 +10,6 @@ rev = CamiMath.rev
 using Printf
 using LinearAlgebra
 
-#export sup
-#export sub
-#export frac
-#export strRational
-
-#export fwd
-#export bwd
-#export reg
-#export rev
-#export isforward
-#export isregular
-
 export Grid
 export gridname
 export gridfunction
