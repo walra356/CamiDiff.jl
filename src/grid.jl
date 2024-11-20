@@ -131,21 +131,24 @@ where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array conv
 NB. Note that ``x[1] = 0`` for all grid functions.
 #### Examples:
 ```
-h = 0.1
-r = [gridfunction(1, n-1, h) for n=1:5]                            # exponential
- [0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032, 0.49182469764127035]
+h = 0.1; r0=1.0; N=4
+julia> r = r0 .* [gridfunction(1, n-1, h) for n=1:N]
+[0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032]
 
-r = [gridfunction(2, n-1, h; p = 4) for n=1:5]  # quasi exponential (degree p=4)
- [0.0, 0.10517083333333321, 0.22140000000000004, 0.3498375, 0.49173333333333336]
+julia> r′ = r0 .* [gridfunction(1, n-1, h; deriv=1) for n=1:N]
+[0.1, 0.11051709180756478, 0.122140275816017, 0.13498588075760032]
 
-r = [gridfunction(3, n-1, h) for n=1:5]              # linear
-  [0.0, 0.1, 0.2, 0.3, 0.4]
+julia> r′′= r0 .* [gridfunction(1, n-1, h; deriv=2) for n=1:N]
+[0.010000000000000002, 0.011051709180756479, 0.012214027581601701, 0.013498588075760034]
 
-r′= [gridfunction(3, n-1, h; deriv=1) for n=1:5]     # linear (first derivative)
-   [0.1, 0.1, 0.1, 0.1, 0.1]
+julia> r = [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1]) for n=1:N]
+[0.0, 0.010000000000000002, 0.04000000000000001, 0.09000000000000002]
 
-  r = [gridfunction(4, n-1, h; polynom = [0,1,1/2,1/6,1/24]) for n=1:5]  # polynomial of degree 4)
-   [0.0, 0.10517083333333334, 0.2214, 0.3498375000000001, 0.49173333333333336]
+julia> r′ = [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=1) for n=1:N]
+[0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
+
+julia> r′′= [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1:N]
+[0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
 ```
 """
 function gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
@@ -246,8 +249,8 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
     name = gridname(ID)
 
     r  = r0 .* [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
-    r′ = r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     # r′= dr/dn
-    r′′= r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d2r/dn2
+    r′ = r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
+    r′′= r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
 
     r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
     rmax = r[N]
