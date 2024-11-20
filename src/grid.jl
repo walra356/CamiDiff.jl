@@ -188,7 +188,7 @@ end
 # ..............................................................................
 @doc raw"""
     castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
-    castGrid(name::String, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
+    castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=7, msg=false)
 
 Method to create the Grid object
 
