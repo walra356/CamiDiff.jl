@@ -131,7 +131,8 @@ where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array conv
 NB. Note that ``x[1] = 0`` for all grid functions.
 #### Examples:
 ```
-h = 0.1; r0=1.0; N=4
+julia> h = 0.1; r0=1.0; N=4;
+
 julia> r = r0 .* [gridfunction(1, n-1, h) for n=1:N]
 [0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032]
 
@@ -398,7 +399,7 @@ polynonials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
 For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
 #### Examples:
 ```
-julia> ff(r) = sqrt(2.0/π) * exp(-r^2/2.0);
+julia> ftest(r) = sqrt(2.0/π) * exp(-r^2/2.0);
 
 julia> grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
 Grid created: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
@@ -416,10 +417,10 @@ julia> r1 = grid1.r;
 julia> r2 = grid2.r;
 julia> r3 = grid3.r;
 julia> r4 = grid4.r;
-julia> f1 = [ff(r1[n]) for n=1:grid1.N];
-julia> f2 = [ff(r2[n]) for n=1:grid2.N];
-julia> f3 = [ff(r3[n]) for n=1:grid3.N];
-julia> f4 = [ff(r4[n]) for n=1:grid4.N];
+julia> f1 = [ftest(r1[n]) for n=1:grid1.N];
+julia> f2 = [ftest(r2[n]) for n=1:grid2.N];
+julia> f3 = [ftest(r3[n]) for n=1:grid3.N];
+julia> f4 = [ftest(r4[n]) for n=1:grid4.N];
 julia> o1 = grid_integration(f1, grid1);
 julia> o2 = grid_integration(f2, grid2);
 julia> o3 = grid_integration(f3, grid3, 1:900);
