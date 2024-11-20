@@ -6,7 +6,7 @@
 #                              finite_difference_adams.jl
 # ==============================================================================
 
-# ========================= fdiff_adams_moulton_expansion_coeffs(k) ===========
+# ========================= fdiff_adams_moulton_expansion_polynom(k) ===========
 
 global glAMe_Int = [1 // 1, -1 // 2, -1 // 12, -1 // 24, -19 // 720, -3 // 160, -863 // 60480, -275 // 24192,
     -33953 // 3628800, -8183 // 1036800, -3250433 // 479001600, -4671 // 788480,
@@ -44,7 +44,7 @@ end
 
 @doc raw"""
     fdiff_adams_moulton_expansion_coeff(k::Int; T=Int, msg=true)
-    fdiff_adams_moulton_expansion_coeffs(k::Int; T=Int, msg=true)
+    fdiff_adams_moulton_expansion_polynom(k::Int; T=Int, msg=true)
 
 Finite difference expansion coefficient vector ``β ≡ [β_0(x),\ ⋯,\ β_k(x)]``.
 Note the *forward* vector ordering, which is the order of use in the summation below,
@@ -57,7 +57,7 @@ Note the *forward* vector ordering, which is the order of use in the summation b
 #### Examples:
 ```
 julia> k = 5;
-julia> β = fdiff_adams_moulton_expansion_coeffs(k); println(β)
+julia> β = fdiff_adams_moulton_expansion_polynom(k); println(β)
 Rational{Int64}[1//1, -1//2, -1//12, -1//24, -19//720, -3//160]
 
 julia> fdiff_adams_moulton_expansion_coeff(k)
@@ -75,7 +75,7 @@ Integer-overflow protection: output converted to BigInt
 -12365722323469980029//4817145976189747200000
 ```
 """
-function fdiff_adams_moulton_expansion_coeffs(k::Int; T=Int, msg=true)
+function fdiff_adams_moulton_expansion_polynom(k::Int; T=Int, msg=true)
 
     nc = 19
 
@@ -91,7 +91,7 @@ function fdiff_adams_moulton_expansion_coeffs(k::Int; T=Int, msg=true)
 end
 function fdiff_adams_moulton_expansion_coeff(k::Int; T=Int, msg=true)
 
-    o = fdiff_adams_moulton_expansion_coeffs(k; T, msg)
+    o = fdiff_adams_moulton_expansion_polynom(k; T, msg)
 
     return o[1+k]
 
@@ -135,7 +135,7 @@ julia> w = create_adams_moulton_weights(k; rationalize=false); println(w)
 """
 function create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, T=Int)
 
-    β = CamiDiff.fdiff_adams_moulton_expansion_coeffs(k; T)
+    β = CamiDiff.fdiff_adams_moulton_expansion_polynom(k; T)
 
     o = fdiff_expansion_weights(β)
 
@@ -150,7 +150,7 @@ function create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, 
 
 end
 
-# ======================== fdiff_adams_bashford_expansion_coeffs(k) ===========
+# ======================== fdiff_adams_bashford_expansion_polynom(k) ===========
 
 global glABe_Int = Rational{Int64}[1, 1//2, 5//12, 3//8, 251//720, 95//288, 19087//60480, 
     5257//17280, 1070017//3628800, 25713//89600, 26842253//95800320, 4777223//17418240, 
@@ -165,7 +165,7 @@ function _abe_BigInt(k)
 
     a = Base.ones(Rational{BigInt},1+k)
     
-    b = CamiDiff.fdiff_adams_moulton_expansion_coeffs(k; msg=false)
+    b = CamiDiff.fdiff_adams_moulton_expansion_polynom(k; msg=false)
     o = CamiMath.polynom_product_expansion(a, b, k)
 
     return o  # Note that D = denominator(gcd(o))
@@ -175,7 +175,7 @@ end
 
 @doc raw"""
     fdiff_adams_bashford_expansion_coeff(k::Int [; T=Int [, msg=true]])
-    fdiff_adams_bashford_expansion_coeffs(k::Int [; T=Int [, msg=true]])
+    fdiff_adams_bashford_expansion_polynom(k::Int [; T=Int [, msg=true]])
 
 ``(k+1)``-point Adams-Bashford expansion coefficients ``B_k \equiv [B_0^k,⋯\ B_k^k]``. 
 Note the *forward* vector ordering, which is the order of use in the summation below,
@@ -185,7 +185,7 @@ Note the *forward* vector ordering, which is the order of use in the summation b
 ```
 #### Examples:
 ```
-julia> o = fdiff_adams_bashford_expansion_coeffs(5); println(o)
+julia> o = fdiff_adams_bashford_expansion_polynom(5); println(o)
 Rational{Int64}[1, 1//2, 5//12, 3//8, 251//720, 95//288]
 
 julia> fdiff_adams_bashford_expansion_coeff(0)
@@ -199,7 +199,7 @@ Integer-overflow protection: output converted to BigInt
 8136836498467582599787//33720021833328230400000
 ```
 """
-function fdiff_adams_bashford_expansion_coeffs(k::Int; T=Int, msg=true)
+function fdiff_adams_bashford_expansion_polynom(k::Int; T=Int, msg=true)
 # ==============================================================================
 #   Adams-Bashford expansion coefficients
 # ==============================================================================
@@ -217,7 +217,7 @@ function fdiff_adams_bashford_expansion_coeffs(k::Int; T=Int, msg=true)
     end
 function fdiff_adams_bashford_expansion_coeff(k::Int; T=Int, msg=true)
       
-    o = fdiff_adams_bashford_expansion_coeffs(k; T, msg)
+    o = fdiff_adams_bashford_expansion_polynom(k; T, msg)
         
     return o[1+k]  
 
@@ -262,7 +262,7 @@ julia> w = create_adams_bashford_weights(k; rationalize=false); println(w)
 """
 function create_adams_bashford_weights(k::Int; rationalize=false, devisor=false, T=Int)
 
-B = CamiDiff.fdiff_adams_bashford_expansion_coeffs(k; T)
+B = CamiDiff.fdiff_adams_bashford_expansion_polynom(k; T)
 
 o = fdiff_expansion_weights(B)
 

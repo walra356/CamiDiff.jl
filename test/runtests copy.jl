@@ -180,15 +180,15 @@ using Test
     @test a_direct(6, 3, 2, 3, -1) == -250 // 20449
     @test b_exchange(6, 3, 2, 3, -1) == 1050 // 20449
 #   -------------------------------------------------------------------------------------------------------------------------
-    @test fdiff_interpolation_expansion_coeffs(-1, 5) == [1, 1, 1, 1, 1, 1]
-    coeffs = fdiff_interpolation_expansion_coeffs(-1, 5);
-    @test fdiff_interpolation_expansion_weights(coeffs) ==  [-1, 6, -15, 20, -15, 6]
-    @test fdiff_interpolation_expansion_coeffs(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
-    coeffs = fdiff_interpolation_expansion_coeffs(1, 5, fwd);
-    fdiff_interpolation_expansion_weights(coeffs, fwd, reg) == [6, -15, 20, -15, 6, -1]
-    fdiff_interpolation_expansion_weights(coeffs, fwd, rev) == [-1, 6, -15, 20, -15, 6]
-    fdiff_interpolation_expansion_weights(coeffs, bwd, reg) == [0, 3, -6, 7, -4, 1]
-    fdiff_interpolation_expansion_weights(coeffs, bwd, rev) == [1, -4, 7, -6, 3, 0]
+    @test fdiff_interpolation_expansion_polynom(-1, 5) == [1, 1, 1, 1, 1, 1]
+    polynom = fdiff_interpolation_expansion_polynom(-1, 5);
+    @test fdiff_interpolation_expansion_weights(polynom) ==  [-1, 6, -15, 20, -15, 6]
+    @test fdiff_interpolation_expansion_polynom(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
+    polynom = fdiff_interpolation_expansion_polynom(1, 5, fwd);
+    fdiff_interpolation_expansion_weights(polynom, fwd, reg) == [6, -15, 20, -15, 6, -1]
+    fdiff_interpolation_expansion_weights(polynom, fwd, rev) == [-1, 6, -15, 20, -15, 6]
+    fdiff_interpolation_expansion_weights(polynom, bwd, reg) == [0, 3, -6, 7, -4, 1]
+    fdiff_interpolation_expansion_weights(polynom, bwd, rev) == [1, -4, 7, -6, 3, 0]
     @test fdiff_interpolation_expansion_weights(1, 5, fwd, reg) == [0, 1, 0, 0, 0, 0]
     @test fdiff_interpolation_expansion_weights(1, 5, fwd, rev) == [0, 0, 0, 0, 1, 0]
     @test fdiff_interpolation_expansion_weights(-1, 5, bwd, reg) == [6, -15, 20, -15, 6, -1]
@@ -203,8 +203,8 @@ using Test
     @test fdiff_expansion([1, -1, 1, -1], [1, 4, 9, 16], fwd) == 0
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16], bwd) == 25
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16]) == 25
-    @test fdiff_differentiation_expansion_coeffs(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
-    @test fdiff_differentiation_expansion_coeffs(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
+    @test fdiff_differentiation_expansion_polynom(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
+    @test fdiff_differentiation_expansion_polynom(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
     @test [fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], v) for v = 1:9] == [-8 // 1, -6 // 1, -4 // 1, -2 // 1, 0 // 1, 2 // 1, 4 // 1, 6 // 1, 8 // 1]
     @test fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], 5.5) == 1.0
     @test create_lagrange_differentiation_matrix(3) == [-11//6 3//1 -3//2 1//3; -1//3 -1//2 1//1 -1//6; 1//6 -1//1 1//2 1//3; -1//3 3//2 -3//1 11//6]
@@ -212,13 +212,13 @@ using Test
     @test trapezoidal_integration([1.0, 4.0, 15.0, 40.0, 85.0, 156.0], 0.0, 5.0, [3 // 8, 7 // 6, 23 // 24]) ≈ 215.4166666
     @test create_adams_moulton_weights(3; rationalize=true) == [1 // 24, -5 // 24, 19 // 24, 3 // 8]
 #   -------------------------------------------------------------------------------------------------------------------------
-    @test fdiff_adams_moulton_expansion_coeffs(5) == [1 // 1, -1 // 2, -1 // 12, -1 // 24, -19 // 720, -3 // 160]
+    @test fdiff_adams_moulton_expansion_polynom(5) == [1 // 1, -1 // 2, -1 // 12, -1 // 24, -19 // 720, -3 // 160]
     @test fdiff_adams_moulton_expansion_coeff(0) == 1//1
     @test fdiff_adams_moulton_expansion_coeff(20; msg=false) == -12365722323469980029 // 4817145976189747200000
     @test create_adams_moulton_weights(5) == [0.01875, -0.12013888888888889, 0.3347222222222222, -0.5541666666666667, 0.9909722222222223, 0.3298611111111111]
     @test create_adams_moulton_weights(5; rationalize=true) == [3//160, -173//1440, 241//720, -133//240, 1427//1440, 95//288]
 #   -------------------------------------------------------------------------------------------------------------------------
-    @test fdiff_adams_bashford_expansion_coeffs(5) == [1 // 1, 1 // 2, 5 // 12, 3 // 8, 251 // 720, 95 // 288]
+    @test fdiff_adams_bashford_expansion_polynom(5) == [1 // 1, 1 // 2, 5 // 12, 3 // 8, 251 // 720, 95 // 288]
     @test fdiff_adams_bashford_expansion_coeff(0) == 1//1
     @test fdiff_adams_bashford_expansion_coeff(20; msg=false) == 8136836498467582599787//33720021833328230400000
     @test create_adams_bashford_weights(5) == [-0.3298611111111111, 1.9979166666666666, -5.0680555555555555, 6.9319444444444445, -5.502083333333333, 2.970138888888889]

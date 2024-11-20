@@ -675,7 +675,7 @@ function trapezoidal_epw(k::Int; rationalize=false, devisor=false)
     o = -σ * c  # solving matrix equation results in trapezoidal_epw
 
     if rationalize
-        a = CamiDiff.fdiff_adams_moulton_expansion_polynom(k)
+        a = fdiff_adams_moulton_expansion_polynom(k)
         D = Base.denominator(Base.gcd(a))          # == Adams-Moulton devisor
         o = devisor ? (k, D, Base.round.(Int, o * D)) :
                       Base.round.(Int, o * D) // D  # convert to Rational{Int}

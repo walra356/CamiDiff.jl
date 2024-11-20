@@ -52,15 +52,15 @@ using Test
     @test o4 ≈ 1.0
 #   -----------------------------------------------------------------------------------------
 
-    @test fdiff_interpolation_expansion_coeffs(-1, 5) == [1, 1, 1, 1, 1, 1]
-    coeffs = fdiff_interpolation_expansion_coeffs(-1, 5);
-    @test fdiff_interpolation_expansion_weights(coeffs) ==  [-1, 6, -15, 20, -15, 6]
-    @test fdiff_interpolation_expansion_coeffs(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
-    coeffs = fdiff_interpolation_expansion_coeffs(1, 5, fwd);
-    fdiff_interpolation_expansion_weights(coeffs, fwd, reg) == [6, -15, 20, -15, 6, -1]
-    fdiff_interpolation_expansion_weights(coeffs, fwd, rev) == [-1, 6, -15, 20, -15, 6]
-    fdiff_interpolation_expansion_weights(coeffs, bwd, reg) == [0, 3, -6, 7, -4, 1]
-    fdiff_interpolation_expansion_weights(coeffs, bwd, rev) == [1, -4, 7, -6, 3, 0]
+    @test fdiff_interpolation_expansion_polynom(-1, 5) == [1, 1, 1, 1, 1, 1]
+    polynom = fdiff_interpolation_expansion_polynom(-1, 5);
+    @test fdiff_interpolation_expansion_weights(polynom) ==  [-1, 6, -15, 20, -15, 6]
+    @test fdiff_interpolation_expansion_polynom(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
+    polynom = fdiff_interpolation_expansion_polynom(1, 5, fwd);
+    fdiff_interpolation_expansion_weights(polynom, fwd, reg) == [6, -15, 20, -15, 6, -1]
+    fdiff_interpolation_expansion_weights(polynom, fwd, rev) == [-1, 6, -15, 20, -15, 6]
+    fdiff_interpolation_expansion_weights(polynom, bwd, reg) == [0, 3, -6, 7, -4, 1]
+    fdiff_interpolation_expansion_weights(polynom, bwd, rev) == [1, -4, 7, -6, 3, 0]
     @test fdiff_interpolation_expansion_weights(1, 5, fwd, reg) == [0, 1, 0, 0, 0, 0]
     @test fdiff_interpolation_expansion_weights(1, 5, fwd, rev) == [0, 0, 0, 0, 1, 0]
     @test fdiff_interpolation_expansion_weights(-1, 5, bwd, reg) == [6, -15, 20, -15, 6, -1]
@@ -75,8 +75,8 @@ using Test
     @test fdiff_expansion([1, -1, 1, -1], [1, 4, 9, 16], fwd) == 0
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16], bwd) == 25
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16]) == 25
-    @test fdiff_differentiation_expansion_coeffs(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
-    @test fdiff_differentiation_expansion_coeffs(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
+    @test fdiff_differentiation_expansion_polynom(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
+    @test fdiff_differentiation_expansion_polynom(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
     @test [fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], v) for v = 1:9] == [-8 // 1, -6 // 1, -4 // 1, -2 // 1, 0 // 1, 2 // 1, 4 // 1, 6 // 1, 8 // 1]
     @test fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], 5.5) == 1.0
     @test create_lagrange_differentiation_matrix(3) == [-11//6 3//1 -3//2 1//3; -1//3 -1//2 1//1 -1//6; 1//6 -1//1 1//2 1//3; -1//3 3//2 -3//1 11//6]
