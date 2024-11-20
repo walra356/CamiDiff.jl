@@ -210,10 +210,10 @@ f[n+k]
 
 Coefficients:
 
-[`fdiff_expansion_weights(coeffs, fwd, reg)`](@ref)
+[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where the `coeffs` ``  α ≡ [α_0,⋯\ α_k]`` are user supplied to define the
+where the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector ``  α ≡ [α_0,⋯\ α_k]`` is user supplied to define the
 expansion.
 
 **Backward difference notation**
@@ -259,15 +259,15 @@ In general there is *no simple symmetry relation* between
 
 Coefficients:
 
-[`fdiff_expansion_weights(coeffs, bwd, rev)`](@ref)
+[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
 `` → \bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]``,
 
-where the `coeffs`  ``  β ≡ [β_0,⋯\ β_k]`` are user supplied to
+where the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector  ``  β ≡ [β_0,⋯\ β_k]`` is user supplied to
 define the expansion.
 
 ```@docs
-fdiff_expansion_weights(coeffs, notation=CamiMath.bwd, ordering=CamiMath.rev)
-fdiff_expansion(coeffs, f, notation=CamiMath.bwd)
+fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
+fdiff_expansion(polynom, f, notation=CamiMath.bwd)
 ```
 
 ### Lagrange-polynomial interpolation/extrapolation
@@ -341,12 +341,12 @@ Symmetry relation:
 
 Weight functions:
 
-[`fdiff_expansion_weights(coeffs, fwd, reg)`](@ref)
+[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k]``,
 
 where the vector
 
-`coeffs = `[`fdiff_interpolation_expansion_coeffs(σ, k, fwd)`](@ref)
+`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``  contains the coefficients of the
 lagrangian-interpolation expansion.
 
@@ -422,17 +422,17 @@ B^k(σ) = F^k(σ) = \bar{B}^k(-k-σ)
 
 Weight function:
 
-[`fdiff_expansion_weights(coeffs, bwd, rev)`](@ref)
+[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
 `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
 where the vector
 
-`coeffs = `[`fdiff_interpolation_expansion_coeffs(σ, k=3, notation=bwd)`](@ref)
+`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k=3, notation=bwd)`](@ref)
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]`` contains the coefficients of the
 lagrangian-interpolation expansion.
 
 ```@docs
-fdiff_interpolation_expansion_coeffs(ξ::T, k=3, notation=CamiMath.bwd) where T<:Real
+fdiff_interpolation_expansion_polynom(ξ::T, k=3, notation=CamiMath.bwd) where T<:Real
 fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 ```
 
@@ -464,7 +464,7 @@ for *lagrangian differentiation* at position ``n+x``. These
 coefficients are determined numerically by polynomial multiplication. As the
 expansion algorith requires the presentce of a ``β_0(x)`` coefficient we add
 a (vanishing) ``p=0`` term, ``β_0(x)\equiv 0``. The corresponding coefficient
-vector is given by [`fdiff_differentiation_expansion_coeffs(k,x)`](@ref).
+vector is given by [`fdiff_differentiation_expansion_polynom(k,x)`](@ref).
 Evaluating the finite-difference expansion up to order ``k`` we obtain
 
 ```math
@@ -499,11 +499,11 @@ Functions:
 
 where
 
-[`fdiff_differentiation_expansion_coeffs(o, k)`](@ref)
+[`fdiff_differentiation_expansion_polynom(o, k)`](@ref)
 ``→ β ≡ [β_0(x),⋯\ β_k(x)]``.
 
 ```@docs
-fdiff_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
+fdiff_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
 fdiff_differentiation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 create_lagrange_differentiation_matrix(k::Int)
 ```
@@ -543,7 +543,7 @@ we ask for the expansion of
 
 This is known as the *Adams-Moulton expansion*. Its expansion coefficients are
 calculated numerically by the function
-[`fdiff_adams_moulton_expansion_coeffs(k)`](@ref). The *Adams-Bashford expansion* is
+[`fdiff_adams_moulton_expansion_polynom(k)`](@ref). The *Adams-Bashford expansion* is
 obtained as the polynomial product of the two expansions,
 
 ```math
@@ -554,7 +554,7 @@ obtained as the polynomial product of the two expansions,
 
 where the vector ``β = [B_0,⋯\ B_k]`` contains the *Adams-Bashford expansion coefficients*,
 rational numbers generated numerically by the function
-[`fdiff_adams_bashford_expansion_coeffs(k)`](@ref). Evaluating the finite-difference
+[`fdiff_adams_bashford_expansion_polynom(k)`](@ref). Evaluating the finite-difference
 expansion up to order ``k`` we obtain (after changing dummy index bring the
 summation in forward order)
 
@@ -570,7 +570,7 @@ where the ``A_j^k= \sum_{p=j}^{k} B_pc_j^p`` are the ``(k+1)``-point
 
 Function:
 
-`β` = [`fdiff_adams_bashford_expansion_coeffs(k)`](@ref)
+`β` = [`fdiff_adams_bashford_expansion_polynom(k)`](@ref)
 ``→ [B_0,⋯\ B_k]``
 
 `adams_bashford_weights`
@@ -581,7 +581,7 @@ Function:
 ``→ [A_k^k,⋯\ A_0^k]``
 
 ```@docs
-fdiff_adams_bashford_expansion_coeffs(k::Int; T=Int, msg=true)
+fdiff_adams_bashford_expansion_polynom(k::Int; T=Int, msg=true)
 create_adams_bashford_weights(k::Int; rationalize=false, devisor=false, T=Int)
 ```
 
@@ -604,7 +604,7 @@ y[n+1]-y[n]= (\sum_{p=0}^{k}b_p∇^p)f[n+1]+⋯.
 
 where the vector ``β = [b_0,⋯\ b_k]`` contains the *Adams-Moulton expansion coefficients*,
 rational numbers generated numerically by the function
-[`fdiff_adams_moulton_expansion_coeffs(k)`](@ref). Extracting the greatest
+[`fdiff_adams_moulton_expansion_polynom(k)`](@ref). Extracting the greatest
 common denominator, ``1/D``, the step becomes
 
 ```math
@@ -630,7 +630,7 @@ where the ``a_j^k= \sum_{p=j}^{k} b_pc_j^p`` are the ``(k+1)``-point
 
 Functions:
 
-`β` = [`fdiff_adams_moulton_expansion_coeffs(k)`](@ref) ``→ [b_0,⋯\ b_k]``
+`β` = [`fdiff_adams_moulton_expansion_polynom(k)`](@ref) ``→ [b_0,⋯\ b_k]``
 
 `adams_moulton_weights`
 = [`fdiff_expansion_weights(β, bwd, rev)`](@ref)
@@ -640,7 +640,7 @@ Functions:
 ``→ [a_k^k,⋯\ a_0^k]``
 
 ```@docs
-fdiff_adams_moulton_expansion_coeffs(k::Int; T=Int, msg=true)
+fdiff_adams_moulton_expansion_polynom(k::Int; T=Int, msg=true)
 create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, T=Int)
 ```
 

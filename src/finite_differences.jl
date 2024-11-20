@@ -36,53 +36,53 @@ function fdiff_weight(k::Int, j::Int)
 end
 
 # ------------------------------------------------------------------------------
-#                  fdiff_expansion_weights(coeffs, bwd, rev)
+#                  fdiff_expansion_weights(polynom, bwd, rev)
 # ------------------------------------------------------------------------------
 
-function reg_fwd_expansion_weights(coeffs)
+function reg_fwd_expansion_weights(polynom)
 
-    k = Base.length(coeffs)-1
+    k = Base.length(polynom)-1
 
-    o = [Base.sum([coeffs[p+1] * fdiff_weight(p, p-j) for p=j:k]) for j=0:k]
-
-    return o
-
-end
-# ..............................................................................
-function rev_fwd_expansion_weights(coeffs)
-
-    k = Base.length(coeffs)-1
-
-    o = [Base.sum([coeffs[p+1] * fdiff_weight(p, p-j) for p=j:k]) for j=k:-1:0]
+    o = [Base.sum([polynom[p+1] * fdiff_weight(p, p-j) for p=j:k]) for j=0:k]
 
     return o
 
 end
 # ..............................................................................
-function reg_bwd_expansion_weights(coeffs)
+function rev_fwd_expansion_weights(polynom)
 
-    k = Base.length(coeffs)-1
+    k = Base.length(polynom)-1
 
-    o = [sum([coeffs[p+1] * fdiff_weight(p, j) for p=j:k]) for j=0:k]
+    o = [Base.sum([polynom[p+1] * fdiff_weight(p, p-j) for p=j:k]) for j=k:-1:0]
 
     return o
 
 end
 # ..............................................................................
-function rev_bwd_expansion_weights(coeffs)
+function reg_bwd_expansion_weights(polynom)
 
-    k = Base.length(coeffs)-1
+    k = Base.length(polynom)-1
 
-    o = [sum([coeffs[p+1] * fdiff_weight(p, j) for p=j:k]) for j=k:-1:0]
+    o = [sum([polynom[p+1] * fdiff_weight(p, j) for p=j:k]) for j=0:k]
+
+    return o
+
+end
+# ..............................................................................
+function rev_bwd_expansion_weights(polynom)
+
+    k = Base.length(polynom)-1
+
+    o = [sum([polynom[p+1] * fdiff_weight(p, j) for p=j:k]) for j=k:-1:0]
 
     return o
 
 end
 # ..............................................................................
 @doc raw"""
-    fdiff_expansion_weights(coeffs[, notation=bwd[, ordering=rev]])
+    fdiff_expansion_weights(polynom[, notation=bwd[, ordering=rev]])
 
-Expansion weights corresponding to the expansion coefficients `coeffs` of
+Expansion weights corresponding to the expansion coefficients [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) of
 a finite difference expansion.
 
 **Forward difference notation** (`notation = fwd`)
@@ -152,16 +152,16 @@ revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
   revBk = [1, -5, 10, -10, 5]
 ```
 """
-function fdiff_expansion_weights(coeffs, notation=bwd, ordering=rev)
+function fdiff_expansion_weights(polynom, notation=bwd, ordering=rev)
 
     if CamiMath.isforward(notation)
 
-        o = CamiMath.isregular(ordering) ? reg_fwd_expansion_weights(coeffs) :
-                                           rev_fwd_expansion_weights(coeffs)
+        o = CamiMath.isregular(ordering) ? reg_fwd_expansion_weights(polynom) :
+                                           rev_fwd_expansion_weights(polynom)
     else
 
-        o = CamiMath.isregular(ordering) ? reg_bwd_expansion_weights(coeffs) :
-                                           rev_bwd_expansion_weights(coeffs)
+        o = CamiMath.isregular(ordering) ? reg_bwd_expansion_weights(polynom) :
+                                           rev_bwd_expansion_weights(polynom)
     end
 
     return o
@@ -169,16 +169,16 @@ function fdiff_expansion_weights(coeffs, notation=bwd, ordering=rev)
 end
 
 # ------------------------------------------------------------------------------
-#                  fdiff_expansion(coeffs, f, notation=bwd)
+#                  fdiff_expansion(polynom, f, notation=bwd)
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    fdiff_expansion(coeffs, f[, notation=bwd])
+    fdiff_expansion(polynom, f[, notation=bwd])
 
 Finite difference expansion of the analytical function f(x) tabulated
 in *forward order* (growing index) at ``k+1`` positions on a uniform grid.
-The expansion coefficients are specified by the vector `coeffs`. By default
-`coeffs` are assumed to be in backward-difference notation (`bwd`). For `coeffs`
+The expansion coefficients are specified by the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom). By default
+[`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) are assumed to be in backward-difference notation (`bwd`). For [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom)
 in forward-difference notation the third argument must be `fwd`.
 
 **Forward difference notation** (`notation = fwd`)
@@ -187,7 +187,7 @@ in forward-difference notation the third argument must be `fwd`.
 ```
 where ``f[n:n+k]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``α ≡ [α_0,⋯\ α_k]`` is the vector `coeffs`, which has to be supplied to
+``α ≡ [α_0,⋯\ α_k]`` is the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom), which has to be supplied to
 define the forward-difference expansion.
 The corresponding weights vector ``F^{k}`` is internally generated.
 
@@ -197,7 +197,7 @@ The corresponding weights vector ``F^{k}`` is internally generated.
 ```
 where ``f[n-k:n]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``β ≡ [β_0,⋯\ β_k]`` is the vector `coeffs`, which has to be supplied to
+``β ≡ [β_0,⋯\ β_k]`` is the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom), which has to be supplied to
 define the backward-difference expansion. The corresponding weights vector
 ``\bar{B}^k`` is internally generated.
 
@@ -239,20 +239,20 @@ the expansion is third order (based on the polynomial of ``k^{th}`` degree
 running through the ``k+1`` points of the tabulated function). Note the
 relation with [`fdiff_interpolation(f, v, k=3)`](@ref).
 """
-function fdiff_expansion(coeffs, f, notation=bwd)
+function fdiff_expansion(polynom, f, notation=bwd)
 
     ordering = CamiMath.isforward(notation) ? reg : rev
-    w = fdiff_expansion_weights(coeffs, notation, ordering)
+    w = fdiff_expansion_weights(polynom, notation, ordering)
 
     return w ⋅ f
 
 end
 
 # ------------------------------------------------------------------------------
-#           fdiff_interpolation_expansion_coeffs(k, x, notation=bwd)
+#           fdiff_interpolation_expansion_polynom(k, x, notation=bwd)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_coeffs(ξ::T, k=3) where T<:Real
+function fwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -262,7 +262,7 @@ function fwd_interpolation_expansion_coeffs(ξ::T, k=3) where T<:Real
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_coeffs(ξ::T, k=3) where T<:Real
+function bwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -273,7 +273,7 @@ function bwd_interpolation_expansion_coeffs(ξ::T, k=3) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_interpolation_expansion_coeffs(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
+    fdiff_interpolation_expansion_polynom(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining the ``k^{th}``-order
 (default *third* order) Lagrange-polynomial interpolation of a tabulated
@@ -291,7 +291,7 @@ f[n+ξ] = \sum_{p=0}^k α_p(-ξ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_coeffs(ξ, k, fwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
 `` → α(-ξ) ≡ [α_0(-ξ),⋯\ α_k(-ξ)]``. In this notation the range
 ``0\leq ξ\leq k`` corresponds to interpolation and the ranges ``ξ<0`` and
 ``ξ>k`` to extrapolation.
@@ -306,7 +306,7 @@ f[n+ξ] = \sum_{p=0}^k β_p(ξ) ∇^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_coeffs(ξ, k, bwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(ξ, k, bwd)`](@ref)
 `` → β(ξ) ≡ [β_0(ξ),⋯\ β_k(ξ)]``. In this notation the range
 ``-k\leq ξ\leq0`` corresponds to interpolation and the ranges
 ``ξ<-k`` and ``ξ>0`` to extrapolation.
@@ -315,39 +315,39 @@ where the expansion coefficients are given by
 ```
 k = 5
 ξ = -1
-α = fdiff_interpolation_expansion_coeffs(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_coeffs(ξ, k, bwd); println("β = $β")
+α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
+β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
   α = [1, 1, 0, 0, 0, 0]
   β = [1, 1, 1, 1, 1, 1]
 
 ξ = 0
-α = fdiff_interpolation_expansion_coeffs(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_coeffs(ξ, k, bwd); println("β = $β")
+α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
+β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
   α = [1, 0, 0, 0, 0, 0]
   β = [1, 0, 0, 0, 0, 0]
 
 ξ = 1
-α = fdiff_interpolation_expansion_coeffs(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_coeffs(ξ, k, bwd); println("β = $β")
+α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
+β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
   α = [1, -1, 1, -1, 1, -1]
   β = [1, -1, 0, 0, 0, 0]
 ```
 """
-function fdiff_interpolation_expansion_coeffs(ξ::T, k=3, notation=bwd) where T<:Real
+function fdiff_interpolation_expansion_polynom(ξ::T, k=3, notation=bwd) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_coeffs(-ξ, k) :
-                                       bwd_interpolation_expansion_coeffs(ξ, k)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(-ξ, k) :
+                                       bwd_interpolation_expansion_polynom(ξ, k)
     return o
 
 end
 
 # ------------------------------------------------------------------------------
-#                  fdiff_interpolation_expansion_weights(coeffs)
+#                  fdiff_interpolation_expansion_weights(polynom)
 # ------------------------------------------------------------------------------
 
 function fwd_interpolation_expansion_weights(ξ::T, k=3, ordering=reg) where T<:Real
 
-    α = fdiff_interpolation_expansion_coeffs(ξ, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(ξ, k, fwd)
     o = fdiff_expansion_weights(α, fwd, ordering)
 
     return o
@@ -356,7 +356,7 @@ end
 #...............................................................................
 function bwd_interpolation_expansion_weights(ξ::T, k=3, ordering=rev) where T<:Real
 
-    β = fdiff_interpolation_expansion_coeffs(ξ, k, bwd)
+    β = fdiff_interpolation_expansion_polynom(ξ, k, bwd)
     o = fdiff_expansion_weights(β, bwd, ordering)
 
     return o
@@ -370,16 +370,16 @@ function fdiff_interpolation_expansion_weights(ξ::T, k=3, notation=bwd, orderin
     return o
 
 end
-function fdiff_interpolation_expansion_weights(coeffs, notation=bwd, ordering=rev)
+function fdiff_interpolation_expansion_weights(polynom, notation=bwd, ordering=rev)
 
     if CamiMath.isforward(notation)
 
-        o = CamiMath.isregular(ordering) ? reg_fwd_expansion_weights(coeffs) :
-                                           rev_fwd_expansion_weights(coeffs)
+        o = CamiMath.isregular(ordering) ? reg_fwd_expansion_weights(polynom) :
+                                           rev_fwd_expansion_weights(polynom)
     else
 
-        o = CamiMath.isregular(ordering) ? reg_bwd_expansion_weights(coeffs) :
-                                           rev_bwd_expansion_weights(coeffs)
+        o = CamiMath.isregular(ordering) ? reg_bwd_expansion_weights(polynom) :
+                                           rev_bwd_expansion_weights(polynom)
     end
 
     return o
@@ -437,7 +437,7 @@ function fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
     k = min(k,l-1)
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     n = v < 1 ? 1 : v < l-k ? floor(Int,v) : l-k
-    α = fdiff_interpolation_expansion_coeffs(n-v, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(n-v, k, fwd)
     o = fdiff_expansion(α, f[n:n+k], fwd)
 
     return o
@@ -445,10 +445,10 @@ function fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 end
 
 # ------------------------------------------------------------------------------
-#                fdiff_differentiation_expansion_coeffs(ξ, k)
+#                fdiff_differentiation_expansion_polynom(ξ, k)
 # ------------------------------------------------------------------------------
 
-function fwd_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
+function fwd_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
 # ==============================================================================
 #   Forward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n,n+k] and
@@ -466,7 +466,7 @@ function fwd_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
     a = 1 ./ a; a[1] = 0
 
     ξ == 0 && return a
-    α = fdiff_interpolation_expansion_coeffs(-ξ, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
 
     a,α = Base.promote(a,α)
 
@@ -474,7 +474,7 @@ return CamiMath.polynom_product_expansion(a, α, k)
 
 end
 #...............................................................................
-function bwd_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
+function bwd_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
 # ==============================================================================
 #   Backward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n-k,n] and
@@ -492,7 +492,7 @@ function bwd_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
     b = 1 ./ b; b[1] = 0
 
     ξ == 0 && return b
-    β = fdiff_interpolation_expansion_coeffs(ξ, k, bwd)
+    β = fdiff_interpolation_expansion_polynom(ξ, k, bwd)
 
     b,β = Base.promote(b,β)
 
@@ -501,7 +501,7 @@ function bwd_differentiation_expansion_coeffs(ξ::T, k=3) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_differentiation_expansion_coeffs(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
+    fdiff_differentiation_expansion_polynom(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining ``k^{th}``-order
 lagrangian *differentiation* of the tabulated analytic function ``f[n]``
@@ -529,14 +529,14 @@ interval ``f[n-k:n]``
 #### Example:
 ```
 k = 2; ξ = 0
-o = fdiff_differentiation_expansion_coeffs(ξ, k); println(o)
+o = fdiff_differentiation_expansion_polynom(ξ, k); println(o)
  [0.0, 1.0, -1.5]
 ```
 """
-function fdiff_differentiation_expansion_coeffs(ξ::T, k=3, notation=bwd) where T<:Real
+function fdiff_differentiation_expansion_polynom(ξ::T, k=3, notation=bwd) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_coeffs(ξ, k) :
-                                       bwd_differentiation_expansion_coeffs(ξ, k)
+    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(ξ, k) :
+                                       bwd_differentiation_expansion_polynom(ξ, k)
     return o
 
 end
@@ -576,7 +576,7 @@ function fdiff_differentiation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     n = v ≤ 1 ? 1 : v < l-k ? floor(Int,v) : l-k
     ξ = v-n
-    α = fdiff_differentiation_expansion_coeffs(ξ, k, fwd)
+    α = fdiff_differentiation_expansion_polynom(ξ, k, fwd)
     w = fdiff_expansion_weights(α, fwd, reg)
     o = w ⋅ f[n:n+k]
 
@@ -612,8 +612,8 @@ function create_lagrange_differentiation_matrix(k::Int)
     m = Matrix{Rational{Int}}(undef,k+1,k+1)
 
     for i=0:k
-        coeffs = CamiDiff.fdiff_differentiation_expansion_coeffs(k-i,k)
-        m[1+i,1:k+1] = fdiff_expansion_weights(coeffs)
+        polynom = CamiDiff.fdiff_differentiation_expansion_polynom(k-i,k)
+        m[1+i,1:k+1] = fdiff_expansion_weights(polynom)
     end
 
     return m
@@ -675,7 +675,7 @@ function trapezoidal_epw(k::Int; rationalize=false, devisor=false)
     o = -σ * c  # solving matrix equation results in trapezoidal_epw
 
     if rationalize
-        a = CamiDiff.fdiff_adams_moulton_expansion_coeffs(k)
+        a = CamiDiff.fdiff_adams_moulton_expansion_polynom(k)
         D = Base.denominator(Base.gcd(a))          # == Adams-Moulton devisor
         o = devisor ? (k, D, Base.round.(Int, o * D)) :
                       Base.round.(Int, o * D) // D  # convert to Rational{Int}
