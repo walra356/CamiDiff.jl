@@ -107,7 +107,7 @@ end
 
 * `ID = 1`: exponential grid function,
 ```math
-    g(t) = e^t - 1.0
+    g(t) = e^t - 1
 ```
 * `ID = 2`: quasi-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
@@ -121,14 +121,15 @@ end
 ```math
     g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p,
 ```
-with ``c_0 ≡ 0`` because grid functions are defined to run through the origin, ``g(0) = 0``. 
+with ``c_0 ≡ 0`` because *by definition* all grid functions run through the origin, ``g(0) = 0``. 
 
 The actual grid is given by 
 ```math
-    x[n] = r_0 * g(t[n]),
+    x[n] = r_0 * g(t[n]) + x_0,
 ```
-where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array convention. 
-NB. Note that ``x[1] = 0`` for all grid functions.
+where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array convention.
+
+NB. Note that ``t[1] = 0`` and ``x[1] = x_0 for all grid functions.
 #### Examples:
 ```
 julia> h = 0.1; r0=1.0; N=4;
@@ -194,12 +195,12 @@ end
     castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
     castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=7, msg=false)
 
-Method to create the Grid object
+Method to create the [`Grid`](@ref) object
 
-`ID = 1`: exponential grid,
-`ID = 2`: quasi-exponential grid,
-`ID = 3`: linear grid
-`ID = 4`: polynomial grid
+`ID = 1`: exponential,
+`ID = 2`: quasi-exponential,
+`ID = 3`: linear (uniform)
+`ID = 4`: polynomial
 #### Examples:
 ```
 julia> grid = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
@@ -219,24 +220,15 @@ Grid: polynomial of degree 2, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0,
 
 julia> grid.r[1:4]
 4-element Vector{Float64}:
- 2.220446049250313e-16
- 1.0000000000000003e-5
- 4.000000000000001e-5
- 9.000000000000003e-5
+ [2.220446049250313e-16, 1.0000000000000003e-5, 4.000000000000001e-5, 9.000000000000003e-5]
 
 julia> grid.r′[1:4]
 4-element Vector{Float64}:
- 0.0
- 2.0000000000000005e-5
- 4.000000000000001e-5
- 6.0000000000000015e-5
-
-julia> grid.r′′[1:4]
+ [0.0, 2.0000000000000005e-5, 4.000000000000001e-5, 6.0000000000000015e-5]
+ 
+ julia> grid.r′′[1:4]
 4-element Vector{Float64}:
- 2.0000000000000005e-5
- 2.0000000000000005e-5
- 2.0000000000000005e-5
- 2.0000000000000005e-5 
+ [2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5] 
 ```
 """
 function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
@@ -345,13 +337,14 @@ end
 tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
 #### Example:
 ```
-julia> ID = 3; # linear grid
 julia> f = [0.0, 1.0, 4.0, 9.0, 16.0, 25.0];
-julia> grid = castGrid(ID, length(f), Float64; r0=1.0, h=1.0, k=3, msg=true);
-Grid created: linear, Float64, Rmax = 6.0 a.u., Ntot = 6, p = 1, h = 1.0, r0 = 1.0
 
-julia> f′= grid_differentiation(f, grid; k=3); println("f′= $(f′)")
-f′= [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
+julia> grid = castGrid("linear", length(f), Float64; r0=1.0, h=1.0, k=3, msg=true);
+Grid: linear (uniform), Float64, rmax = 6.0, Ntot = 6, p = 1, h = 1.0, r0 = 1.0
+
+julia> f′= grid_differentiation(f, grid; k=3)
+6-element Vector{Float64}:
+  [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
 ```
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
@@ -387,15 +380,15 @@ end
     grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T<:Real
     grid_integration(f::Vector{T}, grid::Grid{T}, itr::UnitRange) where T<:Real
 
-Integral of the function ``f=[f_0,⋯\ f_n]`` tabulated on a [`Grid`](@ref)
-using the trapezoidal rule optimized with endpoint correction by the
-weightsvector `grid.epw`,
+Integral of the function ``f(r)`` tabulated on a [`Grid`](@ref) evaluated with
+the trapezoidal rule optimized with endpoint correction by the
+weightsvector [`grid.epw`](@ref),
 ```math
     ∫_{0}^{r_n} f(r) dr = ∫_{0}^{n} f(x) r^{\prime}(x) dx,
 ```
 where the latter integral corresponds to the optimized trapezoidal rule for a
 uniform grid (see [`trapezoidal_integration`](@ref)). The rule is exact for
-polynonials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
+polynomials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
 For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
 #### Examples:
 ```

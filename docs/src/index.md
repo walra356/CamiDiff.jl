@@ -36,7 +36,7 @@ which we define by the discrete function
 ```math
 x[n] = s_0 * g(t[n]) + x_0,
 ```
-where ``g(t)`` is called the *grid function*, ``s_0`` the *scaling factor* and ``x_0`` the *offset* . 
+where ``g(t)`` is called the [`gridfunction`](@ref), ``s_0`` the *scaling factor* and ``x_0`` the *offset* . 
 The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``. 
 Its argument is the *ticks function*
 ```math
