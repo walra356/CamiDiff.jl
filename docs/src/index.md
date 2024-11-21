@@ -27,18 +27,14 @@ julia> using CamiMath
 `CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*, 
 which we shall denote by ``f(x)``. 
 
-The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, ``f(x) ↦ f[n]``. 
-This involves the map
+The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, which is based 
+on the map ``n ↦ x`` and defined by the discrete function
 ```math
-n ↦ x
+x[n] = s_0 * g(t[n]).
 ```
-which we define by the discrete function
-```math
-x[n] = s_0 * g(t[n]),
-```
-where ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. 
-The [`gridfunction`](@ref) is a (generally nonlinear) analytic function *running through the origin*, ``g(0) = 0``. 
-Its argument is the *ticks function*
+Here ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. The [`gridfunction`](@ref) 
+is a (generally nonlinear) analytic function *running through the origin*, ``g(0) = 0``. Its argument is 
+the *ticks function*
 ```math
 t[n] ≡ (n−u) * h,
 ```
@@ -48,7 +44,7 @@ Writing
 f[n] = f(x[n]),
 ```
 we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f(x)`` at position ``x[n]``. 
-As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
+As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(0)``. 
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
 and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather 
