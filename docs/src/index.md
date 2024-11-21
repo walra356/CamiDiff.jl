@@ -56,9 +56,9 @@ than ``f(x)``, with ``r ≥ 0``.
 
 ## Grid
 
-The `Grid` object is the backbone for the numerical procedure on a non-uniform
-grid. Its principal fields are `grid.r` and `grid.r′`, which are discrete
-functions of `N` elements representing the grid function and its derivative.
+The [`Grid`](@ref) object is the backbone for the numerical procedure on a non-uniform
+grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
+functions of `N` elements representing the grid function and its first two derivatives.
 
 ```@docs
 Grid{T}
