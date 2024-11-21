@@ -127,7 +127,7 @@ The actual grid is given by
 ```math
     x[n] = r_0 * g(t[n]),
 ```
-where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array convention.
+where ``t[n] = (n-1) * h`` is the *ticks function* for unit-based indexing.
 
 NB. Note that ``t[1] = 0`` and ``x[1] = 0 for all grid functions.
 #### Examples:
@@ -226,7 +226,7 @@ julia> grid.r′[1:4]
 4-element Vector{Float64}:
  [0.0, 2.0000000000000005e-5, 4.000000000000001e-5, 6.0000000000000015e-5]
  
- julia> grid.r′′[1:4]
+julia> grid.r′′[1:4]
 4-element Vector{Float64}:
  [2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5] 
 ```
