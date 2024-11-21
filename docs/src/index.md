@@ -24,11 +24,10 @@ julia> using CamiMath
 
 ## Introduction
 
-`CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*, 
-which we shall denote by ``f(x)``. 
+`CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*. 
 
-The analysis starts by discretization of ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, which is based 
-on the map ``n ↦ x`` and defined by the discrete function
+The analysis starts by discretization of the function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, 
+which is based on the map ``n ↦ x`` and defined by the discrete function
 ```math
 x[n] = s_0 * g(t[n]).
 ```
@@ -43,8 +42,8 @@ Writing
 ```math
 f[n] = f(x[n]),
 ```
-we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f(x)`` at position ``x[n]``. 
-As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(0)``. 
+we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. 
+As [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), we have ``f[1] = f(0)``. 
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
 and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather 
