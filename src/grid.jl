@@ -382,7 +382,7 @@ end
 
 Integral of the function ``f(r)`` tabulated on a generally nonlinear [`Grid`](@ref) 
 evaluated with the generalized trapezoidal rule optimized with endpoint correction 
-by the weightsvector [`grid.epw`](@ref),
+by the weightsvector `grid.epw`,
 ```math
     ∫_{0}^{r_n} f(r) dr = ∫_{0}^{n} f(x) r^{\prime}(x) dx,
 ```
