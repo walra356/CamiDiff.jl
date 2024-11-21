@@ -380,9 +380,9 @@ end
     grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T<:Real
     grid_integration(f::Vector{T}, grid::Grid{T}, itr::UnitRange) where T<:Real
 
-Integral of the function ``f(r)`` tabulated on a [`Grid`](@ref) evaluated with
-the trapezoidal rule optimized with endpoint correction by the
-weightsvector [`grid.epw`](@ref),
+Integral of the function ``f(r)`` tabulated on a generally nonlinear [`Grid`](@ref) 
+evaluated with the generalized trapezoidal rule optimized with endpoint correction 
+by the weightsvector [`grid.epw`](@ref),
 ```math
     ∫_{0}^{r_n} f(r) dr = ∫_{0}^{n} f(x) r^{\prime}(x) dx,
 ```
