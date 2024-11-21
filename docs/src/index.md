@@ -34,10 +34,10 @@ n ↦ x
 ```
 which we define by the discrete function
 ```math
-x[n] = s_0 * g(t[n]) + x_0,
+x[n] = s_0 * g(t[n]),
 ```
-where ``g(t)`` is called the [`gridfunction`](@ref), ``s_0`` the *scaling factor* and ``x_0`` the *offset* . 
-The grid function is a (generally nonlinear) analytic function running through the origin, ``g(0) = 0``. 
+where ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. 
+The [`gridfunction`](@ref) is a (generally nonlinear) analytic function *running through the origin*, ``g(0) = 0``. 
 Its argument is the *ticks function*
 ```math
 t[n] ≡ (n−u) * h,
@@ -47,7 +47,7 @@ Writing
 ```math
 f[n] = f(x[n]),
 ```
-we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f`` at position ``x[n]``. 
+we recognize in ``f[n]`` a discrete function representing the (continuous) function ``f(x)`` at position ``x[n]``. 
 As [Julia](http://julialang.org) is a unit-based-array language (``u = 1``), we have ``f[1] = f(x_0)``. 
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 

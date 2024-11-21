@@ -125,11 +125,11 @@ with ``c_0 ≡ 0`` because *by definition* all grid functions run through the or
 
 The actual grid is given by 
 ```math
-    x[n] = r_0 * g(t[n]) + x_0,
+    x[n] = r_0 * g(t[n]),
 ```
 where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based-array convention.
 
-NB. Note that ``t[1] = 0`` and ``x[1] = x_0 for all grid functions.
+NB. Note that ``t[1] = 0`` and ``x[1] = 0 for all grid functions.
 #### Examples:
 ```
 julia> h = 0.1; r0=1.0; N=4;
