@@ -55,9 +55,9 @@ f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
 ```
 Comparing the operator expression for the *forward* translation with the Taylor expansion we obtain, by formal inversion of the operator, and operator identity for the *backward* translation operator,
 ```math
-T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1},
+T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1}.
 ```
-by which the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``Δ`` ,
+With this procedure, the explicit dependence on ``h`` has been replaced by an implicit dependence on ``h`` through the expansion in powers of ``Δ`` ,
 ```math
 f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
