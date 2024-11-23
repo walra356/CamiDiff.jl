@@ -57,13 +57,16 @@ Comparing the forward translation with the Taylor expansion, we find an operator
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1},
 ```
-by which the explicit dependence on h can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``Δ`` ,
+by which the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``Δ`` ,
 ```math
 f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x-h)`` can be approximated to any desired level of accuracy.
 
-Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
+Likewise, for *backward differences*, we rewrite the backward-difference definition in the form 
+```math
+f(x-h)=(1-∇)f(x).
+```Comparing this *backward translation* with the Taylor expansion leads to an operator identity for the *backward translation operator*, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
