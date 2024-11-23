@@ -38,7 +38,7 @@ Here, ``Δ`` is called the *forward-difference operator*. Likewise one defines t
 ```
 We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 ```math
-f^′(x)=\underset{h⇒0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
+f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
 ```
 where ``h≡Δ x≥0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 ```math
