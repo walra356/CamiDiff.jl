@@ -32,20 +32,20 @@ Finite-difference calculus is based on the manipulation of finite differences of
 ```math
 Δ f(x)=f(x+h)-f(x).
 ```
-Here ``Δ`` is called the *forward-difference operator*. Likewise one defines the *backward-difference operator* ``∇``, 
+Here, ``Δ`` is called the *forward-difference operator*. Likewise one defines the *backward-difference operator* ``∇``, 
 ```math
 ∇ f(x)=f(x)-f(x-h).
 ```
 We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 ```math
-f′(x)=\underset{h⇒0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
+f^′(x)=\underset{h⇒0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
 ```
-where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
+where ``h≡Δ x≥0`` is the difference interval. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 ```math
 D≡\frac{d}{dx}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h⇒0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 
-With regard to *forward differences* we rewrite the forward difference definition in the form 
+    With regard to *forward differences* we rewrite the forward difference definition in the form 
 ```math
 f(x+h)=(1+Δ)f(x).
 ```
@@ -63,7 +63,7 @@ f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x-h)`` can be approximated to any desired level of accuracy.
 
-Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
+    Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
