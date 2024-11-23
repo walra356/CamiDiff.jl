@@ -26,6 +26,47 @@ julia> using CamiMath
 
 `CamiDiff` is a package for finite-difference analysis of *real analytic functions of a single variable*. 
 
+### Finite differences
+
+Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the forward difference and is defined as ``Δ f(x)=f(x+h)-f(x)``,where ``Δ`` is called the forward-difference operator.Likewise one defines the backward-difference operator, ``∇ f(x)=f(x)-f(x-h)``. We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
+```math
+f′(x)=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
+```
+where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f′(x)≡ Df(x)``, we have 
+```math
+D≡\frac{d}{dx}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{h}.
+```
+
+With regard to *forward differences* we rewrite the forward difference definition in the form ``f(x+h)=(1+Δ)f(x)`` and notice that 
+```math
+T≡(1+Δ)
+```
+has the properties of a translation operator, shifting the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator ``T≡ e^{hD}`` as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
+```math
+f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
+```
+Comparing Eq.() with the Taylor expansion, we find an operator identity for the backward translation operator,
+```math
+T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1},
+```
+by which the explicit dependence on h can be replaced by an implicit dependence on h through the expansion in powers of ``Δ`` ,
+```math
+f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
+```
+By choosing the proper expansion order, ``f(x-h)`` can be approximated to any desired level of accuracy.
+
+Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
+```math
+(1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
+```
+by which the explicit dependence on ``h`` can be replaced by an implicit dependence on h through the expansion in powers of ``∇``, 
+```math
+f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
+```
+By choosing the proper expansion order, f(x+h) can be approximated to any desired level of accuracy.
+
+### Discretization
+
 The analysis starts by discretization of the function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, 
 which is based on the map ``n ↦ x`` and defined by the discrete function
 ```math
@@ -277,10 +318,10 @@ f[n]=(1+Δ)f[n+1],
 ```
 we obtain by formal operator inversion
 ```math
-f[n+1] = (1 + Δ)^{-1} f[n] \equiv \sum_{p=0}^{\infty}(-1)^p Δ^p f[n],
+f[n+1] = (1 + Δ)^{-1} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p Δ^p f[n],
 ```
 ```math
-f[n+2] = (1 + Δ)^{-2} f[n] \equiv \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
+f[n+2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
 ```
 ```math
 \vdots
@@ -291,7 +332,7 @@ index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n-σ] = (1 + Δ)^{-σ} f[n] \equiv \sum_{p=0}^{\infty} α_p(σ) Δ^p f[n],
+f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} α_p(σ) Δ^p f[n],
 ```
 where
 
@@ -353,10 +394,10 @@ f[n]=(1-∇)f[n+1].
 ```
 we obtain by formal operator inversion
 ```math
-f[n+1] = (1 - ∇)^{-1} f[n] \equiv \sum_{p=0}^{\infty}∇^p f[n],
+f[n+1] = (1 - ∇)^{-1} f[n] ≡ \sum_{p=0}^{\infty}∇^p f[n],
 ```
 ```math
-f[n+2] = (1 - ∇)^{-2} f[n] \equiv \sum_{p=0}^{\infty}p∇^p f[n],
+f[n+2] = (1 - ∇)^{-2} f[n] ≡ \sum_{p=0}^{\infty}p∇^p f[n],
 ```
 ```math
 \vdots
@@ -368,7 +409,7 @@ index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n+σ] = (1 - ∇)^{-σ} f[n] \equiv \sum_{p=0}^{\infty} β_p(σ) ∇^p f[n],
+f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} β_p(σ) ∇^p f[n],
 ```
 where
 
@@ -458,7 +499,7 @@ where ``β_p(x)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+x``. These
 coefficients are determined numerically by polynomial multiplication. As the
 expansion algorith requires the presentce of a ``β_0(x)`` coefficient we add
-a (vanishing) ``p=0`` term, ``β_0(x)\equiv 0``. The corresponding coefficient
+a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The corresponding coefficient
 vector is given by [`fdiff_differentiation_expansion_polynom(k,x)`](@ref).
 Evaluating the finite-difference expansion up to order ``k`` we obtain
 
@@ -525,7 +566,7 @@ is not available. As we already have a finite-difference expansion for the
 operator ``(1-∇)^{-1}``,
 
 ```math
-\frac{1}{1-∇}\equiv\sum_{p=0}^{\infty}∇^p,
+\frac{1}{1-∇}≡\sum_{p=0}^{\infty}∇^p,
 ```
 
 we ask for the expansion of
@@ -603,11 +644,11 @@ rational numbers generated numerically by the function
 common denominator, ``1/D``, the step becomes
 
 ```math
-y[n+1]-y[n]= \frac{1}{D}(\sum_{p=0}^{k}b_p^{\prime}∇^p)f[n+1]+⋯,
+y[n+1]-y[n]= \frac{1}{D}(\sum_{p=0}^{k}b_p′∇^p)f[n+1]+⋯,
 ```
 
-where ``b_0^{\prime},⋯\ b_k^{\prime}`` are integers and
-``b_p=b_p^{\prime}/D``. In practice the expansion is restricted to ``k<18``
+where ``b_0′,⋯\ b_k′`` are integers and
+``b_p=b_p′/D``. In practice the expansion is restricted to ``k<18``
 (as limited by integer overflow). Note that this limit is much higher than
 values used in calculations (typically up to ``k = 10``). Evaluating the
 finite-difference expansion up to order ``k`` we obtain (after changing

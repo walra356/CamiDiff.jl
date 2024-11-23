@@ -333,7 +333,7 @@ end
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=3) where T<:Real
     grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=3) where T<:Real
 
-``k^{th}``-order lagrangian *differentiation* of the analytic function ``f``,
+``k^{th}``-order lagrangian *differentiation* of the analytic function ``f(x)``,
 tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
 #### Example:
 ```
@@ -344,7 +344,7 @@ Grid: linear (uniform), Float64, rmax = 6.0, Ntot = 6, p = 1, h = 1.0, r0 = 1.0
 
 julia> f′= grid_differentiation(f, grid; k=3)
 6-element Vector{Float64}:
-  [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
+ [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
 ```
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
@@ -380,15 +380,15 @@ end
     grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T<:Real
     grid_integration(f::Vector{T}, grid::Grid{T}, itr::UnitRange) where T<:Real
 
-Integral of the function ``f(r)`` tabulated on a generally nonlinear [`Grid`](@ref) 
-evaluated with the generalized trapezoidal rule optimized with endpoint correction 
-by the weightsvector `grid.epw`,
+Integral of the analytic function ``f(r)`` tabulated on a generally nonlinear 
+[`Grid`](@ref) and evaluated with the generalized trapezoidal rule optimized 
+with endpoint correction by the weightsvector `grid.epw`,
 ```math
-    ∫_{0}^{r_n} f(r) dr = ∫_{0}^{n} f(x) r^{\prime}(x) dx,
+    ∫_{0}^{r_n} f(r) dr = ∫_{0}^{n} f(x) r^{\prime}(x) dx.
 ```
-where the latter integral corresponds to the optimized trapezoidal rule for a
+Here, the latter integral corresponds to the optimized trapezoidal rule for a
 uniform grid (see [`trapezoidal_integration`](@ref)). The rule is exact for
-polynomials of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
+polynomial functions of degree ``d=0,\ 1,⋯\ k-1``, where ``k=`` `grid.epn`.
 For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
 #### Examples:
 ```
