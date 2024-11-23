@@ -38,11 +38,11 @@ where ``Δ`` is called the forward-difference operator. Likewise one defines the
 ```
 We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 ```math
-f′(x)=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
+f′(x)=\underset{h⇒0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
 ```
-where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f^′(x)≡ Df(x)``, we have 
+where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 ```math
-D≡\frac{d}{dx}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{h}.
+D≡\frac{d}{dx}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h⇒0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 
 With regard to *forward differences* we rewrite the forward difference definition in the form ``f(x+h)=(1+Δ)f(x)`` and notice that 
