@@ -45,7 +45,7 @@ where ``h≡Δ x≥0`` is the difference interval. Introducing the differential 
 D≡\frac{d}{dx}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h⇒0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 
-    With regard to *forward differences* we rewrite the forward difference definition in the form 
+With regard to *forward differences* we rewrite the forward difference definition in the form 
 ```math
 f(x+h)=(1+Δ)f(x).
 ```
@@ -63,7 +63,7 @@ f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x-h)`` can be approximated to any desired level of accuracy.
 
-    Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
+Likewise, for *backward differences* we rewrite the forward difference definition in the form ``f(x-h)=(1-∇)f(x)``. Comparing with the Taylor expansion, this leads to an operator identity for the backward translation operator, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
@@ -71,11 +71,11 @@ by which the explicit dependence on ``h`` can be replaced by an implicit depende
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
-By choosing the proper expansion order, f(x+h) can be approximated to any desired level of accuracy.
+By choosing the proper expansion order, ``f(x+h)`` can be approximated to any desired level of accuracy.
 
 ### Discretization
 
-The analysis starts by discretization of the function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, 
+Finite-difference analysis starts by discretization of the function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, 
 which is based on the map ``n ↦ x`` and defined by the discrete function
 ```math
 x[n] = s_0 * g(t[n]).
