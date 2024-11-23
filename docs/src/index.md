@@ -42,7 +42,7 @@ f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x→
 ```
 where ``h≡Δ x≥0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 ```math
-D≡\frac{d}{dx}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h⇒0}{\mathrm{lim}}\,\frac{Δ}{h}.
+D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 
 With regard to *forward differences* we rewrite the forward difference definition in the form of a *forward translation*,
@@ -53,7 +53,7 @@ where ``T≡(1+Δ)`` is the *forward translation operator*, which shifts the fun
 ```math
 f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
 ```
-Comparing the forward translation with the Taylor expansion, we find an operator identity for the backward translation operator,
+Comparing the *forward translation* with the Taylor expansion, we find an operator identity for the backward translation operator,
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1},
 ```
@@ -66,11 +66,11 @@ By choosing the proper expansion order, ``f(x-h)`` can be approximated to any de
 Likewise, for *backward differences*, we rewrite the backward-difference definition in the form 
 ```math
 f(x-h)=(1-∇)f(x).
-```Comparing this *backward translation* with the Taylor expansion leads to an operator identity for the *backward translation operator*, 
+```Comparing this *backward translation* with the Taylor expansion leads to an operator identity for the *forward translation operator*, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
-by which the explicit dependence on ``h`` can be replaced by an implicit dependence on h through the expansion in powers of ``∇``, 
+by which the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``∇``, 
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
