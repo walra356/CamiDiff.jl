@@ -71,7 +71,7 @@ Comparing this *backward* translation with the Taylor expansion we obtain, by fo
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
-by which the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``∇``, 
+where ``T≡(1-∇)`` is the *backward translation operator*by which the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through the expansion in powers of ``∇``, 
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
