@@ -28,11 +28,19 @@ julia> using CamiMath
 
 ### Finite differences
 
-Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the forward difference and is defined as ``Δ f(x)=f(x+h)-f(x)``,where ``Δ`` is called the forward-difference operator.Likewise one defines the backward-difference operator, ``∇ f(x)=f(x)-f(x-h)``. We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
+Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the forward difference and is defined as 
+```math
+Δ f(x)=f(x+h)-f(x),
+```
+where ``Δ`` is called the forward-difference operator. Likewise one defines the backward-difference operator ``∇``, 
+```math
+∇ f(x)=f(x)-f(x-h).
+```
+We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 ```math
 f′(x)=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
 ```
-where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f′(x)≡ Df(x)``, we have 
+where ``h=Δ x≥0`` is called the difference interval. Introducing the differential operator, ``f^′(x)≡ Df(x)``, we have 
 ```math
 D≡\frac{d}{dx}=\underset{Δ x\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h\rightarrow0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
