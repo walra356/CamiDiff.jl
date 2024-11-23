@@ -49,11 +49,11 @@ With regard to *forward differences* we rewrite the forward difference definitio
 ```math
 f(x+h)=(1+Δ)f(x),
 ```
-where ``T≡(1+Δ)`` is the *forward translation operator*, which shifts the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator ``T≡ e^{hD}`` as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
+where ``T≡(1+Δ)`` is the *forward translation operator*, which shifts the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
 ```math
 f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
 ```
-Comparing the *forward translation* with the Taylor expansion, we find an operator identity for the backward translation operator,
+Comparing the *forward* translation with the Taylor expansion we obtain, by formal inversion of the operator, and operator identity for the *backward* translation operator,
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1},
 ```
@@ -66,7 +66,7 @@ By choosing the proper expansion order, ``f(x-h)`` can be approximated to any de
 Likewise, for *backward differences*, we rewrite the backward-difference definition in the form 
 ```math
 f(x-h)=(1-∇)f(x).
-```Comparing this *backward translation* with the Taylor expansion leads to an operator identity for the *forward translation operator*, 
+```Comparing this *backward* translation with the Taylor expansion we obtain, by formal inversion of the operator, and operator identity for the *forward* translation operator, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
