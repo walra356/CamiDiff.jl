@@ -28,11 +28,11 @@ julia> using CamiMath
 
 ### Finite differences
 
-Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the forward difference and is defined as 
+Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the *forward difference* and is defined as 
 ```math
-Δ f(x)=f(x+h)-f(x),
+Δ f(x)=f(x+h)-f(x).
 ```
-where ``Δ`` is called the forward-difference operator. Likewise one defines the backward-difference operator ``∇``, 
+Here ``Δ`` is called the *forward-difference operator*. Likewise one defines the *backward-difference operator* ``∇``, 
 ```math
 ∇ f(x)=f(x)-f(x-h).
 ```
@@ -45,11 +45,11 @@ where ``h=Δ x≥0`` is called the difference interval. Introducing the differen
 D≡\frac{d}{dx}=\underset{Δ x⇒0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h⇒0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 
-With regard to *forward differences* we rewrite the forward difference definition in the form ``f(x+h)=(1+Δ)f(x)`` and notice that 
+With regard to *forward differences* we rewrite the forward difference definition in the form 
 ```math
-T≡(1+Δ)
+f(x+h)=(1+Δ)f(x).
 ```
-has the properties of a translation operator, shifting the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator ``T≡ e^{hD}`` as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
+Note that ``T≡(1+Δ)`` has the properties of a translation operator, which shifts the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator ``T≡ e^{hD}`` as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
 ```math
 f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
 ```
