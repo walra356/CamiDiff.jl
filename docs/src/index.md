@@ -44,7 +44,7 @@ where ``h≡Δ x≥0`` is the *difference interval*. Introducing the differentia
 ```math
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
-
+### Translation operators 
 With regard to *forward differences* we rewrite the forward difference definition in the form of a *forward translation*,
 ```math
 f(x+h)=(1+Δ)f(x),
