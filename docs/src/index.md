@@ -100,8 +100,10 @@ which is a *linear* function, with ``u`` the *index base* and ``h`` the *step si
 f[n] = f(x[n]),
 ```
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``, with ``n = 1, ⋯ N``. 
-Note that ``h`` determines the *coarseness* of the grid. As [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), 
-we have ``f[1] = f(0)``. 
+Note that ``h`` determines the *coarseness* of the [`Grid`](@ref). The results of a finite-difference calculation 
+on a coarse grid will be less accurate than those on a fine grid, but the algorithm remains the same because 
+finite-difference expansions only depend *implicitely* on ``h``. Since [Julia](http://julialang.org) uses 
+unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
 and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather 
