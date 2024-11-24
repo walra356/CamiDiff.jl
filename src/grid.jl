@@ -121,15 +121,15 @@ end
 ```math
     g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p,
 ```
-with ``c_0 ≡ 0`` because *by definition* all grid functions run through the origin, ``g(0) = 0``. 
+with ``c_0 ≡ 0`` because, *by definition*, all grid functions run through the origin, ``g(0) = 0``. 
 
 The actual grid is given by 
 ```math
     x[n] = r_0 * g(t[n]),
 ```
-where ``t[n] = (n-1) * h`` is the *ticks function* for unit-based indexing.
+where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based indexing of [Julia](http://julialang.org).
 
-NB. Note that ``t[1] = 0`` and ``x[1] = 0 for all grid functions.
+NB. Note that ``t[1] = 0`` and ``x[1] = 0`` for all grid functions.
 #### Examples:
 ```
 julia> h = 0.1; r0=1.0; N=4;
