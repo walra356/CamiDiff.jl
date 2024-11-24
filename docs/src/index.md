@@ -45,6 +45,9 @@ where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differen
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 ### Translation operators 
+
+**Forward difference notation**
+
 With regard to *forward differences* we rewrite the forward difference definition in the form of a *forward translation*,
 ```math
 f(x+h)=(1+Δ)f(x),
@@ -63,6 +66,8 @@ f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x-h)`` can be approximated to any desired level of accuracy.
 
+**Backward difference notation**
+
 Likewise, for *backward differences*, we rewrite the backward-difference definition in the form 
 ```math
 f(x-h)=(1-∇)f(x),
@@ -77,8 +82,6 @@ f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x+h)`` can be approximated to any desired level of accuracy. 
 
- 
-
 ### Discretization
 
 Finite-difference analysis starts by discretization of the function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, 
@@ -92,13 +95,13 @@ the *ticks function*
 ```math
 t[n] ≡ (n−u) * h,
 ```
-which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*.
-Writing
+which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*. Writing
 ```math
 f[n] = f(x[n]),
 ```
-we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. 
-As [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), we have ``f[1] = f(0)``. 
+we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``, with ``n = 1, ⋯ N``. 
+Note that ``h`` determines the *coarseness* of the grid. As [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), 
+we have ``f[1] = f(0)``. 
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)`` 
 and with zero offset. For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather 
