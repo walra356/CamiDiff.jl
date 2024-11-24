@@ -40,7 +40,7 @@ We first focus on *forward differences*. The derivative of ``f(x)`` is given by
 ```math
 f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x+h)-f(x)}{h}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ f(x)}{Δ x},
 ```
-where ``h≡Δ x≥0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
+where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 ```math
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
@@ -67,17 +67,17 @@ Likewise, for *backward differences*, we rewrite the backward-difference definit
 ```math
 f(x-h)=(1-∇)f(x),
 ```
-where ``B≡(1-∇)`` is the *backward translation operator*. Comparing this *backward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``B``, an operator identity for the inverted translation operator ``B^{-1}``, 
+where ``B≡(1-∇)`` is the *backward translation operator*. Comparing this *backward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``B``, an operator identity for the *forward* translation operator ``T``, 
 ```math
-(1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
+B≡(1-∇)=e^{-hD}=T^{-1}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
-In this case the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``∇``, 
+Note how the *backward* translation operator was identified with the inverse *forward* translation operator, ``B=T^{-1}``. When using forward differences, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``∇``, 
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
-By choosing the proper expansion order, ``f(x+h)`` can be approximated to any desired level of accuracy.
+By choosing the proper expansion order, ``f(x+h)`` can be approximated to any desired level of accuracy. 
 
-At this point we identify the *backward* translation operator with the inverse *forward* translation operator, ``B=T^{-1}``. 
+ 
 
 ### Discretization
 
