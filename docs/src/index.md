@@ -57,7 +57,7 @@ Comparing the operator expression for the *forward* translation with the Taylor 
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1}.
 ```
-With this procedure, the explicit dependence on ``h`` has been replaced by an implicit dependence on ``h`` through the expansion in powers of ``Δ`` ,
+With this procedure, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``Δ`` ,
 ```math
 f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
@@ -71,7 +71,7 @@ where ``T^{-1}≡(1-∇)`` is the *backward translation operator*. Comparing thi
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
-Also in this case the explicit dependence on ``h`` has been replaced by an implicit dependence on ``h`` through the expansion in powers of ``∇``, 
+In this case the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``∇``, 
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
