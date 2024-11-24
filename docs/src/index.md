@@ -49,11 +49,11 @@ With regard to *forward differences* we rewrite the forward difference definitio
 ```math
 f(x+h)=(1+Δ)f(x),
 ```
-where ``T≡(1+Δ)`` is the *forward translation operator*, which shifts the function over the infinitesimal interval ``h`` to larger values of ``x``. This translation operator can be expressed in terms of the differential operator as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
+where ``T≡(1+Δ)`` is the *forward translation operator*. This operator shifts the function over the infinitesimal interval ``h`` to larger values of ``x``. The translation operator can be expressed in terms of the differential operator as follows by Taylor expansion of ``f(x)`` about the point ``x``, 
 ```math
 f(x± h)=(1± hD+\tfrac{1}{2}h^2D^2±\tfrac{1}{3!}h^3D^3+⋯)f(x)=e^{± hD}f(x).
 ```
-Comparing the operator expression for the *forward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``T``, and operator identity for the *backward* translation operator ``T^{-1}``,    
+Comparing the operator expression for the *forward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``T``, an operator identity for the inverted translation operator ``T^{-1}``,    
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1}.
 ```
@@ -67,7 +67,7 @@ Likewise, for *backward differences*, we rewrite the backward-difference definit
 ```math
 f(x-h)=(1-∇)f(x),
 ```
-where ``T^{-1}≡(1-∇)`` is the *backward translation operator*. Comparing this *backward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``T^{-1}``, an operator identity for the *forward* translation operator ``T``, 
+where ``B≡(1-∇)`` is the *backward translation operator*. Comparing this *backward* translation with the Taylor expansion we obtain, by formal inversion of the operator ``B``, an operator identity for the inverted translation operator ``B^{-1}``, 
 ```math
 (1-∇)=e^{-hD}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1},
 ```
@@ -76,6 +76,8 @@ In this case the explicit dependence on ``h`` can be replaced by an implicit dep
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
 By choosing the proper expansion order, ``f(x+h)`` can be approximated to any desired level of accuracy.
+
+At this point we identify the *backward* translation operator with the inverse *forward* translation operator, ``B=T^{-1}``. 
 
 ### Discretization
 
