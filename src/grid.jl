@@ -325,9 +325,17 @@ function findIndex(rval::T, grid::Grid{T}) where T<:Number
 end
 
 # ------------------------------------------------------------------------------
-#                       grid_differentiation(f, grid; k=3)
+#                       grid_differentiation(f, grid; k=5)
 # ------------------------------------------------------------------------------
+function _regularize_ratio(f::Vector{T}, r::Vector{T}) where T<:Real
 
+    o = f ./ r
+
+    o[1] = iszero(f[1]) ? T(0) : o[1] 
+    
+    return o
+
+end
 @doc raw"""
     grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=3) where T<:Real
@@ -347,16 +355,16 @@ julia> f′= grid_differentiation(f, grid; k=3)
  [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
 ```
 """
-function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
+function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
     r′= grid.r′
 
     f′= [fdiff_differentiation(f, T(i); k) for i ∈ eachindex(f)]
 
-    return f′ ./ r′
+    return _regularize_ratio(f′, r′)
 
 end
-function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=3) where T<:Real
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
 
     f = f[n1:n2]
     r′= grid.r′[n1:n2]
@@ -364,10 +372,10 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=3
     l = length(f)
     f′ = [fdiff_differentiation(f, T(v); k) for v=1:l]
 
-    return f′ ./ r′
+    return _regularize_ratio(f′, r′)
 
 end
-function grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=3) where T<:Real
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
 
     return grid_differentiation(f, grid, itr.start, itr.stop; k)
 

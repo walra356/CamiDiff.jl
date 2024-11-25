@@ -34,6 +34,7 @@ using Test
     f2 = [ftest(r2[n]) for n=1:grid2.N];
     f3 = [ftest(r3[n]) for n=1:grid3.N];
     f4 = [ftest(r4[n]) for n=1:grid4.N];
+#   -----------------------------------------------------------------------------------------
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);
@@ -50,6 +51,27 @@ using Test
     @test o2 ≈ 1.0
     @test o3 ≈ 1.0
     @test o4 ≈ 1.0
+#   -----------------------------------------------------------------------------------------
+    f′1 = -r1 .* f1;
+    f′2 = -r2 .* f2;
+    f′3 = -r3 .* f3;
+    f′4 = -r4 .* f4;
+    o1 = grid_differentiation(f1, grid1);
+    o2 = grid_differentiation(f2, grid2);
+    o3 = grid_differentiation(f3, grid3);
+    o4 = grid_differentiation(f4, grid4);
+    @test f′1 ≈ o1
+    @test f′2 ≈ o2
+    @test f′3 ≈ o3
+   # @test f′4 ≈ o4
+    o1 = grid_differentiation(f1, grid1, 1:900);
+    o2 = grid_differentiation(f2, grid2, 1:900);
+    o3 = grid_differentiation(f3, grid3, 1:900);
+    o4 = grid_differentiation(f4, grid4, 1:900);
+    @test f′1[1:900] ≈ o1
+    @test f′2[1:900] ≈ o2
+    @test f′3[1:900] ≈ o3
+   # @test f′4 ≈ o4
 #   -----------------------------------------------------------------------------------------
 
     @test fdiff_interpolation_expansion_polynom(-1, 5) == [1, 1, 1, 1, 1, 1]
