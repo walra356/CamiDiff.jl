@@ -337,9 +337,9 @@ function _regularize_ratio(f::Vector{T}, r::Vector{T}) where T<:Real
 
 end
 @doc raw"""
-    grid_differentiation(f::Vector{T}, grid::Grid{T}; k=3) where T<:Real
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=3) where T<:Real
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=3) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
 
 ``k^{th}``-order lagrangian *differentiation* of the analytic function ``f(x)``,
 tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
