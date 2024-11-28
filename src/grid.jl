@@ -105,6 +105,8 @@ end
 @doc raw"""
     gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
+`CamiDiff` offers three internal gridfunctions:
+
 * `ID = 1`: exponential grid function,
 ```math
     g(t) = e^t - 1
@@ -143,13 +145,13 @@ julia> r′ = r0 .* [gridfunction(1, n-1, h; deriv=1) for n=1:N]
 julia> r′′= r0 .* [gridfunction(1, n-1, h; deriv=2) for n=1:N]
 [0.010000000000000002, 0.011051709180756479, 0.012214027581601701, 0.013498588075760034]
 
-julia> r = [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1]) for n=1:N]
+julia> r = r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1]) for n=1:N]
 [0.0, 0.010000000000000002, 0.04000000000000001, 0.09000000000000002]
 
-julia> r′ = [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=1) for n=1:N]
+julia> r′ = r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=1) for n=1:N]
 [0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
 
-julia> r′′= [r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1:N]
+julia> r′′= r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1:N]
 [0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
 ```
 """
@@ -245,7 +247,7 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
     r′ = r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
     r′′= r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
 
-    r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
+    # r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
     rmax = r[N]
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
@@ -331,7 +333,7 @@ function _regularize_ratio(f::Vector{T}, r::Vector{T}) where T<:Real
 
     o = f ./ r
 
-    o[1] = iszero(f[1]) ? T(0) : o[1] 
+    o[1] = abs(f[1]) < T(2) * eps(T)  ? T(0) : o[1] 
     
     return o
 

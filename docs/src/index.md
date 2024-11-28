@@ -111,7 +111,7 @@ For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rath
 
 ## Grid
 
-The [`Grid`](@ref) object is the backbone for the numerical procedure on a non-uniform
+The [`Grid`](@ref) object is the backbone for the numerical procedure on a (generally) non-uniform
 grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
 functions of `N` elements representing the grid function and its first two derivatives.
 
@@ -268,8 +268,12 @@ Coefficients:
 [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector ``  α ≡ [α_0,⋯\ α_k]`` is user supplied to define the
-expansion.
+where the variable `polynom` is the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector ``  α ≡ [α_0,⋯\ α_k]``. This `polynom` has to be supplied by the user to define the expansion under consideration. For some common cases are:
+
+  interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
+differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, fwd)`](@ref)
+ Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref)
+  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, fwd)`](@ref)
 
 **Backward difference notation**
 
@@ -317,8 +321,12 @@ Coefficients:
 [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
 `` → \bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]``,
 
-where the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector  ``  β ≡ [β_0,⋯\ β_k]`` is user supplied to
-define the expansion.
+where the variable `polynom` is the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector  ``  β ≡ [β_0,⋯\ β_k]``. This `polynom` has to be supplied by the user to define the expansion under consideration. For some common cases are:
+
+  interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, bwd)`](@ref)
+differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, bwd)`](@ref)
+ Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, bwd)`](@ref)
+  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, bwd)`](@ref)
 
 ```@docs
 fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
