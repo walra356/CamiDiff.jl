@@ -573,7 +573,7 @@ where
 
 ```@docs
 fdiff_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
-fdiff_differentiation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
+fdiff_differentiation(f::Vector{T}, v::T; k=3) where T<:Real
 create_lagrange_differentiation_matrix(k::Int)
 ```
 
