@@ -158,5 +158,6 @@ using Test
     @test trapezoidal_integration([1.0, 4.0, 15.0, 40.0, 85.0, 156.0], 0.0, 5.0, [3 // 8, 7 // 6, 23 // 24]) ≈ 215.4166666
     @test create_adams_moulton_weights(3; rationalize=true) == [1 // 24, -5 // 24, 19 // 24, 3 // 8]
     @test fdiff_adams_moulton_expansion_coeff(20) == -12365722323469980029//4817145976189747200000
+    @test fdiff_adams_bashford_expansion_coeff(20) == 8136836498467582599787//33720021833328230400000
     
 end
