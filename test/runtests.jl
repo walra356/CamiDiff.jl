@@ -104,6 +104,14 @@ using Test
     @test o2 ≈ 1.0
     @test o3 ≈ 1.0
     @test o4 ≈ 1.0
+    o1 = grid_integration(f1, grid1, 1:5);
+    o2 = grid_integration(f2, grid2, 1:5);
+    o3 = grid_integration(f3, grid3, 1:5);
+    o4 = grid_integration(f4, grid4, 1:5);
+    @test o1 ≈ 4.081028048564596e-5
+    @test o2 ≈ 0.000815888856047799
+    @test o3 ≈ 0.0768862163847329
+    @test o4 ≈ 0.0003199456063034396
 #   -----------------------------------------------------------------------------------------
     f′1 = -f1;
     f′2 = -f2;
