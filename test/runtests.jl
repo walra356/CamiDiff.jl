@@ -127,6 +127,7 @@ using Test
     @test f′4[1:900] ≈ o4
 #   -----------------------------------------------------------------------------------------
     @test fdiff_interpolation_expansion_polynom(-1, 5) == [1, 1, 1, 1, 1, 1]
+    @test fdiff_interpolation_expansion_polynom(BigInt(-1), 5) == BigInt[1, 1, 1, 1, 1, 1]
     polynom = fdiff_interpolation_expansion_polynom(-1, 5);
     @test fdiff_interpolation_expansion_weights(polynom) ==  [-1, 6, -15, 20, -15, 6]
     @test fdiff_interpolation_expansion_polynom(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
