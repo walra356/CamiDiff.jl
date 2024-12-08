@@ -22,7 +22,7 @@ using Test
     @test_throws DomainError castGrid(5, 1000, Float64)
     @test_throws DomainError gridname(5) 
 #   -----------------------------------------------------------------------------------------
-    fta(r) = sqrt(2.0/π) * exp(-r^2/2.0);
+    gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
     grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
     grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=false);
     grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=false);
@@ -31,10 +31,10 @@ using Test
     r2 = grid2.r;
     r3 = grid3.r;
     r4 = grid4.r;
-    f1 = [fta(r1[n]) for n=1:grid1.N];
-    f2 = [fta(r2[n]) for n=1:grid2.N];
-    f3 = [fta(r3[n]) for n=1:grid3.N];
-    f4 = [fta(r4[n]) for n=1:grid4.N];
+    f1 = [gaussian(r1[n]) for n=1:grid1.N];
+    f2 = [gaussian(r2[n]) for n=1:grid2.N];
+    f3 = [gaussian(r3[n]) for n=1:grid3.N];
+    f4 = [gaussian(r4[n]) for n=1:grid4.N];
 #   -----------------------------------------------------------------------------------------
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
@@ -74,7 +74,7 @@ using Test
     @test f′3[1:900] ≈ o3
     @test f′4[1:900] ≈ o4
 #   -----------------------------------------------------------------------------------------
-    ftb(r) = exp(-r);
+    exponential(r) = exp(-r);
     grid1 = castGrid(1, 1000, Float64; h = 0.01, r0 = 0.001, msg=true);
     grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=5, msg=true);
     grid3 = castGrid(3, 1000, Float64; h = 0.01, r0 = 2.0, msg=true);
@@ -83,10 +83,10 @@ using Test
     r2 = grid2.r;
     r3 = grid3.r;
     r4 = grid4.r;
-    f1 = [ftb(r1[n]) for n=1:grid1.N];
-    f2 = [ftb(r2[n]) for n=1:grid2.N];
-    f3 = [ftb(r3[n]) for n=1:grid3.N];
-    f4 = [ftb(r4[n]) for n=1:grid4.N];
+    f1 = [exponential(r1[n]) for n=1:grid1.N];
+    f2 = [exponential(r2[n]) for n=1:grid2.N];
+    f3 = [exponential(r3[n]) for n=1:grid3.N];
+    f4 = [exponential(r4[n]) for n=1:grid4.N];
 #   -----------------------------------------------------------------------------------------
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
@@ -116,7 +116,7 @@ using Test
     @test f′1 ≈ o1
     @test f′2 ≈ o2
     @test f′3 ≈ o3
-    #@test f′4 ≈ o4
+    @test f′4 ≈ o4
     o1 = grid_differentiation(f1, grid1, 1:900);
     o2 = grid_differentiation(f2, grid2, 1:900);
     o3 = grid_differentiation(f3, grid3, 1:900);
@@ -124,7 +124,7 @@ using Test
     @test f′1[1:900] ≈ o1
     @test f′2[1:900] ≈ o2
     @test f′3[1:900] ≈ o3
-    #@test f′4[1:900] ≈ o4
+    @test f′4[1:900] ≈ o4
 #   -----------------------------------------------------------------------------------------
     @test fdiff_interpolation_expansion_polynom(-1, 5) == [1, 1, 1, 1, 1, 1]
     polynom = fdiff_interpolation_expansion_polynom(-1, 5);
@@ -152,7 +152,7 @@ using Test
     @test fdiff_differentiation_expansion_polynom(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
     @test fdiff_differentiation_expansion_polynom(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
     @test [fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], v) for v = 1:9] == [-8 // 1, -6 // 1, -4 // 1, -2 // 1, 0 // 1, 2 // 1, 4 // 1, 6 // 1, 8 // 1]
-    @test fdiff_differentiation([16, 9, 4, 1, 0, 1, 4, 9, 16], 5.5) == 1.0
+    @test fdiff_differentiation(Real[16, 9, 4, 1, 0, 1, 4, 9, 16], 5.5) == 1.0
     @test create_lagrange_differentiation_matrix(3) == [-11//6 3//1 -3//2 1//3; -1//3 -1//2 1//1 -1//6; 1//6 -1//1 1//2 1//3; -1//3 3//2 -3//1 11//6]
     @test trapezoidal_epw(5; rationalize=true) == [95 // 288, 317 // 240, 23 // 30, 793 // 720, 157 // 160]
     @test trapezoidal_integration([1.0, 4.0, 15.0, 40.0, 85.0, 156.0], 0.0, 5.0, [3 // 8, 7 // 6, 23 // 24]) ≈ 215.4166666

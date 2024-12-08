@@ -41,6 +41,7 @@ r0::T
 epn::Int
 epw::Vector{Vector{T}}
 k::Int
+
 end
 
 # ------------------------------------------------------------------------------
@@ -329,11 +330,16 @@ end
 # ------------------------------------------------------------------------------
 #                       grid_differentiation(f, grid; k=5)
 # ------------------------------------------------------------------------------
-function _regularize_ratio(f::Vector{T}, r::Vector{T}) where T<:Real
 
-    o = f ./ r
+function _regularize_ratio(f′::Vector{T}, r′::Vector{T}; k=5) where T<:Real
 
-    o[1] = abs(f[1]) < T(2) * eps(T)  ? T(0) : o[1] 
+    o = f′ ./ r′
+
+    if isinf(o[1])
+        α = fdiff_interpolation_expansion_polynom(1, k-1, fwd) 
+        Fk = fdiff_expansion_weights(α, fwd, reg)
+        o[1] = Fk ⋅ o[2:k+1]
+    end
     
     return o
 
@@ -354,27 +360,48 @@ Grid: linear (uniform), Float64, rmax = 6.0, Ntot = 6, p = 1, h = 1.0, r0 = 1.0
 
 julia> f′= grid_differentiation(f, grid; k=3)
 6-element Vector{Float64}:
- [0.0, 1.9999999999999991, 4.0, 6.000000000000001, 8.0, 10.0]
+ [0.0, 1.9999999999999991, 4.0, 6.0, 8.0, 9.999999999999993]
 ```
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
+    N = grid.N
     r′= grid.r′
+    k = min(k,N-1)
+    k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
+    
+    α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+    β = fdiff_differentiation_expansion_polynom(0, k, bwd)
+    Fk = fdiff_expansion_weights(α, fwd, reg)
+    Bkrev = fdiff_expansion_weights(β, bwd, rev)
 
-    f′= [fdiff_differentiation(f, T(i); k) for i ∈ eachindex(f)]
-
-    return _regularize_ratio(f′, r′)
+    f′= [Fk ⋅ f[n:n+k] for n=1:N-k]
+    g′= [Bkrev ⋅ f[n-k:n] for n=N-k+1:N]
+    f′= append!(f′, g′)
+    
+    return _regularize_ratio(f′, r′; k)
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
 
-    f = f[n1:n2]
+    N = grid.N
     r′= grid.r′[n1:n2]
+    k = min(k,N-1)
+    1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
+    k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
+    
+    α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+    β = fdiff_differentiation_expansion_polynom(0, k, bwd)
+    Fk = fdiff_expansion_weights(α, fwd, reg)
+    Bkrev = fdiff_expansion_weights(β, bwd, rev)
 
-    l = length(f)
-    f′ = [fdiff_differentiation(f, T(v); k) for v=1:l]
+    n2 = min(n2,N-k)
 
-    return _regularize_ratio(f′, r′)
+    f′= [Fk ⋅ f[n:n+k] for n=n1:n2]
+    g′= [Bkrev ⋅ f[n-k:n] for n=n2-k+1:n2]
+    f′= append!(f′, g′)[n1:n2]
+    
+    return _regularize_ratio(f′, r′; k)
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real

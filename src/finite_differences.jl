@@ -569,7 +569,7 @@ see Figure below.
 
 ![Image](./assets/lagrangian_differentiation.png)
 """
-function fdiff_differentiation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
+function fdiff_differentiation(f::Vector{T}, v::T; k=3) where T<:Real
 
     l = length(f)
     k = min(k,l-1)
