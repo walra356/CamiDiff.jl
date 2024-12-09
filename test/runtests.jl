@@ -117,14 +117,14 @@ using Test
     @test f′2 ≈ o2
     @test f′3 ≈ o3
     @test f′4 ≈ o4
-    o1 = grid_differentiation(f1, grid1, 1:900);
-    o2 = grid_differentiation(f2, grid2, 1:900);
-    o3 = grid_differentiation(f3, grid3, 1:900);
-    o4 = grid_differentiation(f4, grid4, 1:900);
-    @test f′1[1:900] ≈ o1
-    @test f′2[1:900] ≈ o2
-    @test f′3[1:900] ≈ o3
-    @test f′4[1:900] ≈ o4
+    o1 = grid_differentiation(f1, grid1, 10:900); 
+    o2 = grid_differentiation(f2, grid2, 10:900);
+    o3 = grid_differentiation(f3, grid3, 10:900);
+    o4 = grid_differentiation(f4, grid4, 10:900);
+    @test f′1[10:900] ≈ o1 
+    @test f′2[10:900] ≈ o2
+    @test f′3[10:900] ≈ o3
+    @test f′4[10:900] ≈ o4
 #   -----------------------------------------------------------------------------------------
     grid1 = castGrid(1, 5, Float64; h = 0.01, r0 = 0.001, msg=true);
     grid2 = castGrid(2, 5, Float64; h = 0.01, r0 = 0.02, p=5, msg=true);

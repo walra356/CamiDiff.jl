@@ -344,6 +344,23 @@ function _regularize_ratio(f′::Vector{T}, r′::Vector{T}; k=5) where T<:Real
     return o
 
 end
+function _regularize_ratio1(f′::Vector{T}, r′::Vector{T}; k=5) where T<:Real
+
+    o = f′ ./ r′
+
+    println("length(f′) = ", length(f′) )
+    println("length(r′) = ", length(r′) )
+
+
+    if isinf(o[1])
+        α = fdiff_interpolation_expansion_polynom(1, k-1, fwd) 
+        Fk = fdiff_expansion_weights(α, fwd, reg)
+        o[1] = Fk ⋅ o[2:k+1]
+    end
+    
+    return o
+
+end
 @doc raw"""
     grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
@@ -398,9 +415,9 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     n3 = min(n2,N-k)
     f′= [Fk ⋅ f[n:n+k] for n=n1:n3]
     g′= [Bkrev ⋅ f[n-k:n] for n=n2-k+1:n2]
-    f′= append!(f′, g′)[n1:n2]
+    f′= append!(f′, g′)[1:n2-n1+1]
     
-    return _regularize_ratio(f′, r′; k)
+    return _regularize_ratio1(f′, r′; k)
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
