@@ -367,7 +367,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
     N = grid.N
     r′= grid.r′
-    k = min(k,N-1)
+    k = min(k,N÷2)
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
@@ -386,7 +386,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
 
     N = grid.N
     r′= grid.r′[n1:n2]
-    k = min(k,N-1)
+    k = min(k,N÷2)
     1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     
@@ -395,9 +395,8 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     Fk = fdiff_expansion_weights(α, fwd, reg)
     Bkrev = fdiff_expansion_weights(β, bwd, rev)
 
-    n2 = min(n2,N-k)
-
-    f′= [Fk ⋅ f[n:n+k] for n=n1:n2]
+    n3 = min(n2,N-k)
+    f′= [Fk ⋅ f[n:n+k] for n=n1:n3]
     g′= [Bkrev ⋅ f[n-k:n] for n=n2-k+1:n2]
     f′= append!(f′, g′)[n1:n2]
     
