@@ -299,6 +299,7 @@ The grid index corresponding to the position `rval` on the `grid`.
 #### Example:
 ```
 julia> h = 0.1; r0 = 1.0;
+
 julia> grid = castGrid(1, 4, Float64; h, r0);
 
 julia> r = grid.r; println("r[3] = $(r[3])")
@@ -353,14 +354,15 @@ end
 tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
 #### Example:
 ```
-julia> f = [0.0, 1.0, 4.0, 9.0, 16.0, 25.0];
+julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=true);
+Grid: linear (uniform), Float64, rmax = 6.28947, Ntot = 1001, p = 1, h = 0.00628319, r0 = 1.0
 
-julia> grid = castGrid("linear", length(f), Float64; r0=1.0, h=1.0, k=3, msg=true);
-Grid: linear (uniform), Float64, rmax = 6.0, Ntot = 6, p = 1, h = 1.0, r0 = 1.0
+julia> f = [sin(grid.h * i) for i=0:1000];
 
-julia> f′= grid_differentiation(f, grid; k=3)
-6-element Vector{Float64}:
- [0.0, 1.9999999999999991, 4.0, 6.0, 8.0, 9.999999999999993]
+julia> g = [cos(grid.h * i) for i=0:1000];
+
+julia> grid_differentiation(f, grid) ≈ g
+true
 ```
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
