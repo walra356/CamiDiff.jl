@@ -289,7 +289,7 @@ end
 @doc raw"""
     gridname(ID::Int)
     
-Name corresponding to the grid ID.
+Name corresponding to the [`Grid`](@ref) ID.
 #### Example:
 ```
 julia> gridname(2)
@@ -313,7 +313,7 @@ end
 @doc raw"""
     findIndex(rval::T, grid::Grid{T}) where T<:Number
 
-The grid index corresponding to the position `rval` on the `grid`.
+The lowest index `i` satisfying the condition `grid.r[i] > rval` on the [`Grid`](@ref).
 #### Example:
 ```
 julia> h = 0.1; r0 = 1.0;
