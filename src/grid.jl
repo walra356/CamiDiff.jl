@@ -375,9 +375,9 @@ tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
 julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=true);
 Grid: linear (uniform), Float64, rmax = 6.28947, Ntot = 1001, p = 1, h = 0.00628319, r0 = 1.0
 
-julia> f = [sin(grid.h * i) for i=0:1000];
+julia> f = [sin(grid.r[i]) for i=1:grid.N]
 
-julia> g = [cos(grid.h * i) for i=0:1000];
+julia> g = [cos(grid.r[i]) for i=1:grid.N]
 
 julia> grid_differentiation(f, grid) ≈ g
 true

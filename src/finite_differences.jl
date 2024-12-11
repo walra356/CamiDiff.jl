@@ -560,49 +560,6 @@ function fdiff_differentiation_expansion_polynom(ξ::T, k=3, notation=bwd) where
 end
 
 # ------------------------------------------------------------------------------
-#                   fdiff_differentiation(f, v; k=3)
-# ------------------------------------------------------------------------------
-
-@doc raw"""
-    fdiff_differentiation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
-
-``k^{th}``-order (default *third* order) lagrangian *differentiation* of
-the analytic function ``f``, tabulated in forward order on a uniform grid.
-#### Example:
-```
-f = [x^3 for x=-5:5]; println(round.(Int,f))
-l = length(f)
-f′ = [fdiff_differentiation(f, v) for v=1:l]; println(round.(Int,f′))
-  [-125, -64, -27, -8, -1, 0, 1, 8, 27, 64, 125]
-  [75, 48, 27, 12, 3, 0, 3, 12, 27, 48, 75]
-
-f′= fdiff_differentiation(f, 1) ; println("f′(1) = $(f′))
-  f′(1) = 75//1
-
-f′= fdiff_differentiation(f, 6.5) ; println("f′(6.5) = $(f′)")
-    f′(6.5) = 0.75
-```
-For a cubic function the third-order lagrangian differentiation is exact -
-see Figure below.
-
-![Image](./assets/lagrangian_differentiation.png)
-"""
-function fdiff_differentiation(f::Vector{T}, v::T; k=3) where T<:Real
-
-    l = length(f)
-    k = min(k,l-1)
-    k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
-    n = v ≤ 1 ? 1 : v < l-k ? floor(Int,v) : l-k
-    ξ = v-n
-    α = fdiff_differentiation_expansion_polynom(ξ, k, fwd)
-    w = fdiff_expansion_weights(α, fwd, reg)
-    o = w ⋅ f[n:n+k]
-
-    return o
-
-end
-
-# ------------------------------------------------------------------------------
 #                   create_lagrange_differentiation_matrix(k)
 # ------------------------------------------------------------------------------
 
