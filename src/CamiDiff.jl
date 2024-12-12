@@ -37,6 +37,8 @@ export gridname
 export gridfunction
 export castGrid
 export findIndex
+export findΔn
+export grid_interpolation
 export grid_differentiation
 export grid_integration
 

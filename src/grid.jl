@@ -25,11 +25,11 @@
 # ============================================================================== 
 
 # ------------------------------------------------------------------------------
-#           Grid (ID, name, Type, N, r, r′, r′′, r′′, h, r0, epn, epw, k)
+#    Grid (ID, name, Type, N, r, r′, r′′, r′′, h, r0, epn, epw, k, p, polynom)
 # ------------------------------------------------------------------------------
 
 """
-    Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
+    Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k, p, polynom)
 
 Type with fields:
 * `.ID`:    grid identifer name (`::Int`)
@@ -44,6 +44,8 @@ Type with fields:
 * `.epn`:   number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
 * `.epw`:   trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
 * `.k`:     finite-difference order (`::Int`)
+* `.p`:     only for quasi-exponential grid; truncation power (`::Int`)
+* `.polynom`: only for polynomial grid: polynom (`::Vector{T}`)
 The object `Grid` is best created with the function [`castGrid`](@ref).
 """
 struct Grid{T}
@@ -59,6 +61,8 @@ r0::T
 epn::Int
 epw::Vector{Vector{T}}
 k::Int
+p::Int
+polynom::Vector{T}
 
 end
 
@@ -271,7 +275,7 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
-    return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k)
+    return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k, p, polynom)
 
 end
 function castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
@@ -308,12 +312,14 @@ function gridname(ID::Int)
    
 end
 
-# =============== findIndex(rval, grid) ========================================
+# ------------------------------------------------------------------------------
+#                       findIndex(rval, grid)
+# ------------------------------------------------------------------------------
 
 @doc raw"""
     findIndex(rval::T, grid::Grid{T}) where T<:Number
 
-The lowest index `i` satisfying the condition `grid.r[i] > rval` on the [`Grid`](@ref).
+The largest index `i` satisfying the condition `grid.r[i] < rval` on the [`Grid`](@ref).
 #### Example:
 ```
 julia> h = 0.1; r0 = 1.0;
@@ -327,22 +333,97 @@ julia> findIndex(0.222, grid)
 3
 ```
 """
-function findIndex(rval::T, grid::Grid{T}) where T<:Number
-# kanweg
-# ==============================================================================
-#  grid index of rval, e.g., rval -> classical turning point
-# ==============================================================================
+function findIndex(rval::T, grid::Grid{T}) where T<:Real
+    
     N = grid.N
     r = grid.r
 
-    r[1] ≤ rval ≤ r[end] || throw(DomainError(rval, "rval outside grid range"))
-
-    n = N
-    while rval < r[n]     # below classical threshhold
-        n > 1 ? n -= 1 : break
+    r[1] ≤ rval ≤ r[end] || throw(DomainError(rval, "rval = $(rval) outside range $(r[1]) ≤ rval ≤ $(r[end])"))
+    
+    n = 1
+    m = N
+    Δn = (m-n)÷2
+    
+    while Δn ≥ 1
+        if r[n+Δn] ≤ rval
+            n += Δn 
+        elseif r[m-Δn] ≥ rval
+            m -= Δn
+        else 
+            error("Error: search for intersection point undecided")
+        end
+        Δn = (m-n)÷2
     end
 
     return n
+
+end
+
+# ------------------------------------------------------------------------------
+#                       findΔn(n, rval, grid; ϵ = 1e-8, k = 7)
+# ------------------------------------------------------------------------------
+
+@doc raw"""
+    findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+
+Fractional grid offset with respect to [`Grid`](@ref) point `n`.
+"""
+function findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+    
+    nul = T(0)
+    one = T(1)
+    two = T(2)
+
+    ID = grid.ID
+    r0 = grid.r0
+     h = grid.h
+     p = grid.p
+    polynom = grid.polynom 
+
+    polynom = [r0*gridfunction(ID, n-1, h; p, polynom, deriv=d)/factorial(d) for d=0:k]
+
+    imin = nul   
+    imax = one   
+    r1 = CamiMath.polynomial(polynom, imin)
+    r2 = CamiMath.polynomial(polynom, imax) 
+    r1 ≤ rval ≤ r2 || throw(DomainError(rval, "rval = $(rval) outside range $(r1) ≤ rval ≤ $(r2)"))
+    
+    Δn = (imax+imin)/two
+    while imax-imin > ϵ
+        if CamiMath.polynomial(polynom, Δn) ≤ rval
+            imin = Δn
+        else
+            imax = Δn
+        end
+        Δn = (imax+imin)/two
+    end
+
+    return Δn
+    
+end
+
+# ------------------------------------------------------------------------------
+#                       grid_interpolation(f, rval, grid; k=5)
+# ------------------------------------------------------------------------------
+
+@doc raw"""
+    grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
+
+Interpolated value for f(rval), with `rval` not on the [`Grid`](@ref) (`rval ∉ grid.r`).
+"""
+function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
+
+    N = grid.N
+    k = min(k,N÷2)
+    k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+
+    n = findIndex(rval, grid)
+    ξ = findΔn(n, rval, grid; ϵ = 1e-12, k = 7)
+    α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
+    Fk = fdiff_expansion_weights(α, fwd, reg)
+    o = Fk ⋅ f[n:n+k]
+    
+    return o
 
 end
 
@@ -388,7 +469,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     N = grid.N
     r′= grid.r′
     k = min(k,N÷2)
-    k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
+    k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)
@@ -408,7 +489,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     r′= grid.r′[n1:n2]
     k = min(k,N÷2)
     1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
-    k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
+    k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)

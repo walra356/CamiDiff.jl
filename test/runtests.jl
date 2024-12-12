@@ -96,7 +96,7 @@ using Test
 #   -----------------------------------------------------------------------------------------
     exponential(r) = exp(-r);
     grid1 = castGrid(1, 1000, Float64; h = 0.01, r0 = 0.001, msg=true);
-    grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=5, msg=true);
+    grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=6, msg=true);
     grid3 = castGrid(3, 1000, Float64; h = 0.01, r0 = 2.0, msg=true);
     grid4 = castGrid(4, 1000, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=true);
     r1 = grid1.r;
@@ -108,6 +108,15 @@ using Test
     f3 = [exponential(r3[n]) for n=1:grid3.N];
     f4 = [exponential(r4[n]) for n=1:grid4.N];
 #   -----------------------------------------------------------------------------------------
+    rval=2.1
+    o1 = grid_interpolation(f1, rval, grid1; k=5)
+    o2 = grid_interpolation(f2, rval, grid2; k=5)
+    o3 = grid_interpolation(f3, rval, grid3; k=5)
+    o4 = grid_interpolation(f4, rval, grid4; k=5)
+    @test o1 ≈ exponential(rval)
+    @test o2 ≈ exponential(rval)
+    @test o3 ≈ exponential(rval)
+    @test o4 ≈ exponential(rval)
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);
