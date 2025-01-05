@@ -21,11 +21,13 @@
 # SOFTWARE.
 
 using CamiDiff
-using CamiMath
+using Test # to use runtests with @testset
 
-# using BenchmarkTools
-using LinearAlgebra
-using Test
+import CamiMath
+fwd = CamiMath.fwd
+bwd = CamiMath.bwd
+reg = CamiMath.reg
+rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
