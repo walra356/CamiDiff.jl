@@ -28,7 +28,6 @@ bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-using Printf
 import LinearAlgebra
 
 export Grid
