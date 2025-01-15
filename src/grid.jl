@@ -272,7 +272,6 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
 
     # r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64)) # quasi zero - kanweg
     rmax = r[N]
-    println("eltype(polynom) = ",eltype(polynom))
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
