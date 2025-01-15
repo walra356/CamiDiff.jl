@@ -262,16 +262,17 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
 # ==============================================================================
     h = convert(T, h)
     r0 = convert(T, r0)
-    polynom = convert.(T, polynom)
+    polynom = convert(Vector{T}, polynom)
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
     name = gridname(ID)
 
-    r  = r0 .* [gridfunction(ID, n-1, h; p, polynom) for n=1:N]
-    r′ = r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
-    r′′= r0 .* [gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
+    r  = r0 .* T[gridfunction(ID, n-1, h; p, polynom) for n=1:N]
+    r′ = r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
+    r′′= r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
 
-    # r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64))
+    # r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64)) # quasi zero - kanweg
     rmax = r[N]
+    println("eltype(polynom) = ",eltype(polynom))
 
     msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k, msg))
 
