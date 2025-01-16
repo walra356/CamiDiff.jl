@@ -420,7 +420,7 @@ function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:
     n = findIndex(rval, grid)
     ξ = findΔn(n, rval, grid; ϵ = 1e-12, k = 7)
     α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
-    Fk = fdiff_expansion_weights(α, fwd, reg)
+    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     o = LinearAlgebra.dot(Fk, f[n:n+k])
     
     return o
@@ -437,7 +437,7 @@ function _regularize_ratio(f′::Vector{T}, r′::Vector{T}; k=5) where T<:Real
 
     if isinf(o[1])
         α = fdiff_interpolation_expansion_polynom(1, k-1, fwd) 
-        Fk = fdiff_expansion_weights(α, fwd, reg)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
         o[1] = LinearAlgebra.dot(Fk, o[2:k+1])
     end
     
@@ -473,8 +473,8 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)
-    Fk = fdiff_expansion_weights(α, fwd, reg)
-    Bkrev = fdiff_expansion_weights(β, bwd, rev)
+    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+    Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
     f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
     g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
@@ -493,8 +493,8 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)
-    Fk = fdiff_expansion_weights(α, fwd, reg)
-    Bkrev = fdiff_expansion_weights(β, bwd, rev)
+    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+    Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
     n3 = min(n2,N-k)
     f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n3]
