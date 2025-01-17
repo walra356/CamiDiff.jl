@@ -262,7 +262,9 @@ function fdiff_expansion(polynom, f, notation=bwd)
     ordering = CamiMath.isforward(notation) ? reg : rev
     w = fdiff_expansion_weights(polynom, notation, ordering)
 
-    return LinearAlgebra.dot(w, f)
+    #return LinearAlgebra.dot(w, f)
+    return sum(w .* f)
+
 
 end
 
@@ -703,7 +705,8 @@ function trapezoidal_integration(f, x1, x2, weights)
     k = Base.length(weights)
     s = (x2-x1)/(n-1)
     a = Base.ones(n); a[1:k] = weights; a[end-k+1:end] = Base.reverse(weights)
-    o = LinearAlgebra.dot(f, a) * s
+    #o = LinearAlgebra.dot(f, a) * s
+    o = sum(f .* a) * s
 
     return o
 

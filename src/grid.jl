@@ -421,7 +421,8 @@ function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:
     ξ = findΔn(n, rval, grid; ϵ = 1e-12, k = 7)
     α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-    o = LinearAlgebra.dot(Fk, f[n:n+k])
+    #o = LinearAlgebra.dot(Fk, f[n:n+k])
+    o = sum(Fk .* f[n:n+k])
     
     return o
 
@@ -438,7 +439,9 @@ function _regularize_ratio(f′::Vector{T}, r′::Vector{T}; k=5) where T<:Real
     if isinf(o[1])
         α = fdiff_interpolation_expansion_polynom(1, k-1, fwd) 
         Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-        o[1] = LinearAlgebra.dot(Fk, o[2:k+1])
+        a = [o[i] for i=2:k+1]
+        # o[1] = LinearAlgebra.dot(Fk, a)
+        o[1] = sum(Fk .* a) # dot product
     end
     
     return o
@@ -476,8 +479,10 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
-    f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
-    g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
+ #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
+ #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
+    f′= [sum(Fk .* f[n:n+k]) for n=1:N-k]
+    g′= [sum(Bkrev .* f[n-k:n]) for n=N-k+1:N]
     f′= append!(f′, g′)
     
     return _regularize_ratio(f′, r′; k)
@@ -486,7 +491,8 @@ end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
 
     N = grid.N
-    r′= grid.r′[n1:n2]
+    r′= [grid.r′[n] for n=n1:n2]
+
     k = min(k,N÷2)
     1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
@@ -496,9 +502,14 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
+    N-k ≥ n2 || println("Warning: N-k < n2, (n2+k-N = ", n2+k-N, ")")
+
     n3 = min(n2,N-k)
-    f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n3]
-    g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n2-k+1:n2]
+    
+ #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n3]
+ #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n2-k+1:n2]
+    f′= [sum(Fk .* f[n:n+k]) for n=n1:n3]
+    g′= [sum(Bkrev .* f[n-k:n]) for n=n2-k+1:n2]
     f′= append!(f′, g′)[1:n2-n1+1]
     
     return _regularize_ratio(f′, r′; k)
@@ -591,7 +602,8 @@ function grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
     w[1:epn] = epw[epi]
     w[N-epn+1:N] = Base.reverse(epw[epi])
 
-    return LinearAlgebra.dot(f .* r′, w)
+    #return LinearAlgebra.dot(f .* r′, w)
+    return sum((f .* r′) .* w)
 
 end
 function grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T<:Real
@@ -618,7 +630,8 @@ function grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T
     w[1:epn] = epw[epi]
     w[end-epn+1:end] = Base.reverse(epw[epi])
 
-    return LinearAlgebra.dot(f .* r′, w)
+    #return LinearAlgebra.dot(f .* r′, w)
+    return sum((f .* r′) .* w)
 
 end
 function grid_integration(f::Vector{T}, grid::Grid{T}, itr::UnitRange) where T<:Real

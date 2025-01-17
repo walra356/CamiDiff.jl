@@ -28,7 +28,7 @@ bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-import LinearAlgebra
+#import LinearAlgebra
 
 export Grid
 export gridname
