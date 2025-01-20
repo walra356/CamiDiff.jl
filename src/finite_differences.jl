@@ -524,7 +524,7 @@ end
     fdiff_differentiation_expansion_polynom(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining ``k^{th}``-order
-lagrangian *differentiation* of the tabulated analytic function ``f[n]``
+*lagrangian differentiation* of the tabulated analytic function ``f[n]``
 at offset ``ξ`` (with respect to index position ``n``), which is positive
 for increasing index and negative for decreasing index.
 

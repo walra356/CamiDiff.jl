@@ -514,16 +514,20 @@ To derive the *lagrangian differentiation* formulas we formally differentiate
 ```math
 f[n+x] = (1 - ∇)^{-x} f[n]
 ```
-with respect to ``x``.
+with respect to ``x``,
+
 ```math
 \frac{df}{dx}[n+x]
 =-ln(1-∇)\ (1-∇)^{-x}f[n]
 =\sum_{q=1}^{k}\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(x)∇^{p}f[n]+⋯.
 ```
+
 Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
+
 ```math
 \frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)∇^{p}f[n]+⋯,
 ```
+
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
 are obtained by polynomial multiplication using the function
@@ -556,15 +560,12 @@ After changing dummy index to reverse the summation the expansion becomes
 ```math
 \frac{df}{dx}[n+x]
 =\sum_{j=0}^{k}\bar{B}^k_j(x)f[n-k+j]
-=\bar{B}^k(x) ⋅ f[n-k:n].
+=\bar{B}^k(x) ⋅ f[n-k:n],
 ```
 
-Functions:
+where
 
-
-
-[`fdiff_expansion_weights(β, bwd, rev)`](@ref)
-`` → \bar{B}^k(x) ≡ [B^k_k(x),⋯\ B^k_0(x)]``
+[`fdiff_expansion_weights(β, bwd, rev)`](@ref) `` → \bar{B}^k(x) ≡ [B^k_k(x),⋯\ B^k_0(x)]``.
 
 
 
