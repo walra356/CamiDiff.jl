@@ -20,8 +20,8 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Introduction" => "pages/introduction.md",
-        "Grid" => "/pages/grid.md",
-        "Applications" => "/pages/application.md",
+        "Grid" => "pages/grid.md",
+        "Application" => "pages/application.md",
         "Index" => "pages/index.md"
     ],
 )
