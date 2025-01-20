@@ -79,13 +79,23 @@ rev = CamiMath.rev
     f′3 = -r3 .* f3;
     f′4 = -r4 .* f4;
     o1 = grid_differentiation(f1, grid1);
+    @test f′1 ≈ o1
+ #   a1 = f′1 ./ o1
+ #   println("a1: ", a1[992:1000])
+ #   println("f′1: ", f′1[992:1000])
+ #   println("o1: ", o1[992:1000])
     o2 = grid_differentiation(f2, grid2);
     o3 = grid_differentiation(f3, grid3);
     o4 = grid_differentiation(f4, grid4);
-    @test f′1 ≈ o1
     @test f′2 ≈ o2
     @test f′3 ≈ o3
     @test f′4 ≈ o4
+ #   a2 = f′2 ./ o2
+ #   a3 = f′3 ./ o3
+ #   a4 = f′4 ./ o4
+#    println("a2: ", a2[992:1000])
+#    println("a3: ", a3[992:1000])
+#    println("a4: ", a4[992:1000])
     o1 = grid_differentiation(f1, grid1, 1:900);
     o2 = grid_differentiation(f2, grid2, 1:900);
     o3 = grid_differentiation(f3, grid3, 1:900);
@@ -93,7 +103,7 @@ rev = CamiMath.rev
     @test f′1[1:900] ≈ o1
     @test f′2[1:900] ≈ o2
     @test f′3[1:900] ≈ o3
-    @test f′4[1:900] ≈ o4
+    @test f′4[1:900] ≈ o4    
 #   -----------------------------------------------------------------------------------------
     exponential(r) = exp(-r);
     grid1 = castGrid(1, 1000, Float64; h = 0.01, r0 = 0.001, msg=true);
@@ -147,6 +157,14 @@ rev = CamiMath.rev
     @test f′2 ≈ o2
     @test f′3 ≈ o3
     @test f′4 ≈ o4
+#    a1 = f′1 ./ o1
+#    a2 = f′2 ./ o2
+#    a3 = f′3 ./ o3
+#    a4 = f′4 ./ o4
+#    println("a1: ", a1[992:1000])
+#    println("a2: ", a2[992:1000])
+#    println("a3: ", a3[992:1000])
+#    println("a4: ", a4[992:1000])
     o1 = grid_differentiation(f1, grid1, 10:900); 
     o2 = grid_differentiation(f2, grid2, 10:900);
     o3 = grid_differentiation(f3, grid3, 10:900);

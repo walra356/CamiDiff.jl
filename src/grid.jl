@@ -508,8 +508,20 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     
  #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n3]
  #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n2-k+1:n2]
+ #   n0=1
+ #   if n0+k ≤ n1
+ #       println("a")
+ #       f′ = [sum(Bkrev .* f[n-k+1:n]) for n=n1:n2]
+ #   else
+ #       println("a")
+ #       f′ = [sum(Fk .* f[n:n+k]) for n=n1:n1+k]
+ #       g′ = [sum(Bkrev .* f[n-k+1:n]) for n=n1+k+1:n2]
+ #       append!(f′, g′)
+ #   end    
+
     f′= [sum(Fk .* f[n:n+k]) for n=n1:n3]
     g′= [sum(Bkrev .* f[n-k:n]) for n=n2-k+1:n2]
+#    println("[f′[end] = ", f′[])
     f′= append!(f′, g′)[1:n2-n1+1]
     
     return _regularize_ratio(f′, r′; k)
