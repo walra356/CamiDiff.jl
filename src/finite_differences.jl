@@ -494,7 +494,7 @@ return CamiMath.polynom_product_expansion(a, α, k)
 
 end
 #...............................................................................
-function bwd_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
+function bwd_differentiation_expansion_polynom(ξ::T, k=5) where T<:Real
 # ==============================================================================
 #   Backward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n-k,n] and
