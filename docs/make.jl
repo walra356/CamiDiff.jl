@@ -2,7 +2,7 @@ using Documenter
 using CamiDiff
 
 makedocs(;
-    modules=[CamiDiff, Camimath],
+    modules=[CamiDiff, CamiMath],
     authors="= <walra356@planet.nl> and contributors",
     sitename="CamiDiff.jl",
     format=Documenter.HTML(;
