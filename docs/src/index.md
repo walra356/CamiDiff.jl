@@ -520,18 +520,18 @@ with respect to ``x``.
 =-ln(1-∇)\ (1-∇)^{-x}f[n]
 =\sum_{q=1}^{k}\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(x)∇^{p}f[n]+⋯.
 ```
-The r.h.s. can be rewritten in the form of a single expansion in powers of ``∇``, 
+Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 ```math
 \frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)∇^{p}f[n]+⋯,
 ```
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
-follow by polynomial multiplication using the function
-[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where ``p1`` 
-and ``p2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors.
-As the [`CamiMath.polynom`](@extref CamiMath.polynom) is f requires the presence of a ``β_0(x)`` coefficient we add
-a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The resulting coefficient
-vector is given (up to order ``k``) by 
+are calculated numerically by polynomial multiplication using the function
+[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
+where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors.
+As both ``p_1`` and ``p_2`` require the presence of a ``β_0(x)`` coefficient 
+we add a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The resulting coefficient vector 
+is given (up to order ``k``) by 
 `polynom = `[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``.
 
 ```math
