@@ -514,30 +514,25 @@ To derive the *lagrangian differentiation* formulas we formally differentiate
 ```math
 f[n+x] = (1 - ∇)^{-x} f[n]
 ```
-
 with respect to ``x``.
-
 ```math
 \frac{df}{dx}[n+x]
 =-ln(1-∇)\ (1-∇)^{-x}f[n]
 =\sum_{q=1}^{k}\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(x)∇^{p}f[n]+⋯.
 ```
-
-Rewriting the r.h.s. as a single summation in powers of ``∇`` for given values
-of ``n`` and ``x`` we obtain an expression of the form
-
+The r.h.s. can be rewritten in the form of a single expansion in powers of ``∇``, 
 ```math
 \frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)∇^{p}f[n]+⋯,
 ```
-
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
-for *lagrangian differentiation* at position ``n+x``. These coefficients 
-are determined numerically by polynomial multiplication using 
-[`CamiMath.polynom_product`](@extref CamiMath.polynom_product). 
-As the expansion algorith requires the presentce of a ``β_0(x)`` coefficient we add
-a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The corresponding coefficient
-vector is given by [`fdiff_differentiation_expansion_polynom(k,x)`](@ref).
-Evaluating the finite-difference expansion up to order ``k`` we obtain
+for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
+follow by polynomial multiplication using the function
+[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where ``p1`` 
+and ``p2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors.
+As the [`CamiMath.polynom`](@extref CamiMath.polynom) is f requires the presence of a ``β_0(x)`` coefficient we add
+a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The resulting coefficient
+vector is given (up to order ``k``) by 
+`polynom = `[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``.
 
 ```math
 \frac{df}{dx}[n+x]
