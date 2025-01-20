@@ -1,6 +1,6 @@
-## Introduction
+# Introduction
 
-### Finite differences
+## Finite differences
 
 Finite-difference calculus is based on the manipulation of finite differences of analytic functions. To introduce the subject we consider the analytic function ``f(x)``. The finite difference of ``f(x+h)`` and ``f(x)`` is called the *forward difference* and is defined as 
 ```math
