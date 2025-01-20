@@ -526,13 +526,12 @@ Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 ```
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
-are calculated numerically by polynomial multiplication using the function
+are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
-where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors.
-As both ``p_1`` and ``p_2`` require the presence of a ``β_0(x)`` coefficient 
-we add a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The resulting coefficient vector 
-is given (up to order ``k``) by 
-`polynom = `[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``.
+where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. The resulting coefficient vector 
+is given (up to order ``k``) by the polynom vector
+[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``,
+with ``β_0(x)≡ 0``.
 
 ```math
 \frac{df}{dx}[n+x]
