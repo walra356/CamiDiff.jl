@@ -531,7 +531,7 @@ are obtained by polynomial multiplication using the function
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
 The resulting coefficients are contained in the following [`CamiMath.polynom`](@extref CamiMath.polynom) vector of order ``k``, 
 
-[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
+[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
 
 Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
 
@@ -547,8 +547,11 @@ where the ``k+1`` *weights*
  B_j^k(x)=\sum_{p=j}^{k}β_p(x)c_{j}^{p}
 ```
 
-are the ``k^{th}``-order *lagrangian-differentiation weights*. After changing
-dummy index to reverse the summation the expansion becomes
+are the ``k^{th}``-order *lagrangian-differentiation weights*
+
+[`fdiff_expansion_weights(β, bwd, reg)`](@ref) `` → B^k(x) ≡ [B^k_0(x),⋯\ B^k_k(x)]``.
+
+After changing dummy index to reverse the summation the expansion becomes
 
 ```math
 \frac{df}{dx}[n+x]
@@ -558,16 +561,12 @@ dummy index to reverse the summation the expansion becomes
 
 Functions:
 
-[`fdiff_expansion_weights(β, bwd, reg)`](@ref)
-`` → B^k(x) ≡ [B^k_0(x),⋯\ B^k_k(x)]``
+
 
 [`fdiff_expansion_weights(β, bwd, rev)`](@ref)
 `` → \bar{B}^k(x) ≡ [B^k_k(x),⋯\ B^k_0(x)]``
 
-where
 
-[`fdiff_differentiation_expansion_polynom(o, k)`](@ref)
-``→ β ≡ [β_0(x),⋯\ β_k(x)]``.
 
 ```@docs
 fdiff_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
