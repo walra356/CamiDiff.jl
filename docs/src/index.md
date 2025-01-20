@@ -530,8 +530,8 @@ are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. The resulting coefficient vector 
 is given by the polynom vector of order ``k`` 
-[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``,
-with ``β_0(x)≡ 0``.
+
+[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
 
 ```math
 \frac{df}{dx}[n+x]
