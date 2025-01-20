@@ -8,6 +8,7 @@ links = InterLinks(
 
 makedocs(;
     modules=[CamiDiff],
+    plugins=[links],
     authors="= <walra356@planet.nl> and contributors",
     sitename="CamiDiff.jl",
     format=Documenter.HTML(;
