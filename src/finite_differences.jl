@@ -449,7 +449,7 @@ The result for f3(v) is exact because the function is cubic and
 the expansion is third order - see Figure below. The tabulated function is
 given by the black points. The interpolation and extrapolation points are red.
 
-![Image](./assets/lagrangian_interpolation.png)
+![Image](../assets/lagrangian_interpolation.png)
 """
 function fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 
