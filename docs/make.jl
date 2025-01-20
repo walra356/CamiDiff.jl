@@ -1,6 +1,10 @@
-import Documenter
 using Documenter
+using DocumenterInterLinks
 using CamiDiff
+
+links = InterLinks(
+    "CamiMath" => "https://walra356.github.io/CamiMath.jl/stable/"
+)
 
 makedocs(;
     modules=[CamiDiff],
