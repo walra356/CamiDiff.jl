@@ -683,8 +683,3 @@ Functions:
 fdiff_adams_moulton_expansion_polynom(k::Int; T=Int, msg=true)
 create_adams_moulton_weights(k::Int; rationalize=false, devisor=false, T=Int)
 ```
-
-## Index
-
-```@index
-```
