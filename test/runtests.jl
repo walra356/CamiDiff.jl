@@ -89,7 +89,7 @@ rev = CamiMath.rev
     o4 = grid_differentiation(f4, grid4);
     @test f′2 ≈ o2
     @test f′3 ≈ o3
-    @test f′4 ≈ o4
+    @test f′4 ≈ o4 
  #   a2 = f′2 ./ o2
  #   a3 = f′3 ./ o3
  #   a4 = f′4 ./ o4
