@@ -533,9 +533,10 @@ is given by the polynom vector of order ``k``
 
 [`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β^p(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
 
+Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
+
 ```math
 \frac{df}{dx}[n+x]
-=\sum_{p=0}^{k}β_p(x)∇^pf[n]
 =\sum_{j=0}^{k}B_j^k(x)f[n-j]
 =B^k(x) ⋅ f[n:-1:n-k],
 ```
@@ -546,7 +547,7 @@ where the ``k+1`` *weights*
  B_j^k(x)=\sum_{p=j}^{k}β_p(x)c_{j}^{p}
 ```
 
-are the ``k^{th}``-order lagrangian differentiation weights. After changing
+are the ``k^{th}``-order *lagrangian-differentiation weights*. After changing
 dummy index to reverse the summation the expansion becomes
 
 ```math
