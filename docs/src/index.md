@@ -533,7 +533,7 @@ of ``n`` and ``x`` we obtain an expression of the form
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+x``. These coefficients 
 are determined numerically by polynomial multiplication using 
-[`../polynom_product(polynom1, polynom2)`](@ref). 
+[`../CamiMath.polynom_product(polynom1, polynom2)`](@ref). 
 As the expansion algorith requires the presentce of a ``β_0(x)`` coefficient we add
 a (vanishing) ``p=0`` term, ``β_0(x)≡ 0``. The corresponding coefficient
 vector is given by [`fdiff_differentiation_expansion_polynom(k,x)`](@ref).
