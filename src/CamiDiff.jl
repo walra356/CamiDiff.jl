@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 module CamiDiff
-
+import Documenter
+import DocumenterInterLinks
 import CamiMath
 fwd = CamiMath.fwd
 bwd = CamiMath.bwd
