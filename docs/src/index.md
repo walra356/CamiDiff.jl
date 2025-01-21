@@ -28,7 +28,7 @@ the result of discretization of ``f(x)``, onto a [`Grid`](@ref) of ``N`` points,
 The [`Grid`](@ref) can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for *real functions of a single variable*, using 
-[`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. A set of 4 predefined types is included: exponential, 
+[`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. A set of four predefined grid types is included: exponential, 
 quasi-exponential, linear and polynomial. To underline the restriction to the non-negative domain, we shall often 
 use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
@@ -54,7 +54,8 @@ which is a discrete *linear* function, where ``u`` is called the *index base* an
 f[n] = f(x[n]),
 ```
 
-we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. 
+we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. This represents 
+the tabulated that has to be provided by the user
 
 Note that ``h`` determines the *coarseness* of the [`Grid`](@ref). The results of a finite-difference calculation 
 on a coarse grid will be less accurate than those on a fine grid, but the algorithm is identical, because the relevant
@@ -67,6 +68,15 @@ The [`Grid`](@ref) object is the backbone for the numerical procedure on a (gene
 grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
 functions of `N` elements representing the grid function and its first two derivatives.
 
+Once the [`Grid`](@ref) is specified, three elementary operations (based on lagrangian interpolation) 
+are at our disposal - see [Application](ref)
+
+[`grid_interpolation(f, rval, grid)`](ref)
+
+[`grid_differentiation(f, grid)`](ref)
+
+[`grid_integration(f, grid)`](ref)
+
 ```@docs
 Grid{T}
 castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=7, msg=true)
@@ -74,9 +84,6 @@ gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 gridname(ID::Int)
 findIndex(rval::T, grid::Grid{T}) where T<:Real
 findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
-grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
-grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
-grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
 ```
 
 ## Finite differences
