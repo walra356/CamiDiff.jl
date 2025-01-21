@@ -68,8 +68,7 @@ The [`Grid`](@ref) object is the backbone for the numerical procedure on a (gene
 grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
 functions of `N` elements representing the grid function and its first two derivatives.
 
-Once the [`Grid`](@ref) is specified, three basic operations (built on lagrangian interpolation) 
-are at our disposal - see [Application](@ref)
+Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Application](@ref)
 
 [`grid_interpolation(f, rval, grid)`](@ref)
 
