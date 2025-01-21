@@ -23,22 +23,22 @@ julia> using CamiDiff
 ## Discretization
 
 The Finite-difference analysis of `CamiDiff` starts by discretization of a given *analytic* 
-function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points addressable by the *gridindex* ``n = 1, ⋯ N``.
-Mathematically, the discretization is based on the map ``n ↦ x``, which defines the discrete function
+function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
+Mathematically, the discretization is based on the map ``n ↦ x,`` which defines the discrete function
 
 ```math
 x[n] = s_0 * g(t[n]).
 ```
 
 Here ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. The [`gridfunction`](@ref) 
-is defined as a (generally nonlinear) function *running through the origin*, ``g(0) = 0``. Its argument is 
+is defined as a (generally nonlinear) function *running through the origin*; i.e., ``g(0) = 0``. Its argument is 
 the *ticks function*
 
 ```math
 t[n] ≡ (n−u) * h,
 ```
 
-which is a *linear* function, with ``u`` the *index base* and ``h`` the *step size*. Writing
+which is a discrete *linear* function, where ``u`` is called the *index base* and ``h`` the *step size*. Writing
 
 ```math
 f[n] = f(x[n]),
@@ -47,12 +47,13 @@ f[n] = f(x[n]),
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. 
 
 Note that ``h`` determines the *coarseness* of the [`Grid`](@ref). The results of a finite-difference calculation 
-on a coarse grid will be less accurate than those on a fine grid, but the algorithm remains the same because 
+on a coarse grid will be less accurate than those on a fine grid, but the algorithm is identical, because 
 finite-difference expansions only depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses 
 unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
 
 NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)``. 
-For this case we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with ``r ≥ 0``.
+To underline this restriction, we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, 
+with the implicit condition ``r ≥ 0``.
 
 ## Grid
 
