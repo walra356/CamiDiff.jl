@@ -34,11 +34,12 @@ rev = CamiMath.rev
 #import LinearAlgebra
 
 export Grid
-export gridtype
+export gridtypename
+export gridtypeID
 export gridfunction
 export castGrid
-export findIndex
-export findΔn
+export gridPos
+export fracPos
 export grid_interpolation
 export grid_differentiation
 export grid_integration

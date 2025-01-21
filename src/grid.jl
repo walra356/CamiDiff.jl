@@ -34,7 +34,7 @@
 Type with fields:
 * `.ID`:    grid identifer name (`::Int`)
 * `.name`:  grid identifer name (`::String`)
-* `.T`:     gridType (`::Type`)
+* `.T`:     gridtypename (`::Type`)
 * `.N`:     number of grid points (`::Int`)
 * `.r  `:   tabulated grid function (`::Vector{T}`)
 * `.r′ `:   tabulated first derivative of grid function (`::Vector{T}`)
@@ -201,7 +201,7 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001, rmax=0, p=5, polyno
 
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
     str_d = ID == 4 ? "of degree $(length(polynom)-1)" : nothing
-    name = ID == 4 ? gridtype(ID::Int) * " of degree $(length(polynom)-1)" : gridtype(ID::Int)
+    name = ID == 4 ? gridtypename(ID::Int) * " of degree $(length(polynom)-1)" : gridtypename(ID::Int)
     str_h = repr(h, context=:compact => true)
     str_r0 = repr(r0, context=:compact => true)
     str_rmax = repr(rmax, context=:compact => true)
@@ -260,11 +260,11 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
 # ==============================================================================
 #  castGrid: creates the grid object
 # ==============================================================================
-    h = convert(T, h)
-    r0 = convert(T, r0)
-    polynom = convert(Vector{T}, polynom)
+    h = convert(T, rationalize(h))
+    r0 = convert(T, rationalize(r0))
+    polynom = convert(Vector{T}, rationalize.(polynom))
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
-    name = gridtype(ID)
+    name = gridtypename(ID)
 
     r  = r0 .* T[gridfunction(ID, n-1, h; p, polynom) for n=1:N]
     r′ = r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
@@ -289,18 +289,18 @@ function castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], 
    
 end
 
-# ........................ gridtype(ID) ........................................
+# ........................ gridtypename(ID) ........................................
 @doc raw"""
-    gridtype(ID::Int)
+    gridtypename(ID::Int)
     
 Name corresponding to the [`Grid`](@ref) ID.
 #### Example:
 ```
-julia> gridtype(2)
+julia> gridtypename(2)
 "quasi-exponential"
 ```
 """
-function gridtype(ID::Int)
+function gridtypename(ID::Int)
 # ==============================================================================
 #  Name used for `Grid` of given `grid.ID`
 # ==============================================================================
@@ -312,14 +312,38 @@ function gridtype(ID::Int)
    
 end
 
+# ........................ gridtypeID(name) ........................................
+@doc raw"""
+    gridtypeID(name::String)
+    
+ID corresponding to the [`gridtypename`](@ref).
+#### Example:
+```
+julia> gridtypeID("quasi-exponential")
+2
+```
+"""
+function gridtypeID(name::String)
+# ==============================================================================
+#  ID corresponding to the gridtypename 'name'
+# ==============================================================================
+    
+    return name == "exponential" ? 1 :
+           name == "quasi-exponential" ? 2 :
+           name == "linear (uniform)" ? 3 :
+           name == "polynomial" ? 4 : throw(DomainError(name, "unknown gridfunction"))
+   
+end
+
 # ------------------------------------------------------------------------------
-#                       findIndex(rval, grid)
+#                       gridPos(rval, grid)
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    findIndex(rval::T, grid::Grid{T}) where T<:Number
+    gridPos(rval::T, grid::Grid{T}) where T<:Number
 
-The largest index `i` satisfying the condition `grid.r[i] < rval` on the [`Grid`](@ref).
+The approximate grid position defined as the largest integer `n` satisfying the 
+condition `grid.r[n] < rval` on the [`Grid`](@ref).
 #### Example:
 ```
 julia> h = 0.1; r0 = 1.0;
@@ -329,11 +353,11 @@ julia> grid = castGrid(1, 4, Float64; h, r0);
 julia> r = grid.r; println("r[3] = $(r[3])")
 r[3] = 0.22140275816016985
 
-julia> findIndex(0.222, grid)
+julia> gridPos(0.222, grid)
 3
 ```
 """
-function findIndex(rval::T, grid::Grid{T}) where T<:Real
+function gridPos(rval::T, grid::Grid{T}) where T<:Real
     
     N = grid.N
     r = grid.r
@@ -360,15 +384,15 @@ function findIndex(rval::T, grid::Grid{T}) where T<:Real
 end
 
 # ------------------------------------------------------------------------------
-#                       findΔn(n, rval, grid; ϵ = 1e-8, k = 7)
+#                       fracPos(n, rval, grid; ϵ = 1e-8, k = 7)
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+    fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 
-Fractional grid offset with respect to [`Grid`](@ref) point `n`.
+Fractional grid offset with respect to [`Grid`](@ref) position `n`.
 """
-function findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:Real
     
     nul = T(0)
     one = T(1)
@@ -417,8 +441,8 @@ function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
 
-    n = findIndex(rval, grid)
-    ξ = findΔn(n, rval, grid; ϵ = 1e-12, k = 7)
+    n = gridPos(rval, grid)
+    ξ = fracPos(n, rval, grid; ϵ = 1e-12, k = 7)
     α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     #o = LinearAlgebra.dot(Fk, f[n:n+k])

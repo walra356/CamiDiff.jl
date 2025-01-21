@@ -28,7 +28,7 @@ the result of discretization of ``f(x)``, onto a [`Grid`](@ref) of ``N`` points,
 The [`Grid`](@ref) can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for *real functions of a single variable*, using 
-[`gridfunction`](@ref)`s` restricted to the domain ``[0, ∞)``. A set of four predefined [`gridtype`](@ref)`s` is included: 'exponential', 
+[`gridfunction`](@ref)`s` restricted to the domain ``[0, ∞)``. A set of four predefined [`gridtypename`](@ref)`s` is included: 'exponential', 
 'quasi-exponential', 'linear' and 'polynomial'. To underline the restriction to the non-negative domain, we shall often 
 use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
@@ -80,9 +80,10 @@ Once the [`Grid`](@ref) is specified, three basic operations are at our disposal
 Grid{T}
 castGrid(ID::Int, N::Int, T::Type; h=1, r0=0.001,  p=5, polynom=[0,1], epn=5, k=7, msg=true)
 gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
-gridtype(ID::Int)
-findIndex(rval::T, grid::Grid{T}) where T<:Real
-findΔn(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+gridtypename(ID::Int)
+gridtypeID(name::String)
+gridPos(rval::T, grid::Grid{T}) where T<:Real
+fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 ```
 
 ## Finite differences

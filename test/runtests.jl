@@ -38,10 +38,14 @@ rev = CamiMath.rev
     @test [grid2.r, grid2.r′, grid2.r′′] ≈ [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]
     @test [grid1.r, grid1.r′, grid1.r′′] == [[0.0, 0.21034183615129542, 0.4428055163203397, 0.6997176151520064], [0.2, 0.22103418361512955, 0.244280551632034, 0.26997176151520064], [0.020000000000000004, 0.022103418361512958, 0.024428055163203403, 0.02699717615152007]]
     @test grid1.name == "exponential"
-    @test findIndex(0.25, grid1) == 2
-    @test_throws DomainError findIndex(100.0, grid1) == 220
+    @test gridPos(0.25, grid1) == 2
+    
+    @test gridtypename(1) == "exponential"
+    @test gridtypeID("exponential") == 1
+    @test_throws DomainError gridPos(100.0, grid1) == 220
     @test_throws DomainError castGrid(5, 1000, Float64)
-    @test_throws DomainError gridtype(5) 
+    @test_throws DomainError gridtypename(5) 
+    @test_throws DomainError gridtypeID("logarithm") 
 #   -----------------------------------------------------------------------------------------
     gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
     grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
@@ -80,10 +84,10 @@ rev = CamiMath.rev
     f′4 = -r4 .* f4;
     o1 = grid_differentiation(f1, grid1);
     @test f′1 ≈ o1
- #   a1 = f′1 ./ o1
- #   println("a1: ", a1[992:1000])
- #   println("f′1: ", f′1[992:1000])
- #   println("o1: ", o1[992:1000])
+    a1 = f′1 ./ o1
+    println("a1: ", a1[992:1000])
+    println("f′1: ", f′1[992:1000])
+    println("o1: ", o1[992:1000])
     o2 = grid_differentiation(f2, grid2);
     o3 = grid_differentiation(f3, grid3);
     o4 = grid_differentiation(f4, grid4);
