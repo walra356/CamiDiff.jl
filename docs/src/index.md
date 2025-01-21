@@ -20,10 +20,15 @@ julia> using CamiDiff
 
 # Introduction
 
+The Finite-difference analysis of `CamiDiff` starts by [Discretization](@ref) of a given *analytic* 
+function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
+
+The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)``. 
+To underline this restriction, we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, 
+with the implicit condition ``r ≥ 0``.
+
 ## Discretization
 
-The Finite-difference analysis of `CamiDiff` starts by discretization of a given *analytic* 
-function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
 Mathematically, the discretization is based on the map ``n ↦ x,`` which defines the discrete function
 
 ```math
@@ -51,9 +56,7 @@ on a coarse grid will be less accurate than those on a fine grid, but the algori
 finite-difference expansions only depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses 
 unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
 
-NB. The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)``. 
-To underline this restriction, we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, 
-with the implicit condition ``r ≥ 0``.
+
 
 ## Grid
 
