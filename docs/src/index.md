@@ -22,12 +22,12 @@ julia> using CamiDiff
 
 The Finite-difference analysis of `CamiDiff` starts by discretization of a given *real analytic function 
 of a single variable*, ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
-The discretization can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
+The [`Grid`](@ref) can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for [`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. 
-Four predefined types are included: exponential, quasi-exponential, linear and polynomial. 
-To underline the restriction to the positive domain, we use the variable ``r`` rather than ``x``, writing 
-``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
+A set of 4 predefined types is included: exponential, quasi-exponential, linear and polynomial. 
+To underline the restriction to the non-negative domain, we shall often use the variable ``r`` rather than ``x``, 
+writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
 ## Discretization
 
@@ -38,7 +38,7 @@ x[n] = s_0 * g(t[n]).
 ```
 
 Here ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. The [`gridfunction`](@ref) 
-is defined as a (generally nonlinear) function *running through the origin*; i.e., ``g(0) = 0``. Its argument is 
+is defined as a (generally nonlinear) function *running through the origin*: ``g(0) = 0``. Its argument is 
 the *ticks function*
 
 ```math
@@ -54,11 +54,9 @@ f[n] = f(x[n]),
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. 
 
 Note that ``h`` determines the *coarseness* of the [`Grid`](@ref). The results of a finite-difference calculation 
-on a coarse grid will be less accurate than those on a fine grid, but the algorithm is identical, because 
+on a coarse grid will be less accurate than those on a fine grid, but the algorithm is identical, because the relevant
 finite-difference expansions only depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses 
 unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
-
-
 
 ## Grid
 
