@@ -69,13 +69,13 @@ grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which ar
 functions of `N` elements representing the grid function and its first two derivatives.
 
 Once the [`Grid`](@ref) is specified, three elementary operations (based on lagrangian interpolation) 
-are at our disposal - see [Application](ref)
+are at our disposal - see [Application](@ref)
 
-[`grid_interpolation(f, rval, grid)`](ref)
+[`grid_interpolation(f, rval, grid)`](@ref)
 
-[`grid_differentiation(f, grid)`](ref)
+[`grid_differentiation(f, grid)`](#ref)
 
-[`grid_integration(f, grid)`](ref)
+[`grid_integration(f, grid)`](@ref)
 
 ```@docs
 Grid{T}

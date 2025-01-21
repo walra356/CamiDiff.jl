@@ -2,11 +2,11 @@
 
 The three elementary operations are:
 
-[`grid_interpolation(f, rval, grid)`](ref)
+[`grid_interpolation(f, rval, grid)`](@ref)
 
-[`grid_differentiation(f, grid)`](ref)
+[`grid_differentiation(f, grid)`](@ref)
 
-[`grid_integration(f, grid)`](ref)
+[`grid_integration(f, grid)`](@ref)
 
 ```@docs
 grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
