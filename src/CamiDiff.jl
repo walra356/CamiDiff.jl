@@ -34,7 +34,7 @@ rev = CamiMath.rev
 #import LinearAlgebra
 
 export Grid
-export gridname
+export gridtype
 export gridfunction
 export castGrid
 export findIndex

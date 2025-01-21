@@ -201,7 +201,7 @@ function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=0.001, rmax=0, p=5, polyno
 
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
     str_d = ID == 4 ? "of degree $(length(polynom)-1)" : nothing
-    name = ID == 4 ? gridname(ID::Int) * " of degree $(length(polynom)-1)" : gridname(ID::Int)
+    name = ID == 4 ? gridtype(ID::Int) * " of degree $(length(polynom)-1)" : gridtype(ID::Int)
     str_h = repr(h, context=:compact => true)
     str_r0 = repr(r0, context=:compact => true)
     str_rmax = repr(rmax, context=:compact => true)
@@ -264,7 +264,7 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5
     r0 = convert(T, r0)
     polynom = convert(Vector{T}, polynom)
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
-    name = gridname(ID)
+    name = gridtype(ID)
 
     r  = r0 .* T[gridfunction(ID, n-1, h; p, polynom) for n=1:N]
     r′ = r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
@@ -289,18 +289,18 @@ function castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], 
    
 end
 
-# ........................ gridname(ID) ........................................
+# ........................ gridtype(ID) ........................................
 @doc raw"""
-    gridname(ID::Int)
+    gridtype(ID::Int)
     
 Name corresponding to the [`Grid`](@ref) ID.
 #### Example:
 ```
-julia> gridname(2)
+julia> gridtype(2)
 "quasi-exponential"
 ```
 """
-function gridname(ID::Int)
+function gridtype(ID::Int)
 # ==============================================================================
 #  Name used for `Grid` of given `grid.ID`
 # ==============================================================================

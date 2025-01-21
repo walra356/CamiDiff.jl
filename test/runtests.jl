@@ -41,7 +41,7 @@ rev = CamiMath.rev
     @test findIndex(0.25, grid1) == 2
     @test_throws DomainError findIndex(100.0, grid1) == 220
     @test_throws DomainError castGrid(5, 1000, Float64)
-    @test_throws DomainError gridname(5) 
+    @test_throws DomainError gridtype(5) 
 #   -----------------------------------------------------------------------------------------
     gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
     grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
