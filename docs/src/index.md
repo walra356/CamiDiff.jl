@@ -22,9 +22,9 @@ julia> using CamiDiff
 
 ## Discretization
 
-Finite-difference analysis starts by discretization of a given *analytic* function ``f(x)`` onto a [`Grid`](@ref) 
-of ``N`` points with *gridindex* ``n = 1, ⋯ N``.
-The discretization is based on the map ``n ↦ x``, which defines the discrete function
+The Finite-difference analysis of `CamiDiff` starts by discretization of a given *analytic* 
+function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points addressable by the *gridindex* ``n = 1, ⋯ N``.
+Mathematically, the discretization is based on the map ``n ↦ x``, which defines the discrete function
 
 ```math
 x[n] = s_0 * g(t[n]).
