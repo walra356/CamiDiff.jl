@@ -20,8 +20,8 @@ julia> using CamiDiff
 
 # Introduction
 
-The Finite-difference analysis of `CamiDiff` starts by [Discretization](@ref) of a given *analytic* 
-function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
+The Finite-difference analysis of `CamiDiff` starts by  [discretization](@ref) of a given *analytic* 
+function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N`` 
 
 The current implementation of `CamiDiff` was developped for grid functions defined on the domain ``[0, ∞)``. 
 To underline this restriction, we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, 
