@@ -20,13 +20,14 @@ julia> using CamiDiff
 
 # Introduction
 
-The Finite-difference analysis of `CamiDiff` starts by discretization of a given *analytic* 
-function ``f(x)`` onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
+The Finite-difference analysis of `CamiDiff` starts by discretization of a given *real analytic function 
+of a single variable*, ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
 The discretization can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for [`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. 
-To underline this restriction, we use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, 
-with the implicit condition ``r ≥ 0``.
+Four predefined types are included: exponential, quasi-exponential, linear and polynomial. 
+To underline the restriction to the positive domain, we use the variable ``r`` rather than ``x``, writing 
+``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
 ## Discretization
 
