@@ -23,12 +23,12 @@ julia> using CamiDiff
 `CamiDiff` has been developped to study *continuously differentiable* functions, provided by the user in *tabulated form*. 
 The package is based on the methods of finite-difference analysis in one dimension. 
 
-Throughout the documentation ``f(x)`` will be the function under investigation. The tabulated form can be regarded as 
+Throughout the documentation ``f(x)`` will be our `function of interest` under investigation. The tabulated form can be regarded as 
 the result of discretization of ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
 The [`Grid`](@ref) can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for *real functions of a single variable*, using 
-[`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. A set of four predefined grid types is included: exponential, 
+[`gridfunction`](@ref)s restricted to the domain ``[0, ∞)``. A set of four predefined grid types is included: exponential, 
 quasi-exponential, linear and polynomial. To underline the restriction to the non-negative domain, we shall often 
 use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
@@ -68,7 +68,7 @@ The [`Grid`](@ref) object is the backbone for the numerical procedure on a (gene
 grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
 functions of `N` elements representing the grid function and its first two derivatives.
 
-Once the [`Grid`](@ref) is specified, three elementary operations (based on lagrangian interpolation) 
+Once the [`Grid`](@ref) is specified, three basic operations (built on lagrangian interpolation) 
 are at our disposal - see [Application](@ref)
 
 [`grid_interpolation(f, rval, grid)`](@ref)
