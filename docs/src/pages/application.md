@@ -16,7 +16,10 @@ grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real
 
 ## Lagrange-polynomial interpolation/extrapolation
 
-The Lagrange polynomial of degree k on a uniform grid is the polynomial running through k+1 subsequent points on the grid. We derive expressions for interpolation/extrapolation in both forward- and backward-difference notation. Beware that Lagrange interpolation becomes inaccurate if the tabulated function cannot be approximated by a polynomial of degree k.
+The Lagrange polynomial of degree k on a uniform grid is the polynomial running through 
+k+1 subsequent points on the grid. We derive expressions for interpolation/extrapolation 
+in both forward- and backward-difference notation. Beware that Lagrange interpolation 
+becomes inaccurate if the tabulated function cannot be approximated by a polynomial of degree k.
 
 **Forward difference notation**
 
@@ -34,8 +37,8 @@ f[n+2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
 ```math
 \vdots
 ```
-where ``k`` is called the order of the expansion and ``n`` is the reference
-index. For interpolation position ``n-σ`` (where σ may be *real* valued in
+where ``p`` is called the order of the expansion and ``n`` is the index of the reference
+position. For interpolation position ``n-σ`` (where σ may be *real* valued in
 index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 

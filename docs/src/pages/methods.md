@@ -7,11 +7,11 @@ Consider the analytical function ``f`` tabulated in *forward order*
 
 **Forward difference notation**
 
-In *forward difference* notation, the *finite difference* of two adjacent
-values on the grid is defined as
+The *forward translation* from position ``n-1`` to position ``n`` on 
+the grid is expressed by the relation
 
 ```math
-Δ f[n] = f[n+1]-f[n],
+f[n] = (1 + Δ) f[n-1] ,
 ```
 
 where ``Δ`` is the forward difference operator. By a formal inversion  
