@@ -4,7 +4,7 @@ CurrentModule = CamiDiff
 
 # Home
 
-`CamiDiff.jl` is a [Julia](http://julialang.org) package for finite-difference analysis of *real analytic functions of a single variable*. 
+`CamiDiff.jl` is a [Julia](http://julialang.org) package for one-dimensional finite-difference analysis. 
 
 ---
 
@@ -21,7 +21,7 @@ julia> using CamiDiff
 # Introduction
 
 `CamiDiff` has been developped to study *continuously differentiable* functions, provided by the user in *tabulated form*. 
-The package is based on the methods of finite-difference analysis. 
+The package is based on the methods of finite-difference analysis in one dimension. 
 
 Throughout the documentation ``f(x)`` will be the function under investigation. The tabulated form can be regarded as 
 the result of discretization of ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
