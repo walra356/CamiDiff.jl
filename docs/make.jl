@@ -19,7 +19,6 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
-        "Grid" => "pages/grid.md",
         "Finite-difference methods" => "pages/methods.md",
         "Application" => "pages/application.md",
         "Index" => "pages/index.md"
