@@ -20,14 +20,17 @@ julia> using CamiDiff
 
 # Introduction
 
-The Finite-difference analysis of `CamiDiff` starts by discretization of a given *real analytic function 
-of a single variable*, ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
+`CamiDiff` has been developped to study *continuously differentiable* functions, provided by the user in *tabulated form*. 
+The package is based on the methods of finite-difference analysis. 
+
+Throughout the documentation ``f(x)`` will be the function under investigation. The tabulated form can be regarded as 
+the result of discretization of ``f(x)``, onto a [`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``.
 The [`Grid`](@ref) can be linear or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
-The current implementation of `CamiDiff` was developped for [`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. 
-A set of 4 predefined types is included: exponential, quasi-exponential, linear and polynomial. 
-To underline the restriction to the non-negative domain, we shall often use the variable ``r`` rather than ``x``, 
-writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
+The current implementation of `CamiDiff` was developped for *real functions of a single variable*, using 
+[`gridfunction`](@ref)s defined on the domain ``[0, ∞)``. A set of 4 predefined types is included: exponential, 
+quasi-exponential, linear and polynomial. To underline the restriction to the non-negative domain, we shall often 
+use the variable ``r`` rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
 ## Discretization
 
