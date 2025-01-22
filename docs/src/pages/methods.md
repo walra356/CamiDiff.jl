@@ -108,10 +108,10 @@ In terms of forward differences the generic form of the finite-difference expans
 
 A finite-difference expansion truncated at order ``k`` is defined
 by ``k+1`` *finite-difference expansion coefficients*, represented by the
-vector ``α = [α_{0},⋯\ α_{k}]``, which has to be supplied by the user. 
-It takes some bookkeeping to rewrite the expansion as a *weighted sum* 
-over the ``k+1`` *function values in forward tabulated form* ``f[n:n+k]``.
-Substituting the finite-difference expression for ``Δ^k``, we obtain
+(user-supplied) vector ``α = [α_{0},⋯\ α_{k}]``. It takes some bookkeeping 
+to rewrite the expansion as a *weighted sum* over the ``k+1`` *function 
+values in forward tabulated form* ``f[n:n+k]``. Substituting the finite-difference 
+expression for ``Δ^k``, we obtain
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -160,11 +160,10 @@ In terms of backward differences the generic form of the finite-difference expan
 \sum_{p=0}^{\infty}β_{p}∇^{p}f[n]=\sum_{p=0}^{k}β_{p}∇^{p}f[n]+⋯.
 ```
 
-In this case the ``k^{th}``- order *finite-difference expansion* is defined
-by the vector ``β = [β_{0},⋯\ β_{k}]``, which has to be supplied by the user. 
-The expansion can written as *weighted sum* over the ``k+1`` *function values 
-in backward tabulated form* ``f[n:-1:n-k]``. Substituting the finite-difference 
-expression for ``∇^k``, we obtain
+In this case the ``k^{th}``- order *finite-difference expansion* is defined by the 
+(user-supplied) vector ``β = [β_{0},⋯\ β_{k}]``. The expansion can written as 
+*weighted sum* over the ``k+1`` *function values in backward tabulated form* ``f[n:-1:n-k]``. 
+Substituting the finite-difference expression for ``∇^k``, we obtain
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]

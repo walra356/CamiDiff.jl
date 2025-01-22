@@ -100,13 +100,13 @@ end
 @doc raw"""
     fdiff_expansion_weights(polynom[, notation=bwd[, ordering=rev]])
 
-Expansion weights corresponding to the expansion coefficients [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) of
-a finite difference expansion.
+Expansion weights vector corresponding to the expansion coefficients [`CamiMath.polynom`](@extref) 
+of a (user-defined) finite-difference expansion.
 
-**Forward difference notation** (`notation = fwd`)
+**Forward-difference notation** (`notation = fwd`)
 
-Weight vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponding to the
-expansion coefficients ``α ≡ [α_0^k,⋯\ α_k^k]`` of the ``k^{th}``-order
+The weight vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponds to the
+expansion coefficients ``α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order
 *forward-difference* expansion,
 
 ```math
@@ -126,9 +126,9 @@ indicate that the weights must be evaluated in forward-difference notation.
 
 **Backward difference notation** (`notation = bwd`)
 
-Weight vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponding to the
+The weight vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponds to the
 expansion coefficients ``β ≡ [β_0,⋯\ β_k]`` of
-the ``k^{th}``-order *backward-difference* expansion,
+the ``k^{th}``-order (user-defined) *backward-difference* expansion,
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
@@ -195,9 +195,9 @@ end
 
 Finite difference expansion of the analytical function f(x) tabulated
 in *forward order* (growing index) at ``k+1`` positions on a uniform grid.
-The expansion coefficients are specified by the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom). By default
-[`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) are assumed to be in backward-difference notation (`bwd`). For [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom)
-in forward-difference notation the third argument must be `fwd`.
+The expansion coefficients are specified by the vector [`CamiMath.polynom`](@extref). By default
+[`CamiMath.polynom`](@extref) are assumed to be in backward-difference notation (`bwd`). 
+For [`CamiMath.polynom`](@extref) in forward-difference notation the third argument must be `fwd`.
 
 **Forward difference notation** (`notation = fwd`)
 ```math
@@ -205,7 +205,7 @@ in forward-difference notation the third argument must be `fwd`.
 ```
 where ``f[n:n+k]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``α ≡ [α_0,⋯\ α_k]`` is the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom), which has to be supplied to
+``α ≡ [α_0,⋯\ α_k]`` is the vector [`CamiMath.polynom`](@extref), which has to be supplied to
 define the forward-difference expansion.
 The corresponding weights vector ``F^{k}`` is internally generated.
 
@@ -215,7 +215,7 @@ The corresponding weights vector ``F^{k}`` is internally generated.
 ```
 where ``f[n-k:n]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``β ≡ [β_0,⋯\ β_k]`` is the vector [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom), which has to be supplied to
+``β ≡ [β_0,⋯\ β_k]`` is the vector [`CamiMath.polynom`](@extref), which has to be supplied to
 define the backward-difference expansion. The corresponding weights vector
 ``\bar{B}^k`` is internally generated.
 
