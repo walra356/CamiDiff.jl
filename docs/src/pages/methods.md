@@ -31,10 +31,10 @@ a *weighted sum* over the function values ``f[n:n+k]`` (involving
          &= f[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k] = \sum_{j=0}^{k} c_{k-j}^k f[n+j],
 \end{aligned}
 ```
-where the ``k+1`` coefficients
+where the ``k+1`` coefficients ``c_{k-j}^k=(-1)^k c_j^k``  with
 
 ```math
-c_{k-j}^{k}=(-1)^{k-j}\binom{k}{j}
+c_{j}^{k}=(-1)^{j}\binom{k}{j}
 ```
 
 are the *summation weights* (short: *weights*), which define the summation, 
@@ -65,20 +65,9 @@ a *weighted sum* over the function values tabulated in backward order,
 = \sum_{j=0}^{k} c_j^kf[n-j],
 ```
 
-where the ``k+1`` coefficients
-
-```math
-c_{j}^{k}=(-1)^{j}\binom{k}{j}
-```
-
-are the *summation weights* (short: *weights*), which define the summation,
-with special values ``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
-
-Note the following symmetry relation:
-
-```math
-c_{k-j}^k=(-1)^k c_j^k.
-```
+where the ``k+1`` coefficients ``c_j^k`` are the *summation weights* 
+(short: *weights*), which define the summation, with special values 
+``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
 
 Coefficients:  
 
