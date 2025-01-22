@@ -26,20 +26,21 @@ a *weighted sum* over the function values ``f[n:n+k]`` (involving
 ``k+1`` points),
 
 ```math
-Δ^k f[n] = c_{k}^kf[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k]
-= \sum_{j=0}^{k} c_{k-j}^k f[n+j].
+Δ^k f[n] = f[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k]
+= \sum_{j=0}^{k} c_{k-j}^k f[n+j],
 ```
-The ``k+1`` coefficients
+where the ``k+1`` coefficients
 
 ```math
 c_{k-j}^{k}=(-1)^{k-j}\binom{k}{j}
 ```
 
-are the *summation weights* (short: *weights*) which define the summation.
+are the *summation weights* (short: *weights*) which define the summation, 
+with special values ``c_{0}^{k}≡1``, ``c_{k}^{k}≡1`` 
 
 **Backward difference notation**
 
-In *backward translation* from position ``n-1`` to position ``n`` on 
+The *backward translation* from position ``n-1`` to position ``n`` on 
 the grid is expressed by the relation
 
 ```math
@@ -58,7 +59,7 @@ a *weighted sum* over the function values tabulated in backward order,
 ``f[n:-1:n-k]`` (involving ``k+1`` points),
 
 ```math
-∇^k f[n] = f[n] + c_1^kf[n-1] + ⋯ + c_k^kf[n-k]
+∇^k f[n] = f[n] + c_1^kf[n-1] + ⋯ + f[n-k]
 = \sum_{j=0}^{k} c_j^kf[n-j],
 ```
 
