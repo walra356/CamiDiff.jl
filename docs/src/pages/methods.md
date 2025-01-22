@@ -39,11 +39,11 @@ are the *summation weights* (short: *weights*) which define the summation.
 
 **Backward difference notation**
 
-In *backward difference* notation, the *finite difference* of two adjacent
-values on the grid is defined as
+In *backward translation* from position ``n-1`` to position ``n`` on 
+the grid is expressed by the relation
 
 ```math
-∇ f[n] = f[n]-f[n-1],
+f[n-1] = (1 - ∇) f[n],
 ```
 
 where ``∇`` is the backward difference operator.  By a formal inversion  
