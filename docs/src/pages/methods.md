@@ -83,6 +83,10 @@ In inner product form the result becomes
 ```
 where ``c^k  ≡ [c_0^k,⋯\ c_k^k]``.
 
+Coefficients:
+
+[`fdiff_weight(k::Int, j::Int)`](@ref) ``→ c^k ≡ [c_0^k,⋯\ c_k^k]``
+
 ```@docs
 # isforward(notation)
 # isregular(ordering)
@@ -131,20 +135,14 @@ with ``j=0,⋯\ k``. In inner product form the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
-```math
-f[n:n+k] = \left[\begin{array}{c}
-f[n]\\
-\vdots\\
-f[n+k]
-\end{array}\right].
-```
-
 Coefficients:
 
 [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where `polynom` is the [`CamiMath.polynom`](https://walra356.github.io/CamiMath.jl/stable/#CamiMath.polynom) vector ``  α ≡ [α_0,⋯\ α_k]``. This `polynom` has to be supplied by the user to define the expansion under consideration. Some common cases are:
+where `polynom` is the [`CamiMath.polynom`](@extref) vector ``α ≡ [α_0,⋯\ α_k]``. 
+This `polynom` has to be supplied by the user to define the expansion under consideration. 
+Some common cases are:
 
   interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
 
