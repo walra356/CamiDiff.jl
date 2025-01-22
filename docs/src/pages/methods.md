@@ -37,8 +37,8 @@ where the ``k+1`` coefficients ``c_{k-j}^k=(-1)^k c_j^k``,  with
 c_{j}^{k}=(-1)^{j}\binom{k}{j},
 ```
 
-are the *summation weights* (short: *weights*) defining the summation, 
-with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``.
+are the *summation weights* (short: *weights*) defining the summation, with special values 
+``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``.
 
 In inner product form the result becomes
 
@@ -74,8 +74,7 @@ a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving
 ```
 
 where the ``k+1`` coefficients ``c_j^k`` are the *summation weights* 
-(short: *weights*) defining the summation, with special values 
-``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
+(short: *weights*) defining the summation. 
 
 In inner product form the result becomes
 
