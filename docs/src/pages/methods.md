@@ -36,7 +36,7 @@ c_{k-j}^{k}=(-1)^{k-j}\binom{k}{j}
 ```
 
 are the *summation weights* (short: *weights*) which define the summation, 
-with special values ``c_{0}^{k}≡1``, ``c_{k}^{k}≡1`` 
+with special values ``c_{k-k}^{k}=c_0^k≡(-1)^j``, ``c_{k-0}^{k}=c_k^k≡1`` 
 
 **Backward difference notation**
 
