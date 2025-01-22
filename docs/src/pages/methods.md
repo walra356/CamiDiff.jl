@@ -40,23 +40,15 @@ c_{j}^{k}=(-1)^{j}\binom{k}{j},
 are the *summation weights* (short: *weights*) defining the summation, 
 with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``.
 
-In inner product form the summation becomes
+In inner product form the expression becomes
 
 ```math
 Δ^k f[n]
-\sum_{j=0}^{k} c_{k-j}^k f[n+j]
-=c^k \cdot f[n:n+k],
+=\sum_{j=0}^{k} c_{k-j}^k f[n+j]
+=\bar{c}^k \cdot f[n:n+k],
 ```
 
-where ``c^k  ≡ [c_0^k,⋯\ c_k^k]``.
-
-```math
-f[n:n+k] = \left[\begin{array}{c}
-f[n]\\
-\vdots\\
-f[n+k]
-\end{array}\right].
-```
+where ``\bar{c}^k  ≡ [c_k^k,⋯\ c_0^k]``.
 
 **Backward difference notation**
 
@@ -86,6 +78,14 @@ a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving
 where the ``k+1`` coefficients ``c_j^k`` are the *summation weights* 
 (short: *weights*) defining the summation, with special values 
 ``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
+
+In inner product form the expression becomes
+
+```math
+∇^k f[n] 
+=\sum_{j=0}^{k} c_j^kf[n-j]
+=\c^k \cdot f[n:-1:n-k]=\bar{c}^k \cdot f[n-k:n],
+```
 
 ```@docs
 # isforward(notation)
