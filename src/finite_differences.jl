@@ -116,7 +116,7 @@ expansion coefficients ``α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order
 ```
 
 where ``f[n:n+k]`` are elements of the
-analytic function ``f`` tabulated in *forward* order.
+analytic function ``f`` tabulated in regular=*forward* order.
 
 [`fdiff_expansion_weights(α, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
