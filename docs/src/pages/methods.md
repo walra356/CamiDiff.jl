@@ -106,12 +106,11 @@ In terms of forward differences the generic form of the finite-difference expans
 =\sum_{p=0}^{k}α_{p}Δ^{p}f[n]+⋯.
 ```
 
-A finite-difference expansion truncated at order ``k`` is defined
-by ``k+1`` *finite-difference expansion coefficients*, represented by the
-(user-supplied) vector ``α = [α_{0},⋯\ α_{k}]``. It takes some bookkeeping 
-to rewrite the expansion as a *weighted sum* over the ``k+1`` *function 
-values in forward tabulated form* ``f[n:n+k]``. Substituting the finite-difference 
-expression for ``Δ^k``, we obtain
+Truncated at order ``k`` the expansion is defined by ``k+1`` *finite-difference expansion coefficients*, 
+supplied by the user in vector form, ``α = [α_{0},⋯\ α_{k}]``, with *regular* ordering (growing index). 
+It takes some bookkeeping to rewrite the expansion as a *weighted sum* 
+over the ``k+1`` *function values*  in *regular* ordering (growing grid position), ``f[n:n+k]``. 
+Substituting the finite-difference expression for ``Δ^k`` (see [Finite differences](@ref)) we obtain
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -161,9 +160,10 @@ In terms of backward differences the generic form of the finite-difference expan
 ```
 
 In this case the ``k^{th}``- order *finite-difference expansion* is defined by the 
-(user-supplied) vector ``β = [β_{0},⋯\ β_{k}]``. The expansion can written as 
-*weighted sum* over the ``k+1`` *function values in backward tabulated form* ``f[n:-1:n-k]``. 
-Substituting the finite-difference expression for ``∇^k``, we obtain
+(user-supplied) vector ``β = [β_{0},⋯\ β_{k}]``, containing the expansion coefficients in 
+regular ordering (growing index). The expansion can written as *weighted sum* over 
+the ``k+1`` *function values* in *reversed* ordering (*decreasing* grid position), ``f[n:-1:n-k]``. 
+Substituting the finite-difference expression for ``∇^k`` (see [Finite differences](@ref)), we obtain
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
