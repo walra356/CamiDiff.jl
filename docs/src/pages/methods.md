@@ -23,7 +23,7 @@ f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n],
 
 where ``Δ^k`` is the  ``k^{th}``-*order forward difference* defined as
 a *weighted sum* over the function values ``f[n:n+k]`` (involving
-``k+1`` points),
+``k+1`` points appearing in regular=forward order),
 
 ```math
 \begin{aligned}
@@ -57,8 +57,8 @@ f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],
 ```
 
 where ``∇^k`` is the  ``k^{th}``-*order backward difference* defined as
-a *weighted sum* over the function values tabulated in backward order,
-``f[n:-1:n-k]`` (involving ``k+1`` points),
+a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving 
+``k+1`` points appearing in reversed order),
 
 ```math
 ∇^k f[n] = f[n] + c_1^kf[n-1] + ⋯ + f[n-k]
