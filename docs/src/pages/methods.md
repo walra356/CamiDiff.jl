@@ -40,7 +40,7 @@ c_{j}^{k}=(-1)^{j}\binom{k}{j},
 are the *summation weights* (short: *weights*) defining the summation, 
 with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``.
 
-In inner product form the expression becomes
+In inner product form the result becomes
 
 ```math
 Δ^k f[n]
@@ -79,14 +79,15 @@ where the ``k+1`` coefficients ``c_j^k`` are the *summation weights*
 (short: *weights*) defining the summation, with special values 
 ``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
 
-In inner product form the expression becomes
+In inner product form the result becomes
 
 ```math
 ∇^k f[n] 
 =\sum_{j=0}^{k} c_j^kf[n-j]
 =c^k \cdot f[n:-1:n-k]
 =\bar{c}^k \cdot f[n-k:n],
-```
+```\
+where ``c^k  ≡ [c_0^k,⋯\ c_k^k]``.
 
 ```@docs
 # isforward(notation)
