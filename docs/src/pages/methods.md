@@ -40,6 +40,24 @@ c_{j}^{k}=(-1)^{j}\binom{k}{j},
 are the *summation weights* (short: *weights*) defining the summation, 
 with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``.
 
+In inner product form the summation becomes
+
+```math
+Δ^k f[n]
+\sum_{j=0}^{k} c_{k-j}^k f[n+j]
+=c^k \cdot f[n:n+k],
+```
+
+where ``c^k  ≡ [c_0^k,⋯\ c_k^k]``.
+
+```math
+f[n:n+k] = \left[\begin{array}{c}
+f[n]\\
+\vdots\\
+f[n+k]
+\end{array}\right].
+```
+
 **Backward difference notation**
 
 The *backward translation* from position ``n`` to position ``n-1`` on 
@@ -58,7 +76,7 @@ f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],
 
 where ``∇^k`` is the  ``k^{th}``-*order backward difference* defined as
 a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving 
-``k+1`` points appearing in reversed order),
+``k+1`` points corresponding to function values appearing in reversed order),
 
 ```math
 ∇^k f[n] = f[n] + c_1^kf[n-1] + ⋯ + f[n-k]
@@ -68,10 +86,6 @@ a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving
 where the ``k+1`` coefficients ``c_j^k`` are the *summation weights* 
 (short: *weights*) defining the summation, with special values 
 ``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
-
-Coefficients:  
-
-[`fdiff_weight(k,j)`](@ref) `` → c_j^k=(-1)^j\binom{k}{j}``
 
 ```@docs
 # isforward(notation)
