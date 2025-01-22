@@ -14,8 +14,8 @@ the grid is expressed by the relation
 f[n] = (1 + Δ) f[n-1] ,
 ```
 
-where ``Δ`` is the forward difference operator. By a formal inversion  
-procedure we find
+where ``Δ`` is the forward difference operator. By formal inversion  
+we find
 
 ```math
 f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n],
@@ -47,8 +47,8 @@ the grid is expressed by the relation
 f[n] = (1 - ∇) f[n+1],
 ```
 
-where ``∇`` is the backward difference operator.  By a formal inversion  
-procedure we find in this case
+where ``∇`` is the backward difference operator.  By formal inversion  
+we obtain in this case
 
 ```math
 f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],

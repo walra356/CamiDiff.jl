@@ -34,7 +34,7 @@
 Finite difference weight coefficient,
 
 ```math
-c_{j}^{k}=(-1)^{k+j}\binom{k}{j}.
+c_{j}^{k}=(-1)^{j}\binom{k}{j}.
 ```
 #### Example:
 ```
