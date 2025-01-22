@@ -84,7 +84,8 @@ In inner product form the expression becomes
 ```math
 ∇^k f[n] 
 =\sum_{j=0}^{k} c_j^kf[n-j]
-=\c^k \cdot f[n:-1:n-k]=\bar{c}^k \cdot f[n-k:n],
+=c^k \cdot f[n:-1:n-k]
+=\bar{c}^k \cdot f[n-k:n],
 ```
 
 ```@docs
