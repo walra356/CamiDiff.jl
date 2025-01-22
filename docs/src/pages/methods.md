@@ -44,7 +44,7 @@ The *backward translation* from position ``n`` to position ``n-1`` on
 the grid is expressed by the relation
 
 ```math
-f[n-1] = (1 - ∇) f[n],
+f[n] = (1 - ∇) f[n+1],
 ```
 
 where ``∇`` is the backward difference operator.  By a formal inversion  
