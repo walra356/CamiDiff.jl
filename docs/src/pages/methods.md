@@ -43,9 +43,7 @@ with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``
 In inner product form the result becomes
 
 ```math
-Δ^k f[n]
-=\sum_{j=0}^{k} c_{k-j}^k f[n+j]
-=\bar{c}^k \cdot f[n:n+k],
+Δ^k f[n]=\bar{c}^k \cdot f[n:n+k],
 ```
 
 where ``\bar{c}^k  ≡ [c_k^k,⋯\ c_0^k]``.
@@ -68,7 +66,7 @@ f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],
 
 where ``∇^k`` is the  ``k^{th}``-*order backward difference* defined as
 a *weighted sum* over the function values ``f[n:-1:n-k]`` (involving 
-``k+1`` points corresponding to function values appearing in reversed order),
+``k+1`` points appearing in reversed order),
 
 ```math
 ∇^k f[n] = f[n] + c_1^kf[n-1] + ⋯ + f[n-k]
@@ -82,11 +80,8 @@ where the ``k+1`` coefficients ``c_j^k`` are the *summation weights*
 In inner product form the result becomes
 
 ```math
-∇^k f[n] 
-=\sum_{j=0}^{k} c_j^kf[n-j]
-=c^k \cdot f[n:-1:n-k]
-=\bar{c}^k \cdot f[n-k:n],
-```\
+∇^k f[n] = c^k \cdot f[n:-1:n-k] =\bar{c}^k \cdot f[n-k:n],
+```
 where ``c^k  ≡ [c_0^k,⋯\ c_k^k]``.
 
 ```@docs
