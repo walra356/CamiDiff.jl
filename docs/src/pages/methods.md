@@ -31,13 +31,13 @@ a *weighted sum* over the function values ``f[n:n+k]`` (involving
          &= f[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k] = \sum_{j=0}^{k} c_{k-j}^k f[n+j],
 \end{aligned}
 ```
-where the ``k+1`` coefficients ``c_{k-j}^k=(-1)^k c_j^k``  with
+where the ``k+1`` coefficients ``c_{k-j}^k=(-1)^k c_j^k``,  with
 
 ```math
-c_{j}^{k}=(-1)^{j}\binom{k}{j}
+c_{j}^{k}=(-1)^{j}\binom{k}{j},
 ```
 
-are the *summation weights* (short: *weights*), which define the summation, 
+are the *summation weights* (short: *weights*) defining the summation, 
 with special values ``c_{k-0}^{k}=c_k^k≡1`` and ``c_{k-k}^{k}=c_0^k≡(-1)^j``.
 
 **Backward difference notation**
@@ -66,7 +66,7 @@ a *weighted sum* over the function values tabulated in backward order,
 ```
 
 where the ``k+1`` coefficients ``c_j^k`` are the *summation weights* 
-(short: *weights*), which define the summation, with special values 
+(short: *weights*) defining the summation, with special values 
 ``c_{0}^{k}≡1`` and ``c_{k}^{k}≡(-1)^{k}``. 
 
 Coefficients:  
