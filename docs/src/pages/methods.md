@@ -26,14 +26,10 @@ a *weighted sum* over the function values ``f[n:n+k]`` (involving
 ``k+1`` points),
 
 ```math
-Δ^k f[n] = f[n+k] + c_1^kf[n+k-1] + ⋯  + f[n]
-= \sum_{j=0}^{k} c_{k-j}^k f[n+j],
-```
-
-```math
-Δ^k f[n] = f[n+k] + c_1^kf[n+k-1] + ⋯  + f[n]//
-         = f[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k]
-= \sum_{j=0}^{k} c_{k-j}^k f[n+j],
+\begin{aligned}
+Δ^k f[n] &= f[n+k] + c_1^kf[n+k-1] + ⋯  + f[n] \\
+         &= f[n] + c_{k-1}^kf[n+1] + ⋯  + f[n+k] = \sum_{j=0}^{k} c_{k-j}^k f[n+j],
+\end{aligned}
 ```
 where the ``k+1`` coefficients
 
