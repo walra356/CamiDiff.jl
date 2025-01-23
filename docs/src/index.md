@@ -66,7 +66,7 @@ Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the in
 ## Grid
 
 The [`Grid`](@ref) object is the backbone for numerical procedures. Its principal fields are `grid.r`, `grid.r′` 
-and `grid.r′′` which are discrete functions of `N` elements representing the grid function and its first two derivatives. 
+and `grid.r′′`. These are discrete functions of `N` elements representing the grid function and its first two derivatives. 
 The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function ``r[n]`` represents the transformation by the gridfunction. 
 
 Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Finite-difference methods](@ref)
