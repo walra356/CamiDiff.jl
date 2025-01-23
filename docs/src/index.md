@@ -55,18 +55,19 @@ f[n] = f(x[n]),
 ```
 
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. This represents 
-the tabulated that has to be provided by the user
+the tabulated function that has to be provided by the user. 
 
-Note that ``h`` determines the *coarseness* of the [`Grid`](@ref). The results of a finite-difference calculation 
-on a coarse grid will be less accurate than those on a fine grid, but the algorithm is identical, because the relevant
-finite-difference expansions only depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses 
-unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
+NB. The discrete function ``f[n]`` is defined on the *uniform grid of the natural numbers*. This uniformity greatly 
+simplifies the numerical analysis. The stepsize ``h`` determines the *coarseness* of the grid. The results 
+of a finite-difference calculation on a coarse grid will be less accurate than those on a fine grid, but 
+the algorithm is identical, because the relevant finite-difference expansions only depend on ``h`` *implicitely*. 
+Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
 
 ## Grid
 
-The [`Grid`](@ref) object is the backbone for the numerical procedure on a (generally) non-uniform
-grid. Its principal fields are `grid.r`, `grid.r′` and `grid.r′′` which are discrete
-functions of `N` elements representing the grid function and its first two derivatives.
+The [`Grid`](@ref) object is the backbone for the numerical procedure. Its principal fields are `grid.r`, `grid.r′` 
+and `grid.r′′` which are discrete functions of `N` elements representing the grid function and its first two derivatives. 
+The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function ``r[n]`` represents the transformation by the gridfunction. 
 
 Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Application](@ref)
 
