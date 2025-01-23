@@ -107,10 +107,10 @@ In terms of forward differences the generic form of the finite-difference expans
 ```
 
 Truncated at order ``k``, the expansion is defined by ``k+1`` *finite-difference expansion coefficients*, 
-supplied by the user in the form of the corresponding [`CamiMath.polynom`](@extref) vector, ``α = [α_{0},⋯\ α_{k}]``, 
-with the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion as a *weighted sum* 
-over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of *growing* grid position). 
-Substituting the finite-difference expression for ``Δ^k``, we obtain
+supplied by the user in the form of a [`CamiMath.polynom`](@extref) vector, ``α = [α_{0},⋯\ α_{k}]``, 
+with the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion as 
+a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of 
+*growing* grid position). Substituting the finite-difference expression for ``Δ^k``, we obtain
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
