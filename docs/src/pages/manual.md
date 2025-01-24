@@ -218,12 +218,13 @@ fdiff_expansion(polynom, f, notation=CamiMath.bwd)
 fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ```
 
-## Lagrange-polynomial interpolation/extrapolation
+## Lagrange-polynomial interpolation
 
-The Lagrange polynomial of degree k on a uniform grid is the polynomial running through 
-k+1 subsequent points on the grid. We derive expressions for interpolation/extrapolation 
-in both forward- and backward-difference notation. Beware that Lagrange interpolation 
-becomes inaccurate if the tabulated function cannot be approximated by a polynomial of degree k.
+The Lagrange polynomial of degree ``k`` on a uniform grid is the polynomial running 
+through ``k+1`` subsequent points on the [`Grid`](@ref). We derive expressions for 
+interpolation/extrapolation in both forward- and backward-difference notation. Beware 
+that Lagrange interpolation becomes inaccurate if the tabulated function cannot be 
+approximated by a polynomial of degree ``k``.
 
 **Forward difference notation**
 
