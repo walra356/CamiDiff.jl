@@ -140,9 +140,9 @@ Coefficients:
 [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where `polynom` is the expansion vector ``α ≡ [α_0,⋯\ α_k]``. 
+where `polynom` is the expansion vector ``α ≡ [α_0,⋯\ α_k]``, which has to be supplied by the user 
+to define the expansion under consideration.  
 
-This `polynom` has to be supplied by the user to define the expansion under consideration. 
 Some common cases are:
 
   interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
@@ -200,9 +200,10 @@ Coefficients:
 [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
 `` → \bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]``,
 
-where `polynom` is the [`CamiMath.polynom`](@extref) vector  ``  β ≡ [β_0,⋯\ β_k]``. 
+where `polynom` is the expansion vector ``β ≡ [β_0,⋯\ β_k]``, which has to be supplied by the user 
+to define the expansion under consideration. 
 
-This `polynom` has to be supplied by the user to define the expansion under consideration. Some common cases are:
+Some common cases are:
 
   interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, bwd)`](@ref)
 
