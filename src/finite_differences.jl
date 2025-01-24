@@ -158,10 +158,10 @@ indicate that the weights must be evaluated in backward-difference notation.
 Consider the expansions,
 
 ```math
-f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n].
+f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n]=F^{k} \cdot f[n:n+k],
 ```
 ```math
-f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],
+f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n].
 ```
 ```
 julia> α = [1,-1,1,-1,1];
@@ -228,35 +228,41 @@ define the backward-difference expansion. The corresponding weights vector
 #### Examples:
 Consider the function ``f(x)=x^2`` and the expansions,
 ```math
-f(x-1)=(1+Δ)^{-1}=(1-Δ+Δ^2-Δ^3+⋯)f(x).
+f[n-1]=(1+Δ)^{-1}=(1-Δ+Δ^2-Δ^3+⋯)f[n]=F^{k} \cdot f[n:n+k],
 ```
 ```math
-f(x+1)=(1-∇)^{-1}=(1+∇+∇^2+∇^3+⋯)f(x),
+f[n]=(1+Δ)^{-1}=(1-Δ+Δ^2-Δ^3+⋯)f[n+1]=F^{k} \cdot f[n+1:n+k+1],
+```
+```math
+f[n]=(1-∇)^{-1}=(1+∇+∇^2+∇^3+⋯)f[n-1]=\bar{B}^k \cdot f[n-k-1:n-1]
 ```
 To fourth order `(k=4)` the forward- and backward-difference coefficient vectors
 are `α=[1,-1,1,-1,1]` and `β=[1,1,1,1,1]`, respectively. We tabulate the function
 at ``k+1`` points, `f=[1,4,9,16,25]`.
 ```
-α = [1,-1,1,-1,1]
-Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-  Fk = [5, -10, 10, -5, 1]
+julia> f = [0, 1, 4, 9,16,25,36,49,64,81,100];
 
-β = [1,1,1,1,1]
-revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
-  revBk = [1, -5, 10, -10, 5]
+julia> α = [1,-1,1,-1,1];
 
-f = [1,4,9,16,25]
-o = fdiff_expansion(α, f, fwd); println("f[0] = $(o)")
-  f[0] = 0
+julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
+Fk = [5, -10, 10, -5, 1]
 
-fdiff_expansion(α, f, fwd) == Fk ⋅ f == fdiff_interpolation(f, 0)
-  true
+julia> β = [1,1,1,1,1];
 
-o = fdiff_expansion(β, f, bwd); println("f[6] = $(o)")
-  f[6] = 36
+julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
+revBk = [1, -5, 10, -10, 5]
 
-fdiff_expansion(β, f, bwd) == revBk ⋅ f == fdiff_interpolation(f, length(f)+1)
-  true
+julia> fdiff_expansion(α,f[7:11],fwd)
+25
+
+julia> sum(Fk .* f[7:11]) # inner product
+25
+
+julia> sum(revBk .* f[1:5]) # inner product
+25
+
+julia> f[6]
+25
 ```
 In these cases the results are exact because the function is quadratic and
 the expansion is third order (based on the polynomial of ``k^{th}`` degree
