@@ -19,8 +19,7 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
-        "Finite-difference methods" => "pages/methods.md",
-        "Application" => "pages/application.md",
+        "Manuel" => "pages/manuel.md",
         "Index" => "pages/index.md"
     ],
 )

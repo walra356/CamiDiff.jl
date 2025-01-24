@@ -1,6 +1,4 @@
-## Finite-difference methods
-
-### Finite differences
+## Finite differences
 
 Consider the analytical function ``f`` tabulated in *forward order*  
 (growing index) at ``n`` positions on a *uniform grid*.

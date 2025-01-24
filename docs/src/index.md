@@ -69,7 +69,7 @@ The [`Grid`](@ref) object is the backbone for numerical procedures. Its principa
 and `grid.r′′`. These are discrete functions of `N` elements representing the grid function and its first two derivatives. 
 The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function ``r[n]`` represents the transformation by the gridfunction. 
 
-Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Finite-difference methods](@ref)
+Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Manuel](@ref)
 
 [`grid_interpolation(f, rval, grid)`](@ref)
 
