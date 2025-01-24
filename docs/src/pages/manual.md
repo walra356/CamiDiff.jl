@@ -1,3 +1,5 @@
+# Manual
+
 ## Finite differences
 
 Consider the analytical function ``f`` tabulated in *forward order*  
