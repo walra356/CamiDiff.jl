@@ -232,7 +232,7 @@ analytical function ``f`` (tabulated in *forward* order) and
 define the backward-difference expansion.
 
 NB. The vector `polynom` determines the order of the expansion, 
-``k+1 = \text(length)(α) = \text(length)(β)``. The weights vectors ``F^k`` and 
+``k+1 = \rm(length)(α) = \rm(length)(β)``. The weights vectors ``F^k`` and 
 ``\bar{B}^k`` are *internally generated* by the function
 [`fdiff_expansion_weights(polynom, notation, ordering)`](@ref).
 
