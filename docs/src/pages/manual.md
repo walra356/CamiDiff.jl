@@ -346,7 +346,7 @@ lagrangian interpolation, with
 \end{cases}
 ```
 being the Pochhammer symbol `CamiMath.pochhammer`.  Note that for ``σ = 1`` we find  
-``β_p ≡ β_p(1) ≡ 1`, regaining the expansion coefficients obtained above for the 
+``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients obtained above for the 
 generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
 *interpolation* over the grid position interval ``n-k ≤ x ≤ n+1`` (most accurately 
 over the interval ``0 ≤ x ≤ n+1``), outside this interval the method amounts to 
