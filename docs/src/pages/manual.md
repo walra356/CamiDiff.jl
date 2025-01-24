@@ -140,7 +140,7 @@ Coefficients:
 [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where `polynom` is the [`CamiMath.polynom`](@extref) vector ``α ≡ [α_0,⋯\ α_k]``. 
+where `polynom` is the expansion vector ``α ≡ [α_0,⋯\ α_k]``. 
 
 This `polynom` has to be supplied by the user to define the expansion under consideration. 
 Some common cases are:
