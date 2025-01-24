@@ -230,14 +230,14 @@ approximated by a polynomial of degree ``k``.
 
 Starting from the relation
 ```math
-f[n]=(1+Δ)f[n+1],
+f[n]=(1+Δ)f[n-1],
 ```
 we obtain by formal operator inversion
 ```math
-f[n+1] = (1 + Δ)^{-1} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p Δ^p f[n],
+f[n-1] = (1 + Δ)^{-1} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p Δ^p f[n],
 ```
 ```math
-f[n+2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
+f[n-2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
 ```
 ```math
 \vdots
