@@ -106,8 +106,8 @@ of a (user-defined) finite-difference expansion.
 **Forward-difference notation** (`notation = fwd`)
 
 The weight vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponding to the expansion 
-coefficient vector ``polynom = α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order
-*forward-difference* expansion,
+coefficient vector `polynom = α` of the  (user-defined) ``k^{th}``-order
+*forward-difference* expansion, where `` α ≡ [α_0,⋯\ α_k]``.
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -127,8 +127,8 @@ indicate that the weights must be evaluated in forward-difference notation.
 **Backward difference notation** (`notation = bwd`)
 
 The weight vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponding to the
-expansion coefficient vector ``polynom = β ≡ [β_0,⋯\ β_k]`` of
-the ``k^{th}``-order (user-defined) *backward-difference* expansion,
+expansion coefficient vector `polynom = β` of the  (user-defined) 
+``k^{th}``-order *backward-difference* expansion, where ``β ≡ [β_0,⋯\ β_k]``
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
