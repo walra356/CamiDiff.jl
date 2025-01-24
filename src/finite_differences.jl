@@ -199,13 +199,11 @@ end
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    fdiff_expansion(polynom, f[, notation=bwd])
+    fdiff_expansion(polynom, f [, notation=bwd])
 
-Finite difference expansion of the analytical function f(x) tabulated
-in *forward order* (growing index) at ``k+1`` positions on a uniform grid.
-The expansion coefficients are specified by the vector [`CamiMath.polynom`](@extref). By default
-[`CamiMath.polynom`](@extref) are assumed to be in backward-difference notation (`bwd`). 
-For [`CamiMath.polynom`](@extref) in forward-difference notation the third argument must be `fwd`.
+Finite difference expansion of the analytical function `f` tabulated in *forward order* (growing index) 
+at ``k+1`` positions on a uniform grid. The expansion coefficients are specified by the vector `polynom`. 
+By default the expansion is calculated in backward-difference notation (`bwd`). 
 
 **Forward difference notation** (`notation = fwd`)
 ```math
