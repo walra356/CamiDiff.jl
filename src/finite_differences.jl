@@ -164,18 +164,26 @@ f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n]&=\bar{B}^k \cdot f[n-k:n].
 \end{aligned}
 ```
 ```
-julia> α = [1,-1,1,-1,1];
+julia> f = [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
-julia> β = [1,1,1,1,1];
+julia> α = [1,-1,1,-1,1];
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [5, -10, 10, -5, 1]
 
-julia> Bk = fdiff_expansion_weights(β, bwd, reg); println("Bk = $(Bk)")
-Bk = [5, -10, 10, -5, 1]
+julia> β = [1,1,1,1,1];
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [1, -5, 10, -10, 5]
+
+julia> sum(Fk .* f[7:11]) # inner product
+25
+
+julia> sum(revBk .* f[1:5]) # inner product
+25
+
+julia> f[6]
+25
 ```
 """
 function fdiff_expansion_weights(polynom, notation=bwd, ordering=rev)
@@ -201,8 +209,8 @@ end
 @doc raw"""
     fdiff_expansion(polynom, f [, notation=bwd])
 
-Finite difference expansion evaluated for the analytical function ``f`` tabulated in *regular order* (growing index) 
-at ``k+1`` positions on a uniform grid. The expansion coefficients are specified by the vector `polynom`. 
+Finite difference expansion evaluated to ``k^{th}`` order for the analytical function ``f`` tabulated in *regular order* (growing index) 
+at ``k+1`` positions on a [`Grid`](@ref). The expansion coefficients are specified by the vector `polynom`. 
 By default the expansion is calculated in backward-difference notation (`bwd`). 
 
 **Forward difference notation** (`notation = fwd`)
@@ -244,25 +252,16 @@ To fourth order `(k=4)` the forward- and backward-difference coefficient vectors
 are `α=[1,-1,1,-1,1]` and `β=[1,1,1,1,1]`, respectively. We tabulate the function
 at ``k+1`` points, `f=[1,4,9,16,25]`.
 ```
-julia> f = [0, 1, 4, 9,16,25,36,49,64,81,100];
+julia> f = [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
 julia> α = [1,-1,1,-1,1];
 
-julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-Fk = [5, -10, 10, -5, 1]
-
 julia> β = [1,1,1,1,1];
-
-julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
-revBk = [1, -5, 10, -10, 5]
 
 julia> fdiff_expansion(α,f[7:11],fwd)
 25
 
-julia> sum(Fk .* f[7:11]) # inner product
-25
-
-julia> sum(revBk .* f[1:5]) # inner product
+julia> fdiff_expansion(β,f[1:5],fwd)
 25
 
 julia> f[6]
