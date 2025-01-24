@@ -107,9 +107,9 @@ In terms of forward differences the generic form of the finite-difference expans
 ```
 
 Truncated at order ``k``, the expansion is defined by ``k+1`` *finite-difference expansion coefficients*, 
-supplied by the user in the form of a [`CamiMath.polynom`](@extref) vector, ``α = [α_{0},⋯\ α_{k}]``, 
-with the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion as 
-a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of
+supplied by the user in the form of the expansion vector, ``α = [α_{0},⋯\ α_{k}]``, which contains the
+coefficients in the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion 
+as a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of
 *growing* grid position). Substituting the definition of the forward difference, ``Δ = f[n+1] - f[n]``, 
 the finite-difference expression takes the form
 
@@ -126,7 +126,7 @@ F_{j}^{k}=\sum_{p=j}^{k}α_{p}c_{p-j}^{p}
 =\sum_{p=j}^{k}(-1)^{p+j}\binom{p}{j}α_{p},
 ```
 
-with ``j=0,⋯\ k``. In inner product form the expansion becomes
+with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
 =\sum_{j=0}^{k}F_{j}^{k}f[n+j]
@@ -161,9 +161,9 @@ In terms of backward differences the generic form of the finite-difference expan
 \sum_{p=0}^{\infty}β_{p}∇^{p}f[n]=\sum_{p=0}^{k}β_{p}∇^{p}f[n]+⋯.
 ```
 
-In this case the ``k^{th}``- order *finite-difference expansion* is defined by the 
-corresponding user-supplied [`CamiMath.polynom`](@extref) vector, ``β = [β_{0},⋯\ β_{k}]``, containing the 
-expansion coefficients in *regular* ordering *growing* index. The expansion can written as 
+In this case the ``k^{th}``- order *finite-difference expansion* is defined by the (user-supplied)
+expansion vector ``β = [β_{0},⋯\ β_{k}]``, which contains the expansion coefficients 
+in the *regular* ordering *growing* index. The expansion can written as 
 a *weighted sum* over the ``k+1`` *function values* ``f[n:-1:n-k]`` (note *reversed* ordering 
 of *decreasing* grid position). Substituting the definition of the backward difference, ``∇ = f[n] - f[n-1]``, 
 the finite-difference expression takes the form
@@ -181,7 +181,7 @@ where the *weights* are given by
 B_{j}^{k}=\sum_{p=j}^{k}β_{p}c_{j}^{p}
 =\sum_{p=j}^{k}(-1)^{j}\binom{p}{j}β_{p},
 ```
-with ``j=0,⋯\ k``. In inner product form the expansion becomes
+with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
