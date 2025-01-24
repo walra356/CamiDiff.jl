@@ -220,8 +220,7 @@ on a [`Grid`](@ref). The expansion coefficients are specified by the vector
 ```
 where ``f[n:n+k]`` are elements of the analytical function ``f`` (tabulated in 
 *forward* order) and `polynom` ``α ≡ [α_0,⋯\ α_k]`` is the expansion coefficient 
-vector, which has to be supplied to define the forward-difference expansion. 
-Note ``k+1 = length(α)``; i.e., `polynom` determines the order of the expansion.
+vector, which has to be supplied to define the forward-difference expansion.
 
 **Backward difference notation** (`notation = bwd`)
 ```math
@@ -232,7 +231,8 @@ analytical function ``f`` (tabulated in *forward* order) and
 ``β ≡ [β_0,⋯\ β_k]`` is the vector `polynom`, which has to be supplied to
 define the backward-difference expansion.
 
-NB. The weights vectors ``F^k`` and ``\bar{B}^k`` are *internally generated* by the function
+NB. The vector `polynom` determines the order of the expansion, ``k+1 = length(α)``. 
+The weights vectors ``F^k`` and ``\bar{B}^k`` are *internally generated* by the function
 [`fdiff_expansion_weights(polynom, notation, ordering)`](@ref).
 
 #### Examples:
