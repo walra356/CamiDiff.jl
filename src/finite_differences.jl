@@ -211,9 +211,8 @@ By default the expansion is calculated in backward-difference notation (`bwd`).
 ```
 where ``f[n:n+k]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``α ≡ [α_0,⋯\ α_k]`` is the vector [`CamiMath.polynom`](@extref), which has to be supplied to
+``α ≡ [α_0,⋯\ α_k]`` is the vector `polynom`, which has to be supplied to
 define the forward-difference expansion.
-The corresponding weights vector ``F^{k}`` is internally generated.
 
 **Backward difference notation** (`notation = bwd`)
 ```math
@@ -221,9 +220,11 @@ The corresponding weights vector ``F^{k}`` is internally generated.
 ```
 where ``f[n-k:n]`` are elements of the
 analytical function ``f`` (tabulated in *forward* order) and
-``β ≡ [β_0,⋯\ β_k]`` is the vector [`CamiMath.polynom`](@extref), which has to be supplied to
-define the backward-difference expansion. The corresponding weights vector
-``\bar{B}^k`` is internally generated.
+``β ≡ [β_0,⋯\ β_k]`` is the vector `polynom`, which has to be supplied to
+define the backward-difference expansion.
+
+NB. The weights vectors ``F^k`` and ``\bar{B}^k`` are *internally generated* by the function
+[`fdiff_expansion_weights(polynom, notation, ordering)`](@ref).
 
 #### Examples:
 Consider the function ``f(x)=x^2`` and the expansions,
