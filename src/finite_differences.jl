@@ -230,14 +230,14 @@ NB. The weights vectors ``F^k`` and ``\bar{B}^k`` are *internally generated* by 
 Consider the function ``f(x)=x^2`` and the expansions,
 ```math
 \begin{aligned}
-f[n-1]=(1+Δ)^{-1}=(1-Δ+Δ^2-Δ^3+⋯)f[n]&=F^{k} \cdot f[n:n+k],\\
-f[n]=(1+Δ)^{-1}=(1-Δ+Δ^2-Δ^3+⋯)f[n+1]$=F^{k} \cdot f[n+1:n+k+1],
+f[n-1]=(1+Δ)^{-1}&=(1-Δ+Δ^2-Δ^3+⋯)f[n]=F^{k} \cdot f[n:n+k],\\
+f[n]=(1+Δ)^{-1}&=(1-Δ+Δ^2-Δ^3+⋯)f[n+1]=F^{k} \cdot f[n+1:n+k+1],
 \end{aligned}
 ```
 ```math
 \begin{aligned}
-f[n+1]=(1-∇)^{-1}=(1+∇+∇^2+∇^3+⋯)f[n]&=\bar{B}^k \cdot f[n-k:n],\\
-f[n]=(1-∇)^{-1}=(1+∇+∇^2+∇^3+⋯)f[n-1]&=\bar{B}^k \cdot f[n-k-1:n-1]
+f[n+1]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n],\\
+f[n]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n-1]=\bar{B}^k \cdot f[n-k-1:n-1]
 \end{aligned}
 ```
 To fourth order `(k=4)` the forward- and backward-difference coefficient vectors
