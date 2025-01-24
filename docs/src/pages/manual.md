@@ -189,11 +189,11 @@ with ``j=0,⋯\ k``. In inner product form the expansion becomes
 =\bar{B}^k \cdot f[n-k:n],
 ```
 
-where the *weights vector* ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` contains
-the weights in backward order.
+where ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` is the *weights vector* ``B^{k} ≡ [B_0^k,⋯\ B_k^k]`` tabulated 
+in reversed order.
 
-In general there is *no simple symmetry relation* between
-``B^k`` and ``F^k``.
+The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
+which is not unique but depends on the expansion under consideration.
 
 Coefficients:
 
