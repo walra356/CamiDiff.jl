@@ -218,17 +218,17 @@ fdiff_expansion(polynom, f, notation=CamiMath.bwd)
 fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ```
 
-## Lagrange-polynomial interpolation
+## Lagrange interpolation
 
-The Lagrange polynomial of degree ``k`` on a uniform grid is the polynomial running 
+The *Lagrange polynomial* of degree ``k`` on a uniform grid is the polynomial running 
 through ``k+1`` subsequent points on the [`Grid`](@ref). We derive expressions for 
-interpolation/extrapolation in both forward- and backward-difference notation. Beware 
+interpolation in both forward- and backward-difference notation. Beware 
 that Lagrange interpolation becomes inaccurate if the tabulated function cannot be 
 approximated by a polynomial of degree ``k``.
 
 **Forward difference notation**
 
-Starting from the relation
+Starting from the forward translation expression
 ```math
 f[n]=(1+Δ)f[n-1],
 ```
@@ -243,7 +243,7 @@ f[n-2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
 \vdots
 ```
 where ``p`` is called the order of the expansion and ``n`` is the index of the reference
-position. For interpolation position ``n-σ`` (where σ may be *real* valued in
+position. For interpolation position ``n-σ`` (where ``σ`` may be *real* valued in
 index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
@@ -256,8 +256,7 @@ where
 α_p(σ) ≡ (-1)^p(σ)_p/p!
 ```
 is the ``p^{th}``-order *finite-difference expansion coefficient*
-for lagrangian lagrangian interpolation over the
-interval ``-k ≤σ ≤0\ \ (n \le n-σ \le n+k)``,
+for lagrangian interpolation, with 
 
 ```math
 (σ)_{p}=\begin{cases}
@@ -265,10 +264,15 @@ interval ``-k ≤σ ≤0\ \ (n \le n-σ \le n+k)``,
 σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
 \end{cases}
 ```
-being the Pochhammer symbol `CamiMath.pochhammer`. For ``σ`` outside 
-the interpolation interval the method corresponds to *extrapolation* along the
-Lagrange polynomial. Evaluating the finite-difference expansion up to
-order ``k`` we obtain  
+being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
+``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for the 
+generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
+*interpolation* over the grid position interval ``n-1 ≤ x ≤ n+k`` (most accurately 
+over the interval ``n-1 ≤ x ≤ n``), outside the method amounts to *extrapolation*,
+and although useful in some cases, it is not recommended.apolation* along the
+Lagrange polynomial. 
+
+Evaluating the finite-difference expansion up to order ``k`` we obtain  
 
 ```math
 f[n-σ] =\sum_{p=0}^{k}α_p(σ)Δ^pf[n]
@@ -282,8 +286,7 @@ where the ``k+1`` *weights*
 F_j^k(σ)= \sum_{p=j}^{k} (-1)^k α_p(σ) c_j^p
 =\sum_{p=j}^{k} (-1)^j \binom{p}{j}(σ)_p/p!
 ```
-are the *lagrangian interpolation weights* corresponding to the point
-``f[n-σ]``.
+are the *lagrangian interpolation weights* corresponding to the point ``f[n-σ]``.
 
 Symmetry relation:
 
@@ -334,8 +337,7 @@ where
 ```
 
 is the ``p^{th}``-order *finite-difference expansion coefficient* for
-lagrangian interpolation over the interval ``-k ≤σ ≤0\ \ (n-k \le n+σ \le n)``,
-with
+lagrangian interpolation, with
 
 ```math
 (σ)_{p}=\begin{cases}
@@ -343,10 +345,14 @@ with
 σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
 \end{cases}
 ```
-being the Pochhammer symbol `CamiMath.pochhammer`. For ``σ`` outside 
-the interpolation interval the method corresponds to *extrapolation* along the
-Lagrange polynomial. Evaluating the finite-difference expansion up to
-order ``k`` we obtain
+being the Pochhammer symbol `CamiMath.pochhammer`.  Note that for ``σ = 1`` we find  
+``β_p ≡ β_p(1) ≡ 1`, regaining the expansion coefficients obtained above for the 
+generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
+*interpolation* over the grid position interval ``n-k ≤ x ≤ n+1`` (most accurately 
+over the interval ``0 ≤ x ≤ n+1``), outside this interval the method amounts to 
+*extrapolation*, and although useful in some cases, it is not recommended. 
+
+Evaluating the finite-difference expansion up to order ``k`` we obtain
 
 ```math
 f[n+σ] =\sum_{p=0}^{k}β_p(σ)∇^pf[n]
