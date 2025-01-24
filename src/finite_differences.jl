@@ -158,10 +158,10 @@ indicate that the weights must be evaluated in backward-difference notation.
 Consider the expansions,
 
 ```math
-f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n]=F^{k} \cdot f[n:n+k],
-```
-```math
-f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n].
+\begin{aligned}
+f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n]&=F^{k} \cdot f[n:n+k],\\
+f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n]&=\bar{B}^k \cdot f[n-k:n].
+\end{aligned}
 ```
 ```
 julia> α = [1,-1,1,-1,1];
