@@ -193,7 +193,7 @@ where ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` is the *weights vector* ``B^{k} ≡
 in reversed order.
 
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
-which is not unique but depends on the expansion under consideration.
+which is not unique. It but depends on the expansion under consideration.
 
 Coefficients:
 
