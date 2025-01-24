@@ -250,8 +250,9 @@ f[n+1]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n],\\
 f[n]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n-1]=\bar{B}^k \cdot f[n-k-1:n-1]
 \end{aligned}
 ```
-Note that to fourth order `(k=4)` the forward- and backward-difference 
-coefficient vectors are `α=[1,-1,1,-1,1]` and `β=[1,1,1,1,1]`, respectively. 
+Note that to fourth order in the expansion `(k=4)`, the forward- 
+and backward-difference coefficient vectors are `α=[1,-1,1,-1,1]` 
+and `β=[1,1,1,1,1]`, respectively. 
 ```
 julia> f = [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
