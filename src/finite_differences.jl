@@ -131,7 +131,7 @@ analytic function ``f`` tabulated in regular=*forward* order.
 [`fdiff_expansion_weights(α, fwd, reg)`](@ref)
 ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
 
-where `` α ≡ [α_0,⋯\ α_k]`` has to be supplied in combination with `fwd` to
+where `` α ≡ [α_0,⋯\ α_k]`` has to be supplied by the user in combination with `fwd` to
 indicate that the weights must be evaluated in forward-difference notation.
 
 **Backward difference notation** (`notation = bwd`)
@@ -151,7 +151,7 @@ analytic function ``f`` tabulated in *forward* order.
 [`fdiff_expansion_weights(β, bwd, rev)`](@ref)
 `` → \bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]``,
 
-where `` β ≡ [β_0,⋯\ β_k]`` has to be supplied in combination with `bwd` to
+where `` β ≡ [β_0,⋯\ β_k]`` has to be supplied by the user in combination with `bwd` to
 indicate that the weights must be evaluated in backward-difference notation.
 #### Example:
 
@@ -219,16 +219,16 @@ on a [`Grid`](@ref). The expansion coefficients are specified by the vector
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^{k} \cdot f[n:n+k],
 ```
 where ``f[n:n+k]`` are elements of the analytical function ``f`` (tabulated in 
-*forward* order) and `polynom` ``α ≡ [α_0,⋯\ α_k]`` is the expansion coefficient 
-vector, which has to be supplied to define the forward-difference expansion.
+*forward* order) and `polynom` is the expansion coefficient vector 
+``α ≡ [α_0,⋯\ α_k]``, which has to be supplied to define the forward-difference expansion.
 
 **Backward difference notation** (`notation = bwd`)
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k \cdot f[n-k:n].
 ```
 where ``f[n-k:n]`` are elements of the
-analytical function ``f`` (tabulated in *forward* order) and
-``β ≡ [β_0,⋯\ β_k]`` is the vector `polynom`, which has to be supplied to
+analytical function ``f`` (tabulated in *forward* order) and `polynom` is the expansion 
+coefficient vector ``β ≡ [β_0,⋯\ β_k]``, which has to be supplied to
 define the backward-difference expansion.
 
 NB. The vector `polynom` determines the order of the expansion, 
