@@ -100,14 +100,13 @@ end
 @doc raw"""
     fdiff_expansion_weights(polynom [, notation=bwd [, ordering=rev]])
 
-Expansion weights vector corresponding to the expansion coefficient vector `polynom`
+Weights vector corresponding to the expansion coefficient vector `polynom`
 of a (user-defined) finite-difference expansion.
 
 **Forward-difference notation** (`notation = fwd`)
 
-The weight vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponding to the expansion 
-coefficient vector `` α ≡ [α_0,⋯\ α_k]`` of the  (user-defined) ``k^{th}``-order
-*forward-difference* expansion (`polynom = α`).
+The weights vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponding to the expansion coefficient vector 
+`` α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order *forward-difference* expansion (`polynom = α`).
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -126,9 +125,8 @@ indicate that the weights must be evaluated in forward-difference notation.
 
 **Backward difference notation** (`notation = bwd`)
 
-The weight vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponding to the
-expansion coefficient vector ``β ≡ [β_0,⋯\ β_k]`` of the  (user-defined) 
-``k^{th}``-order *backward-difference* expansion (`polynom = β`).
+The weights vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponding to the expansion coefficient 
+vector ``β ≡ [β_0,⋯\ β_k]`` of the ``k^{th}``-order *backward-difference* expansion (`polynom = β`).
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
