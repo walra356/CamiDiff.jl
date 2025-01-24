@@ -98,9 +98,9 @@ function rev_bwd_expansion_weights(polynom)
 end
 # ..............................................................................
 @doc raw"""
-    fdiff_expansion_weights(polynom[, notation=bwd[, ordering=rev]])
+    fdiff_expansion_weights(polynom [, notation=bwd [, ordering=rev]])
 
-Expansion weights vector corresponding to the expansion coefficients [`CamiMath.polynom`](@extref) 
+Expansion weights vector corresponding to the expansion coefficien vector `polynom`
 of a (user-defined) finite-difference expansion.
 
 **Forward-difference notation** (`notation = fwd`)
