@@ -209,18 +209,19 @@ end
 @doc raw"""
     fdiff_expansion(polynom, f [, notation=bwd])
 
-Finite difference expansion evaluated to ``k^{th}`` order for the analytical function ``f`` tabulated in *regular order* (growing index) 
-at ``k+1`` positions on a [`Grid`](@ref). The expansion coefficients are specified by the vector `polynom`. 
-By default the expansion is calculated in backward-difference notation (`bwd`). 
+Finite difference expansion evaluated to ``k^{th}`` order for the analytical 
+function ``f``, tabulated in *regular order* (growing index) at ``k+1`` positions 
+on a [`Grid`](@ref). The expansion coefficients are specified by the vector 
+`polynom`. By default the expansion is calculated in backward-difference notation (`bwd`). 
 
 **Forward difference notation** (`notation = fwd`)
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^{k} \cdot f[n:n+k],
 ```
-where ``f[n:n+k]`` are elements of the
-analytical function ``f`` (tabulated in *forward* order) and
-``α ≡ [α_0,⋯\ α_k]`` is the vector `polynom`, which has to be supplied to
-define the forward-difference expansion.
+where ``f[n:n+k]`` are elements of the analytical function ``f`` (tabulated in 
+*forward* order) and `polynom` ``α ≡ [α_0,⋯\ α_k]`` is the expansion coefficient 
+vector, which has to be supplied to define the forward-difference expansion. 
+Note ``k+1 = length(α)``; i.e., `polynom` determines the order of the expansion.
 
 **Backward difference notation** (`notation = bwd`)
 ```math
