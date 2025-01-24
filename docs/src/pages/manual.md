@@ -109,7 +109,7 @@ In terms of forward differences the generic form of the finite-difference expans
 Truncated at order ``k``, the expansion is defined by ``k+1`` *finite-difference expansion coefficients*, 
 supplied by the user in the form of a [`CamiMath.polynom`](@extref) vector, ``α = [α_{0},⋯\ α_{k}]``, 
 with the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion as 
-a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of 
+a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of
 *growing* grid position). Substituting the definition of the forward difference, ``Δ = f[n+1] - f[n]``, 
 the finite-difference expression takes the form
 
@@ -164,7 +164,7 @@ In terms of backward differences the generic form of the finite-difference expan
 In this case the ``k^{th}``- order *finite-difference expansion* is defined by the 
 corresponding user-supplied [`CamiMath.polynom`](@extref) vector, ``β = [β_{0},⋯\ β_{k}]``, containing the 
 expansion coefficients in *regular* ordering *growing* index. The expansion can written as 
-a *weighted sum* over the ``k+1`` *function values* ``f[n:-1:n-k]`` (note) the *reversed* ordering 
+a *weighted sum* over the ``k+1`` *function values* ``f[n:-1:n-k]`` (note *reversed* ordering 
 of *decreasing* grid position). Substituting the definition of the backward difference, ``∇ = f[n] - f[n-1]``, 
 the finite-difference expression takes the form
 
