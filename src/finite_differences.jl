@@ -38,13 +38,24 @@ c_{j}^{k}=(-1)^{j}\binom{k}{j}.
 ```
 #### Example:
 ```
-c(k,j) = fdiff_weight(k,j)
+julia> c(k,j) = fdiff_weight(k,j);
 
-[[c(k,j) for j=0:k] for k=0:3] == [[1], [1, -1], [1, -2, 1], [1, -3, 3, -1]]
-  true
+julia> a = [[c(k,j) for j=0:k] for k=0:3]
+4-element Vector{Vector{Int64}}:
+ [1]
+ [1, -1]
+ [1, -2, 1]
+ [1, -3, 3, -1]
 
-[[c(k,k-j) for j=0:k] for k=0:3] == [[1], [-1, 1], [1, -2, 1], [-1, 3, -3, 1]]
-  true
+julia> b = [[c(k,k-j) for j=0:k] for k=0:3]
+4-element Vector{Vector{Int64}}:
+ [1]
+ [-1, 1]
+ [1, -2, 1]
+ [-1, 3, -3, 1]
+
+julia> b == reverse.(a)
+true
 ```
 """
 function fdiff_weight(k::Int, j::Int)
@@ -105,8 +116,8 @@ of a (user-defined) finite-difference expansion.
 
 **Forward-difference notation** (`notation = fwd`)
 
-The weights vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponding to the expansion coefficient vector 
-`` α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order *forward-difference* expansion (`polynom = α`).
+The weights vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponds in this case to the expansion coefficient 
+vector `` α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order *forward-difference* expansion (`polynom = α`).
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -125,8 +136,8 @@ indicate that the weights must be evaluated in forward-difference notation.
 
 **Backward difference notation** (`notation = bwd`)
 
-The weights vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponding to the expansion coefficient 
-vector ``β ≡ [β_0,⋯\ β_k]`` of the ``k^{th}``-order *backward-difference* expansion (`polynom = β`).
+The weights vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponds in this case to the expansion c
+oefficient vector ``β ≡ [β_0,⋯\ β_k]`` of the ``k^{th}``-order *backward-difference* expansion (`polynom = β`).
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
@@ -153,19 +164,18 @@ f[n-1]=(1+Δ)^{-1}f[n]=(1-Δ+Δ^2-Δ^3+⋯)f[n].
 f[n+1]=(1-∇)^{-1}f[n]=(1+∇+∇^2+∇^3+⋯)f[n],
 ```
 ```
-α = [1,-1,1,-1,1]
-β = [1,1,1,1,1]
-Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-  Fk = [5, -10, 10, -5, 1]
+julia> α = [1,-1,1,-1,1];
 
-Bk = fdiff_expansion_weights(β, bwd, reg); println("Bk = $(Bk)")
-  Bk = [5, -10, 10, -5, 1]
+julia> β = [1,1,1,1,1];
 
-revFk = fdiff_expansion_weights(α, fwd, rev); println("revFk = $(revFk)")
-  revFk = [1, -5, 10, -10, 5]
+julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
+Fk = [5, -10, 10, -5, 1]
 
-revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
-  revBk = [1, -5, 10, -10, 5]
+julia> Bk = fdiff_expansion_weights(β, bwd, reg); println("Bk = $(Bk)")
+Bk = [5, -10, 10, -5, 1]
+
+julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
+revBk = [1, -5, 10, -10, 5]
 ```
 """
 function fdiff_expansion_weights(polynom, notation=bwd, ordering=rev)
