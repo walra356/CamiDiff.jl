@@ -219,17 +219,16 @@ on a [`Grid`](@ref). The expansion coefficients are specified by the vector
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^{k} \cdot f[n:n+k],
 ```
 where ``f[n:n+k]`` are elements of the analytical function ``f`` (tabulated in 
-*forward* order) and `polynom` is the expansion coefficient vector 
-``α ≡ [α_0,⋯\ α_k]``, which has to be supplied to define the forward-difference expansion.
+*forward* order) and `polynom` is the (user-supplied) expansion coefficient vector 
+``α ≡ [α_0,⋯\ α_k]``.
 
 **Backward difference notation** (`notation = bwd`)
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k \cdot f[n-k:n].
 ```
 where ``f[n-k:n]`` are elements of the
-analytical function ``f`` (tabulated in *forward* order) and `polynom` is the expansion 
-coefficient vector ``β ≡ [β_0,⋯\ β_k]``, which has to be supplied to
-define the backward-difference expansion.
+analytical function ``f`` (tabulated in *forward* order) and `polynom` is the (user-supplied)
+expansion coefficient vector ``β ≡ [β_0,⋯\ β_k]``.
 
 NB. The vector `polynom` determines the order of the expansion, 
 ``k+1 = \rm{length}(α) = \rm{length}(β)``. The weights vectors ``F^k`` and 
@@ -250,9 +249,9 @@ f[n+1]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n],\\
 f[n]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n-1]=\bar{B}^k \cdot f[n-k-1:n-1]
 \end{aligned}
 ```
-Note that to fourth order in the expansion `(k=4)`, the forward- 
-and backward-difference coefficient vectors are `α=[1,-1,1,-1,1]` 
-and `β=[1,1,1,1,1]`, respectively. 
+Note that, in these examples, to fourth order in the expansion ``(k=4)``, 
+the forward- and backward-difference coefficient vectors `polynom` are 
+given by ``α=[1,-1,1,-1,1]`` and ``β=[1,1,1,1,1]``, respectively. 
 ```
 julia> f = [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
@@ -271,8 +270,8 @@ julia> f[6]
 ```
 In these cases the results are exact because the function is quadratic and
 the expansion is third order (based on the polynomial of ``k^{th}`` degree
-running through the ``k+1`` points of the tabulated function). Note the
-relation with [`fdiff_interpolation(f, v, k=3)`](@ref).
+running through the ``k+1`` points of the tabulated function). Compare with 
+the example of [`fdiff_interpolation(f, v, k=3)`](@ref).
 """
 function fdiff_expansion(polynom, f, notation=bwd)
 
@@ -289,7 +288,26 @@ end
 #           fdiff_interpolation_expansion_polynom(k, x, notation=bwd)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
+function fwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
+
+    o = Base.ones(T,k+1)
+    σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
+             (for p=1:k; o[p+1] = o[p]*(-σ-p+1)/p end)
+
+    return o
+
+end
+#...............................................................................
+function bwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
+
+    o = Base.ones(T,k+1)
+    σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
+             (for p=1:k; o[p+1] = o[p]*(σ+p-1)/p end)
+
+    return o
+
+end
+function fwd_interpolation_expansion_polynom1(ξ::T, k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -299,7 +317,7 @@ function fwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
+function bwd_interpolation_expansion_polynom1(ξ::T, k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -310,70 +328,69 @@ function bwd_interpolation_expansion_polynom(ξ::T, k=3) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_interpolation_expansion_polynom(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
+    fdiff_interpolation_expansion_polynom(σ::T [, k=3 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining the ``k^{th}``-order
 (default *third* order) Lagrange-polynomial interpolation of a tabulated
-analytic function ``f[n]`` at offset ``ξ`` with respect to index
+analytic function ``f[n]`` at offset ``σ`` with respect to index
 position ``n``, which is positive for increasing index and negative for
 decreasing index.
 
 **Forward difference notation** (`notation = fwd`)
 
 In this case we consider the tabulated interval ``f[n:n+k]``. The interpolated
-value ``f[n+ξ]`` is given by the forward-difference expansion
+value ``f[n-σ]`` is given by the forward-difference expansion
 
 ```math
-f[n+ξ] = \sum_{p=0}^k α_p(-ξ) Δ^p f[n] + ⋯,
+f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
-`` → α(-ξ) ≡ [α_0(-ξ),⋯\ α_k(-ξ)]``. In this notation the range
-``0\leq ξ\leq k`` corresponds to interpolation and the ranges ``ξ<0`` and
-``ξ>k`` to extrapolation.
+[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
+`` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
+``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
+``σ > 1k`` to extrapolation.
 
 **Backward difference notation** (`notation = bwd`)
 
 In this case we consider the tabulated interval ``f[n-k:n]``. The interpolated
-value ``f[n+ξ]`` is given by the backward-difference expansion
+value ``f[n+σ]`` is given by the backward-difference expansion
 
 ```math
-f[n+ξ] = \sum_{p=0}^k β_p(ξ) ∇^p f[n] + ⋯,
+f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(ξ, k, bwd)`](@ref)
-`` → β(ξ) ≡ [β_0(ξ),⋯\ β_k(ξ)]``. In this notation the range
-``-k\leq ξ\leq0`` corresponds to interpolation and the ranges
-``ξ<-k`` and ``ξ>0`` to extrapolation.
+[`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref)
+`` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. In this notation the range
+``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
+``σ > 1k`` to extrapolation.
 
 #### Examples:
 ```
-k = 5
-ξ = -1
-α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
-  α = [1, 1, 0, 0, 0, 0]
-  β = [1, 1, 1, 1, 1, 1]
+julia> k = 5;
 
-ξ = 0
-α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
-  α = [1, 0, 0, 0, 0, 0]
-  β = [1, 0, 0, 0, 0, 0]
+julia> σ = 1;
 
-ξ = 1
-α = fdiff_interpolation_expansion_polynom(ξ, k, fwd); println("α = $α")
-β = fdiff_interpolation_expansion_polynom(ξ, k, bwd); println("β = $β")
-  α = [1, -1, 1, -1, 1, -1]
-  β = [1, -1, 0, 0, 0, 0]
+julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
+α = [1, -1, 1, -1, 1, -1]
+
+julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
+β = [1, 1, 1, 1, 1, 1]
+
+julia> σ = 0;
+
+julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
+α = [1, 0, 0, 0, 0, 0]
+
+julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
+β = [1, 0, 0, 0, 0, 0]
 ```
 """
-function fdiff_interpolation_expansion_polynom(ξ::T, k=3, notation=bwd) where T<:Real
+function fdiff_interpolation_expansion_polynom(:T, k=4, notation=bwd) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(-ξ, k) :
-                                       bwd_interpolation_expansion_polynom(ξ, k)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ, k) :
+                                       bwd_interpolation_expansion_polynom(σ, k)
     return o
 
 end
@@ -382,28 +399,89 @@ end
 #                  fdiff_interpolation_expansion_weights(polynom)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_weights(ξ::T, k=3, ordering=reg) where T<:Real
+function fwd_interpolation_expansion_weights(σ::T, k::Int, ordering=reg) where T<:Real
 
-    α = fdiff_interpolation_expansion_polynom(ξ, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
     o = fdiff_expansion_weights(α, fwd, ordering)
 
     return o
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_weights(ξ::T, k=3, ordering=rev) where T<:Real
+function bwd_interpolation_expansion_weights(σ::T, k=Int, ordering=rev) where T<:Real
 
-    β = fdiff_interpolation_expansion_polynom(ξ, k, bwd)
+    β = fdiff_interpolation_expansion_polynom(σ, k, bwd)
     o = fdiff_expansion_weights(β, bwd, ordering)
 
     return o
 
 end
 #...............................................................................
-function fdiff_interpolation_expansion_weights(ξ::T, k=3, notation=bwd, ordering=rev) where T<:Real
+@doc raw"""
+    fdiff_interpolation_expansion_weights(σ::T, k::Int [, notation=bwd [, ordering=rev]]) where T<:Real
+    fdiff_interpolation_expansion_weights(polynom [, notation=bwd [, ordering=rev]])
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(-ξ, k, ordering) :
-                                       bwd_interpolation_expansion_weights(ξ, k, ordering)
+Finite-difference expansion weights vector defining the ``k^{th}``-order
+(default *third* order) Lagrange-polynomial interpolation of a tabulated
+analytic function ``f[n]`` at offset ``σ`` with respect to index
+position ``n``, which is positive for increasing index and negative for
+decreasing index.
+
+**Forward difference notation** (`notation = fwd`)
+
+In this case we consider the tabulated interval ``f[n:n+k]``. The interpolated
+value ``f[n-σ]`` is given by the forward-difference expansion
+
+```math
+f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
+```
+where the expansion coefficients are given by
+
+[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
+`` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
+``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
+``σ > 1k`` to extrapolation.
+
+**Backward difference notation** (`notation = bwd`)
+
+In this case we consider the tabulated interval ``f[n-k:n]``. The interpolated
+value ``f[n+σ]`` is given by the backward-difference expansion
+
+```math
+f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
+```
+where the expansion coefficients are given by
+
+[`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref)
+`` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. In this notation the range
+``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
+``σ > 1k`` to extrapolation.
+
+#### Examples:
+```
+julia> Fk1 = fdiff_interpolation_expansion_weights(1, 4, fwd, reg); println("Fk1 = $(Fk1)")
+Fk1 = [5, -10, 10, -5, 1]
+
+julia> revBk1 = fdiff_interpolation_expansion_weights(1, 4, bwd, rev); println("revBk1 = $(revBk1)")
+revBk1 = [1, -5, 10, -10, 5]
+
+julia> α = fdiff_interpolation_expansion_polynom(1, 4, fwd); println("α = $α")
+α = [1, -1, 1, -1, 1]
+
+julia> Fk1 = fdiff_interpolation_expansion_weights(α, fwd, reg); println("Fk1 = $(Fk1)")
+Fk1 = [5, -10, 10, -5, 1]
+
+julia> β = fdiff_interpolation_expansion_polynom(1, 4, bwd); println("β = $β")
+β = [1, 1, 1, 1, 1]
+
+julia> revBk1 = fdiff_interpolation_expansion_weights(β, bwd, rev); println("revBk1 = $(revBk1)")
+revBk1 = [1, -5, 10, -10, 5]
+```
+"""
+function fdiff_interpolation_expansion_weights(σ::T, k=3, notation=bwd, ordering=rev) where T<:Real
+
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, k, ordering) :
+                                       bwd_interpolation_expansion_weights(σ, k, ordering)
     return o
 
 end
@@ -468,7 +546,7 @@ given by the black points. The interpolation and extrapolation points are red.
 
 ![Image](../assets/lagrangian_interpolation.png)
 """
-function fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
+function fdiff_interpolation(f::Vector{T}, v::V; k=4) where {T<:Real, V<:Real}
 
     l = length(f)
     k = min(k,l-1)

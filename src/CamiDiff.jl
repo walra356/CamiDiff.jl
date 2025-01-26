@@ -48,6 +48,8 @@ export fdiff_weight
 export fdiff_expansion_weights
 export fdiff_expansion
 export fwd_diff_expansion_weights
+export fwd_interpolation_expansion_polynom
+export bwd_interpolation_expansion_polynom
 export fdiff_interpolation_expansion_polynom
 export fdiff_interpolation_expansion_weights
 export fdiff_interpolation
