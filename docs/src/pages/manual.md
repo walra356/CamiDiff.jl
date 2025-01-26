@@ -251,7 +251,7 @@ index units) these expansions can be generalized to the form of
 f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} (-1)^p l_p(σ) Δ^p f[n],
 ```
 where ``α_p(σ) = (-1)^p l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient*
-for lagrangian interpolation, where 
+for lagrangian interpolation. Here we define 
 
 ```math
 l_p(σ) ≡ (σ)_p/p!\,,
@@ -263,13 +263,14 @@ with
 σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
 \end{cases}
 ```
-being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
-``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for the 
-generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
-*interpolation* over the grid position interval ``n-1 ≤ x ≤ n+k`` (most accurately 
-over the interval ``n-1 ≤ x ≤ n``), outside the method amounts to *extrapolation*,
-and although useful in some cases, it is not recommended.apolation* along the
-Lagrange polynomial. 
+being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find 
+``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for 
+the generic finite-difference expansion. 
+
+For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
+``n ≤ x ≤ n+k``. Outside this interval, in particular for ``σ > 0``, the method amounts to 
+*extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
+position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
 Evaluating the finite-difference expansion up to order ``k`` we obtain  
 
@@ -329,14 +330,15 @@ index units) these expansions can be generalized to the form of
 ```math
 f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} l_p(σ) ∇^p f[n],
 ```
-where ``β_p(σ) = l_p(σ) ≡ (σ)_p/p! = (-1)^p α_p(σ)`` is the 
-``p^{th}``-order *finite-difference expansion coefficient* for lagrangian interpolation, 
-with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  Note that for ``σ = 1`` 
-we find ``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients obtained above for the 
-generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
-*interpolation* over the grid position interval ``n-k ≤ x ≤ n+1`` (most accurately 
-over the interval ``0 ≤ x ≤ n+1``), outside this interval the method amounts to 
-*extrapolation*, and although useful in some cases, it is not recommended. 
+where ``β_p(σ) = l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient* 
+for lagrangian interpolation, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  
+Note that for ``σ = 1`` we find ``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients 
+obtained above for the generic finite-difference expansion. 
+
+For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
+``n-k ≤ x ≤ n``, outside this interval, in particular for ``σ > 0``, the method amounts to 
+*extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
+position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
 Evaluating the finite-difference expansion up to order ``k`` we obtain
 
