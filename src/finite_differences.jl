@@ -288,7 +288,7 @@ end
 #           fdiff_interpolation_expansion_polynom(k, x, notation=bwd)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
+function fwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -298,7 +298,7 @@ function fwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
+function bwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
 
     o = Base.ones(T,k+1)
     σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -393,8 +393,8 @@ julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $
 """
 function fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ, k) :
-                                       bwd_interpolation_expansion_polynom(σ, k)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ; k) :
+                                       bwd_interpolation_expansion_polynom(σ; k)
     return o
 
 end
