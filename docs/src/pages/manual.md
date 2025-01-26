@@ -253,18 +253,22 @@ f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} α_p(σ) Δ^p f[n],
 where
 
 ```math
-α_p(σ) ≡ (-1)^p(σ)_p/p!
+α_p(σ) = (-1)^p l_p(σ)
 ```
 is the ``p^{th}``-order *finite-difference expansion coefficient*
 for lagrangian interpolation, with 
 
+```math
+l_p(σ) ≡ (σ)_p/p!,
+``` 
+where
 ```math
 (σ)_{p}=\begin{cases}
 1 & p=0\\
 σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
 \end{cases}
 ```
-being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
+is the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
 ``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for the 
 generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
 *interpolation* over the grid position interval ``n-1 ≤ x ≤ n+k`` (most accurately 
@@ -333,7 +337,7 @@ f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} β_p(σ) ∇^p f[n],
 where
 
 ```math
-β_p(σ) ≡ (σ)_p/p! = (-1)^p α_p(σ)
+β_p(σ) = l_p(σ) ≡ (σ)_p/p! = (-1)^p α_p(σ)
 ```
 
 is the ``p^{th}``-order *finite-difference expansion coefficient* for
@@ -396,6 +400,68 @@ fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 ```
 
 ## Lagrangian differentiation
+
+**Forward difference notation** (`notation = fwd`)
+
+To derive the *lagrangian differentiation* formulas we formally differentiate
+
+```math
+f[n-x] = (1+Δ)^{-x} f[n]
+```
+with respect to ``-x``,
+
+```math
+-\frac{df}{dx}[n-x]
+=-ln(1+Δ)\ (1+Δ)^{-x}f[n]
+=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(x)∇^{p}f[n]+⋯.
+```
+
+Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
+
+```math
+\frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)∇^{p}f[n]+⋯,
+```
+
+where ``β_p(x)`` represents the *finite-difference expansion coefficients*
+for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
+are obtained by polynomial multiplication using the function
+[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
+where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
+The resulting coefficients are contained in the following [`CamiMath.polynom`](@extref CamiMath.polynom) vector of order ``k``, 
+
+[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
+
+Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
+
+```math
+\frac{df}{dx}[n+x]
+=\sum_{j=0}^{k}B_j^k(x)f[n-j]
+=B^k(x) ⋅ f[n:-1:n-k],
+```
+
+where the ``k+1`` *weights*
+
+```math
+ B_j^k(x)=\sum_{p=j}^{k}β_p(x)c_{j}^{p}
+```
+
+are the ``k^{th}``-order *lagrangian-differentiation weights*
+
+[`fdiff_expansion_weights(β, bwd, reg)`](@ref) `` → B^k(x) ≡ [B^k_0(x),⋯\ B^k_k(x)]``.
+
+After changing dummy index to reverse the summation the expansion becomes
+
+```math
+\frac{df}{dx}[n+x]
+=\sum_{j=0}^{k}\bar{B}^k_j(x)f[n-k+j]
+=\bar{B}^k(x) ⋅ f[n-k:n],
+```
+
+where
+
+[`fdiff_expansion_weights(β, bwd, rev)`](@ref) `` → \bar{B}^k(x) ≡ [B^k_k(x),⋯\ B^k_0(x)]``.
+
+**backward difference notation** (`notation = bwd`)
 
 To derive the *lagrangian differentiation* formulas we formally differentiate
 
