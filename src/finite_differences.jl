@@ -403,36 +403,36 @@ true
 ```
 julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-julia> x = 7.5; n = 5; k = 5;
+julia> x = 7.25; n = 5; k = 5;
 
 julia> σ = n-x # offset (case: forward-difference interpolation)
--2.5
+-2.25
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
-α = [1.0, 2.5, 1.875, 0.3125, -0.0390625, 0.01171875]
+α = [1.0, 2.25, 1.40625, 0.1171875, -0.02197265625, 0.0076904296875]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-Fk = [0.01171875, -0.09765625, 0.5859375, 0.5859375, -0.09765625, 0.01171875]
+Fk = [0.0093994140625, -0.0845947265625, 0.845947265625, 0.281982421875, -0.0604248046875, 0.0076904296875]
 
-julia> Fk ⋅ f[n:n+k] ≈ x == 7.5
+julia> Fk ⋅ f[n:n+k] ≈ x == 7.25
 true
 ```
 #### Example 3 - backward-difference interpolation on a uniform grid
 ```
 julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-julia> x = 7.5; n = 9; k = 5;
+julia> x = 7.25; n = 9; k = 5;
 
 julia> σ = -(n-x) # offset (case: backward-difference interpolation)
--1.5
+-1.75
 
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
-β = [1.0, -1.5, 0.375, 0.0625, 0.0234375, 0.01171875]
+β = [1.0, -1.75, 0.65625, 0.0546875, 0.01708984375, 0.0076904296875]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
-revBk = [-0.01171875, 0.08203125, -0.2734375, 0.8203125, 0.41015625, -0.02734375]
+revBk = [-0.0076904296875, 0.0555419921875, -0.199951171875, 0.999755859375, 0.1666259765625, -0.0142822265625]
 
-julia> revBk ⋅ f[n-k:n] ≈ x == 7.5
+julia> revBk ⋅ f[n-k:n] ≈ x == 7.25
 true
 ```
 """
