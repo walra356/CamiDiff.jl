@@ -397,10 +397,10 @@ with respect to ``-σ``,
 ```math
 -\frac{df}{dσ}[n-σ]
 =ln(1+Δ)\ (1+Δ)^{-σ}f[n]
-=\sum_{q=1}^{k}\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n]+⋯.
+=\sum_{q=1}^{k}l_{q}(σ)\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n]+⋯.
 ```
 
-Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
+Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain
 
 ```math
 \frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)Δ^{p}f[n]+⋯,
