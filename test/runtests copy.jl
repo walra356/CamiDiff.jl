@@ -151,21 +151,21 @@ rev = CamiMath.rev
     f′3 = -f3;
     f′4 = -f4;
 #   -----------------------------------------------------------------------------------------
-    @test fdiff_interpolation_expansion_polynom(1, 5, bwd) == [1, 1, 1, 1, 1, 1]
-    polynom = fdiff_interpolation_expansion_polynom(1, 5, bwd);
+    @test fdiff_interpolation_expansion_polynom(1, bwd; k=5) == [1, 1, 1, 1, 1, 1]
+    polynom = fdiff_interpolation_expansion_polynom(1, bwd; k=5);
     @test fdiff_interpolation_expansion_weights(polynom) ==  [-1, 6, -15, 20, -15, 6]
     @test fdiff_interpolation_expansion_weights(polynom, bwd, reg) == [6, -15, 20, -15, 6, -1]
     @test fdiff_interpolation_expansion_weights(polynom, bwd, rev) == [-1, 6, -15, 20, -15, 6]
     #   -----------------------------------------------------------------------------------------
-    @test fdiff_interpolation_expansion_polynom(1, 5, fwd) == [1, -1, 1, -1, 1, -1]
-    polynom = fdiff_interpolation_expansion_polynom(1, 5, fwd);
+    @test fdiff_interpolation_expansion_polynom(1, fwd; k=5) == [1, -1, 1, -1, 1, -1]
+    polynom = fdiff_interpolation_expansion_polynom(1, fwd; k=5);
     @test fdiff_interpolation_expansion_weights(polynom, fwd, reg) == [6, -15, 20, -15, 6, -1]
     @test fdiff_interpolation_expansion_weights(polynom, fwd, rev) == [-1, 6, -15, 20, -15, 6]
     #   -----------------------------------------------------------------------------------------
-    @test fdiff_interpolation_expansion_weights(1, 5, fwd, reg) == [6, -15, 20, -15, 6, -1]
-    @test fdiff_interpolation_expansion_weights(1, 5, fwd, rev) == [-1, 6, -15, 20, -15, 6]
-    @test fdiff_interpolation_expansion_weights(1, 5, bwd, reg) == [6, -15, 20, -15, 6, -1]
-    @test fdiff_interpolation_expansion_weights(1, 5, bwd, rev) == [-1, 6, -15, 20, -15, 6]
+    @test fdiff_interpolation_expansion_weights(1, fwd, reg; k=5) == [6, -15, 20, -15, 6, -1]
+    @test fdiff_interpolation_expansion_weights(1, fwd, rev; k=5) == [-1, 6, -15, 20, -15, 6]
+    @test fdiff_interpolation_expansion_weights(1, bwd, reg; k=5) == [6, -15, 20, -15, 6, -1]
+    @test fdiff_interpolation_expansion_weights(1, bwd, rev; k=5) == [-1, 6, -15, 20, -15, 6]
     #   -----------------------------------------------------------------------------------------
     @test [fdiff_interpolation([ν^3 for ν = -5:2], ν; k=3) for ν = 1:0.5:8] == [-125.0, -91.125, -64.0, -42.875, -27.0, -15.625, -8.0, -3.375, -1.0, -0.125, 0.0, 0.125, 1.0, 3.375, 8.0]
     @test fdiff_expansion_weights([0, 1, 2, 3, 4, 5], fwd, reg) == [-3, 15, -33, 37, -21, 5]

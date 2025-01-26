@@ -346,7 +346,7 @@ f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, fwd; k=3)`](@ref)
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
 ``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
 ``σ > 1k`` to extrapolation.
@@ -361,29 +361,27 @@ f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, bwd; k=3)`](@ref)
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. In this notation the range
 ``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
 ``σ > 1k`` to extrapolation.
 
 #### Examples:
 ```
-julia> k = 5;
-
 julia> σ = 1;
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd; k=5); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
-julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
 β = [1, 1, 1, 1, 1, 1]
 
 julia> σ = 0;
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
 α = [1, 0, 0, 0, 0, 0]
 
-julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
 β = [1, 0, 0, 0, 0, 0]
 ```
 """
@@ -437,7 +435,7 @@ f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, fwd; k=3)`](@ref)
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
 ``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
 ``σ > 1k`` to extrapolation.
@@ -452,26 +450,26 @@ f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, bwd; k=3)`](@ref)
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. In this notation the range
 ``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
 ``σ > 1k`` to extrapolation.
 
 #### Examples:
 ```
-julia> Fk1 = fdiff_interpolation_expansion_weights(1, 4, fwd, reg); println("Fk1 = $(Fk1)")
+julia> Fk1 = fdiff_interpolation_expansion_weights(1, fwd, reg; k=4); println("Fk1 = $(Fk1)")
 Fk1 = [5, -10, 10, -5, 1]
 
-julia> revBk1 = fdiff_interpolation_expansion_weights(1, 4, bwd, rev); println("revBk1 = $(revBk1)")
+julia> revBk1 = fdiff_interpolation_expansion_weights(1, bwd, rev; k=4); println("revBk1 = $(revBk1)")
 revBk1 = [1, -5, 10, -10, 5]
 
-julia> α = fdiff_interpolation_expansion_polynom(1, 4, fwd); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(1, fwd; k=4); println("α = $α")
 α = [1, -1, 1, -1, 1]
 
 julia> Fk1 = fdiff_interpolation_expansion_weights(α, fwd, reg); println("Fk1 = $(Fk1)")
 Fk1 = [5, -10, 10, -5, 1]
 
-julia> β = fdiff_interpolation_expansion_polynom(1, 4, bwd); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(1, bwd; k=4); println("β = $β")
 β = [1, 1, 1, 1, 1]
 
 julia> revBk1 = fdiff_interpolation_expansion_weights(β, bwd, rev); println("revBk1 = $(revBk1)")
