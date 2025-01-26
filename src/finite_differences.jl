@@ -397,18 +397,18 @@ end
 #                  fdiff_interpolation_expansion_weights(polynom)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_weights(σ::T, k::Int, ordering=reg) where T<:Real
+function fwd_interpolation_expansion_weights(σ::T, ordering=reg; k=3) where T<:Real
 
-    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(σ, fwd; k)
     o = fdiff_expansion_weights(α, fwd, ordering)
 
     return o
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_weights(σ::T, k=Int, ordering=rev) where T<:Real
+function bwd_interpolation_expansion_weights(σ::T, ordering=rev; k=3) where T<:Real
 
-    β = fdiff_interpolation_expansion_polynom(σ, k, bwd)
+    β = fdiff_interpolation_expansion_polynom(σ, bwd; k)
     o = fdiff_expansion_weights(β, bwd, ordering)
 
     return o
@@ -478,8 +478,8 @@ revBk1 = [1, -5, 10, -10, 5]
 """
 function fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, k, ordering) :
-                                       bwd_interpolation_expansion_weights(σ, k, ordering)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, ordering; k) :
+                                       bwd_interpolation_expansion_weights(σ, ordering; k)
     return o
 
 end
