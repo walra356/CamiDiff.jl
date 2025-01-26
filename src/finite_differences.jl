@@ -347,9 +347,12 @@ f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 where the expansion coefficients are given by
 
 [`fdiff_interpolation_expansion_polynom(σ, fwd; k=3)`](@ref)
-`` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
-``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
-``σ > 1k`` to extrapolation.
+`` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. 
+
+Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
+if `f[n:n+k] are known. More generally, it can serve to *interpolate* to (real or integral) positions 
+``n ≤ v ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real or integral) positions `v<n` 
+(using ``σ > 0``) or `v>n+k` (using ``σ < -k``).  NB. ``σ\equiv n-v``.
 
 **Backward difference notation** (`notation = bwd`)
 
@@ -362,15 +365,18 @@ f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
 where the expansion coefficients are given by
 
 [`fdiff_interpolation_expansion_polynom(σ, bwd; k=3)`](@ref)
-`` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. In this notation the range
-``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
-``σ > 1k`` to extrapolation.
+`` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. 
+
+Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
+if `f[n-k:n]`` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
+``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real or integral) 
+positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. ``σ\equiv n-v``.
 
 #### Examples:
 ```
 julia> σ = 1;
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd; k=5); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
