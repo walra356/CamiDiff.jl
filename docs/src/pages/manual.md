@@ -390,60 +390,60 @@ fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 To derive the *lagrangian differentiation* formulas we formally differentiate
 
 ```math
-f[n-x] = (1+Δ)^{-x} f[n]
+f[n-σ] = (1+Δ)^{-σ} f[n]
 ```
-with respect to ``-x``,
+with respect to ``-σ``,
 
 ```math
--\frac{df}{dx}[n-x]
-=ln(1+Δ)\ (1+Δ)^{-x}f[n]
-=\sum_{q=1}^{k}\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(x)Δ^{p}f[n]+⋯.
+-\frac{df}{dσ}[n-σ]
+=ln(1+Δ)\ (1+Δ)^{-σ}f[n]
+=\sum_{q=1}^{k}\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n]+⋯.
 ```
 
 Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 
 ```math
-\frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)Δ^{p}f[n]+⋯,
+\frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)Δ^{p}f[n]+⋯,
 ```
 
-where ``β_p(x)`` represents the *finite-difference expansion coefficients*
-for *lagrangian differentiation* at position ``n+x``. The coefficients ``β_p(x)`` 
+where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
+for *lagrangian differentiation* at position ``n+σ``. The coefficients ``β_p(σ)`` 
 are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
 The resulting coefficients are contained in the following [`CamiMath.polynom`](@extref CamiMath.polynom) vector of order ``k``, 
 
-[`fdiff_differentiation_expansion_polynom(k,x)`](@ref) `` → β(x) ≡ [β_0(x),⋯\ β_p(x)]``, with ``β_0(x)≡ 0``.
+[`fdiff_differentiation_expansion_polynom(k,σ)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_p(σ)]``, with ``β_0(σ)≡ 0``.
 
 Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
 
 ```math
-\frac{df}{dx}[n+x]
-=\sum_{j=0}^{k}B_j^k(x)f[n-j]
-=B^k(x) ⋅ f[n:-1:n-k],
+\frac{df}{dσ}[n+σ]
+=\sum_{j=0}^{k}B_j^k(σ)f[n-j]
+=B^k(σ) ⋅ f[n:-1:n-k],
 ```
 
 where the ``k+1`` *weights*
 
 ```math
- B_j^k(x)=\sum_{p=j}^{k}β_p(x)c_{j}^{p}
+ B_j^k(σ)=\sum_{p=j}^{k}β_p(σ)c_{j}^{p}
 ```
 
 are the ``k^{th}``-order *lagrangian-differentiation weights*
 
-[`fdiff_expansion_weights(β, bwd, reg)`](@ref) `` → B^k(x) ≡ [B^k_0(x),⋯\ B^k_k(x)]``.
+[`fdiff_expansion_weights(β, bwd, reg)`](@ref) `` → B^k(σ) ≡ [B^k_0(σ),⋯\ B^k_k(σ)]``.
 
 After changing dummy index to reverse the summation the expansion becomes
 
 ```math
-\frac{df}{dx}[n+x]
-=\sum_{j=0}^{k}\bar{B}^k_j(x)f[n-k+j]
-=\bar{B}^k(x) ⋅ f[n-k:n],
+\frac{df}{dσ}[n+σ]
+=\sum_{j=0}^{k}\bar{B}^k_j(σ)f[n-k+j]
+=\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
 where
 
-[`fdiff_expansion_weights(β, bwd, rev)`](@ref) `` → \bar{B}^k(x) ≡ [B^k_k(x),⋯\ B^k_0(x)]``.
+[`fdiff_expansion_weights(β, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B^k_k(σ),⋯\ B^k_0(σ)]``.
 
 **backward difference notation** (`notation = bwd`)
 
