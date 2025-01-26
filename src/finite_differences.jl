@@ -387,7 +387,7 @@ julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β
 β = [1, 0, 0, 0, 0, 0]
 ```
 """
-function fdiff_interpolation_expansion_polynom(:T, k=4, notation=bwd) where T<:Real
+function fdiff_interpolation_expansion_polynom(σ::T, k=4, notation=bwd) where T<:Real
 
     o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ, k) :
                                        bwd_interpolation_expansion_polynom(σ, k)
