@@ -350,9 +350,10 @@ where the expansion coefficients are given by
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
-if `f[n:n+k]` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
-``n ≤ v ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real or integral) positions `v<n` 
-(using ``σ > 0``) or `v>n+k` (using ``σ < -k``).  NB. ``σ ≡ n-v``.
+if `f[n:n+k]` are known. More generally, it can serve to *interpolate* to (real) positions 
+``n ≤ v ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real) 
+positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``).  NB. The forward offset 
+is given by ``σ ≡ n-v``.
 
 **Backward difference notation** (`notation = bwd`)
 
@@ -368,27 +369,66 @@ where the expansion coefficients are given by
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
-if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
-``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real or integral) 
-positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. ``σ ≡ n-v``.
+if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real) positions 
+``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
+positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. The backward offset 
+is given by ``σ ≡ -(n-v)``.
 
-#### Examples:
+#### Example 1 - *extrapolation on a uniform grid*:
 ```
 julia> σ = 1;
+
+julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
+julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
+Fk = [6, -15, 20, -15, 6, -1]
+
+julia> Fk ⋅ f[5:10] == f[4] == 16
+true
+
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
 β = [1, 1, 1, 1, 1, 1]
 
-julia> σ = 0;
+julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
+revBk = [-1, 6, -15, 20, -15, 6]
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
-α = [1, 0, 0, 0, 0, 0]
+julia> revBk ⋅ f[1:6] == f[7] == 49
 
-julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
-β = [1, 0, 0, 0, 0, 0]
+```
+#### Example 2 - *interpolation on a uniform grid*:
+```
+julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10];
+
+julia> n = 5; v = 7.5; k = 5;
+
+julia> σ = n-v
+-2.5
+
+julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
+α = [1.0, 2.5, 1.875, 0.3125, -0.0390625, 0.01171875]
+
+julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
+Fk = [0.01171875, -0.09765625, 0.5859375, 0.5859375, -0.09765625, 0.01171875]
+
+julia> Fk ⋅ f[n:n+k] ≈ 7.5
+true
+
+julia> n = 9; v = 7.5; k = 5;
+
+julia> σ = v-n
+-1.5
+
+julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
+β = [1.0, -1.5, 0.375, 0.0625, 0.0234375, 0.01171875]
+
+julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
+revBk = [-0.01171875, 0.08203125, -0.2734375, 0.8203125, 0.41015625, -0.02734375]
+
+julia> revBk ⋅ f[n-k:n] ≈ 7.5
+true
 ```
 """
 function fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
