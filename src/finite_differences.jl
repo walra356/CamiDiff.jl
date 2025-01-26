@@ -351,9 +351,9 @@ where the expansion coefficients are given by
 
 Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
 if `f[n:n+k]` are known. More generally, it can serve to *interpolate* to (real) positions 
-``n ≤ v ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real) 
-positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``).  NB. The forward offset 
-is given by ``σ ≡ n-v``.
+``n ≤ x ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real) 
+positions ``x<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``).  NB. The forward offset 
+is given by ``σ ≡ n-x``.
 
 **Backward difference notation** (`notation = bwd`)
 
@@ -370,13 +370,13 @@ where the expansion coefficients are given by
 
 Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
 if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real) positions 
-``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
-positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. The backward offset 
-is given by ``σ ≡ -(n-v)``.
+``n-k ≤ x ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
+positions ``xv<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``). NB. The backward offset 
+is given by ``σ ≡ -(n-x)``.
 
-#### Example 1 - extrapolation on a uniform grid:
+#### Example 1 - extrapolation on a uniform grid
 ```
-julia> σ = 1;
+julia> σ = 1; # offset
 
 julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
@@ -399,13 +399,13 @@ julia> revBk ⋅ f[1:6] == f[7] == 49
 true
 
 ```
-#### Example 2 - interpolation on a uniform grid:
+#### Example 2 - forward-difference interpolation on a uniform grid
 ```
 julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-julia> v = 7.5; n = 5; k = 5;
+julia> x = 7.5; n = 5; k = 5;
 
-julia> σ = n-v # forward difference offset
+julia> σ = n-x # offset (case: forward-difference interpolation)
 -2.5
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
@@ -414,12 +414,16 @@ julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [0.01171875, -0.09765625, 0.5859375, 0.5859375, -0.09765625, 0.01171875]
 
-julia> Fk ⋅ f[n:n+k] ≈ 7.5
+julia> Fk ⋅ f[n:n+k] ≈ x == 7.5
 true
+```
+#### Example 3 - backward-difference interpolation on a uniform grid
+```
+julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-julia> v = 7.5; n = 9; k = 5;
+julia> x = 7.5; n = 9; k = 5;
 
-julia> σ = -(n-v) # backward difference offset
+julia> σ = -(n-x) # offset (case: backward-difference interpolation)
 -1.5
 
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
@@ -428,7 +432,7 @@ julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [-0.01171875, 0.08203125, -0.2734375, 0.8203125, 0.41015625, -0.02734375]
 
-julia> revBk ⋅ f[n-k:n] ≈ v
+julia> revBk ⋅ f[n-k:n] ≈ x == 7.5
 true
 ```
 """
@@ -597,7 +601,7 @@ function fdiff_interpolation(f::Vector{T}, v::V; k=4) where {T<:Real, V<:Real}
     k = min(k,l-1)
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     n = v < 1 ? 1 : v < l-k ? floor(Int,v) : l-k
-    α = fdiff_interpolation_expansion_polynom(n-v, k, fwd)
+    α = fdiff_interpolation_expansion_polynom(n-v, fwd; k)
     o = fdiff_expansion(α, f[n:n+k], fwd)
 
     return o
@@ -608,11 +612,11 @@ end
 #                fdiff_differentiation_expansion_polynom(ξ, k)
 # ------------------------------------------------------------------------------
 
-function fwd_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
+function fwd_differentiation_expansion_polynom(σ::T; k=5) where T<:Real
 # ==============================================================================
 #   Forward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n,n+k] and
-#   evaluated at the interpolation position n+ξ.
+#   evaluated at the interpolation position n+σ.
 # ==============================================================================
     Float = (Float64, Float32, Float16, BigFloat) #######################################################################################
 
@@ -625,8 +629,8 @@ function fwd_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
 
     a = 1 ./ a; a[1] = 0
 
-    ξ == 0 && return a
-    α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
+    σ == 0 && return a
+    α = fdiff_interpolation_expansion_polynom(σ, fwd; k)
 
     a,α = Base.promote(a,α)
 
@@ -634,7 +638,7 @@ return CamiMath.polynom_product_expansion(a, α, k)
 
 end
 #...............................................................................
-function bwd_differentiation_expansion_polynom(ξ::T, k=5) where T<:Real
+function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
 # ==============================================================================
 #   Backward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n-k,n] and
@@ -651,8 +655,8 @@ function bwd_differentiation_expansion_polynom(ξ::T, k=5) where T<:Real
 
     b = 1 ./ b; b[1] = 0
 
-    ξ == 0 && return b
-    β = fdiff_interpolation_expansion_polynom(ξ, k, bwd)
+    α == 0 && return b
+    β = fdiff_interpolation_expansion_polynom(α, bwd; k=5)
 
     b,β = Base.promote(b,β)
 
@@ -693,10 +697,10 @@ o = fdiff_differentiation_expansion_polynom(ξ, k); println(o)
  [0.0, 1.0, -1.5]
 ```
 """
-function fdiff_differentiation_expansion_polynom(ξ::T, k=3, notation=bwd) where T<:Real
+function fdiff_differentiation_expansion_polynom(α::T, notation=bwd; k=5) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(ξ, k) :
-                                       bwd_differentiation_expansion_polynom(ξ, k)
+    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(α; k) :
+                                       bwd_differentiation_expansion_polynom(α; k)
     return o
 
 end
