@@ -374,7 +374,7 @@ if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real)
 positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. The backward offset 
 is given by ``σ ≡ -(n-v)``.
 
-#### Example 1 - *extrapolation on a uniform grid*:
+#### Example 1 - extrapolation on a uniform grid:
 ```
 julia> σ = 1;
 
@@ -396,15 +396,16 @@ julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)"
 revBk = [-1, 6, -15, 20, -15, 6]
 
 julia> revBk ⋅ f[1:6] == f[7] == 49
+true
 
 ```
-#### Example 2 - *interpolation on a uniform grid*:
+#### Example 2 - interpolation on a uniform grid:
 ```
-julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10];
+julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-julia> n = 5; v = 7.5; k = 5;
+julia> v = 7.5; n = 5; k = 5;
 
-julia> σ = n-v
+julia> σ = n-v # forward difference offset
 -2.5
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
@@ -416,9 +417,9 @@ Fk = [0.01171875, -0.09765625, 0.5859375, 0.5859375, -0.09765625, 0.01171875]
 julia> Fk ⋅ f[n:n+k] ≈ 7.5
 true
 
-julia> n = 9; v = 7.5; k = 5;
+julia> v = 7.5; n = 9; k = 5;
 
-julia> σ = v-n
+julia> σ = -(n-v) # backward difference offset
 -1.5
 
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
@@ -427,7 +428,7 @@ julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [-0.01171875, 0.08203125, -0.2734375, 0.8203125, 0.41015625, -0.02734375]
 
-julia> revBk ⋅ f[n-k:n] ≈ 7.5
+julia> revBk ⋅ f[n-k:n] ≈ v
 true
 ```
 """
