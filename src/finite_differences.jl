@@ -328,7 +328,7 @@ function bwd_interpolation_expansion_polynom1(ξ::T, k=3) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_interpolation_expansion_polynom(σ::T [, k=3 [, notation=bwd]]) where T<:Real
+    fdiff_interpolation_expansion_polynom(σ::T [, notation=bwd [; k=3]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining the ``k^{th}``-order
 (default *third* order) Lagrange-polynomial interpolation of a tabulated
@@ -387,7 +387,7 @@ julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β
 β = [1, 0, 0, 0, 0, 0]
 ```
 """
-function fdiff_interpolation_expansion_polynom(σ::T, k=4, notation=bwd) where T<:Real
+function fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
 
     o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ, k) :
                                        bwd_interpolation_expansion_polynom(σ, k)
@@ -418,7 +418,7 @@ function bwd_interpolation_expansion_weights(σ::T, k=Int, ordering=rev) where T
 end
 #...............................................................................
 @doc raw"""
-    fdiff_interpolation_expansion_weights(σ::T, k::Int [, notation=bwd [, ordering=rev]]) where T<:Real
+    fdiff_interpolation_expansion_weights(σ::T, [, notation=bwd [, ordering=rev [, k=3]]]) where T<:Real
     fdiff_interpolation_expansion_weights(polynom [, notation=bwd [, ordering=rev]])
 
 Finite-difference expansion weights vector defining the ``k^{th}``-order
@@ -478,7 +478,7 @@ julia> revBk1 = fdiff_interpolation_expansion_weights(β, bwd, rev); println("re
 revBk1 = [1, -5, 10, -10, 5]
 ```
 """
-function fdiff_interpolation_expansion_weights(σ::T, k=3, notation=bwd, ordering=rev) where T<:Real
+function fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
 
     o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, k, ordering) :
                                        bwd_interpolation_expansion_weights(σ, k, ordering)
