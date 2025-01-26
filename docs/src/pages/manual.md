@@ -397,23 +397,23 @@ with respect to ``-σ``,
 ```math
 -\frac{df}{dσ}[n-σ]
 =ln(1+Δ)\ (1+Δ)^{-σ}f[n]
-=\sum_{q=1}^{k}l_{q}(σ)\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n]+⋯.
+=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n]+⋯.
 ```
 
 Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain
 
 ```math
-\frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)Δ^{p}f[n]+⋯,
+\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n]+⋯,
 ```
 
-where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
-for *lagrangian differentiation* at position ``n+σ``. The coefficients ``β_p(σ)`` 
+where ``α_p(σ)`` represents the *finite-difference expansion coefficients*
+for *lagrangian differentiation* at position ``n-σ``. The coefficients ``α_p(σ)`` 
 are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
 The resulting coefficients are contained in the following [`CamiMath.polynom`](@extref CamiMath.polynom) vector of order ``k``, 
 
-[`fdiff_differentiation_expansion_polynom(k,σ)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_p(σ)]``, with ``β_0(σ)≡ 0``.
+[`fdiff_differentiation_expansion_polynom(k,σ)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_p(σ)]``, with ``α_0(σ)≡ 0``.
 
 Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
 
