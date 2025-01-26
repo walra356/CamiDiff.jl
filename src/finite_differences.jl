@@ -307,25 +307,6 @@ function bwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
     return o
 
 end
-function fwd_interpolation_expansion_polynom1(ξ::T, k=3) where T<:Real
-
-    o = Base.ones(T,k+1)
-    ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
-             (for p=1:k; o[p+1] = o[p]*(ξ-p+1)/p end)
-
-    return o
-
-end
-#...............................................................................
-function bwd_interpolation_expansion_polynom1(ξ::T, k=3) where T<:Real
-
-    o = Base.ones(T,k+1)
-    ξ == 0 ? (for p=2:k+1; o[p] = 0 end) :
-             (for p=1:k; o[p+1] = o[p]*(p-ξ-1)/p end)
-
-    return o
-
-end
 #...............................................................................
 @doc raw"""
     fdiff_interpolation_expansion_polynom(σ::T [, notation=bwd [; k=3]]) where T<:Real

@@ -248,27 +248,22 @@ index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} α_p(σ) Δ^p f[n],
+f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} (-1)^p l_p(σ) Δ^p f[n],
 ```
-where
+where ``α_p(σ) = (-1)^p l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient*
+for lagrangian interpolation, where 
 
 ```math
-α_p(σ) = (-1)^p l_p(σ)
-```
-is the ``p^{th}``-order *finite-difference expansion coefficient*
-for lagrangian interpolation, with 
-
-```math
-l_p(σ) ≡ (σ)_p/p!,
+l_p(σ) ≡ (σ)_p/p!\,,
 ``` 
-where
+with
 ```math
 (σ)_{p}=\begin{cases}
 1 & p=0\\
 σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
 \end{cases}
 ```
-is the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
+being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find  
 ``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for the 
 generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
 *interpolation* over the grid position interval ``n-1 ≤ x ≤ n+k`` (most accurately 
@@ -332,25 +327,12 @@ index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} β_p(σ) ∇^p f[n],
+f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} l_p(σ) ∇^p f[n],
 ```
-where
-
-```math
-β_p(σ) = l_p(σ) ≡ (σ)_p/p! = (-1)^p α_p(σ)
-```
-
-is the ``p^{th}``-order *finite-difference expansion coefficient* for
-lagrangian interpolation, with
-
-```math
-(σ)_{p}=\begin{cases}
-1 & p=0\\
-σ(σ+1)(σ+2)\cdots(σ+p-1) & p>0
-\end{cases}
-```
-being the Pochhammer symbol `CamiMath.pochhammer`.  Note that for ``σ = 1`` we find  
-``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients obtained above for the 
+where ``β_p(σ) = l_p(σ) ≡ (σ)_p/p! = (-1)^p α_p(σ)`` is the 
+``p^{th}``-order *finite-difference expansion coefficient* for lagrangian interpolation, 
+with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  Note that for ``σ = 1`` 
+we find ``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients obtained above for the 
 generic finite-difference expansion. For ``-k ≤ σ ≤ 1`` the method can be used for 
 *interpolation* over the grid position interval ``n-k ≤ x ≤ n+1`` (most accurately 
 over the interval ``0 ≤ x ≤ n+1``), outside this interval the method amounts to 
