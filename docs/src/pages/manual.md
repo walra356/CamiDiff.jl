@@ -95,7 +95,7 @@ fdiff_weight(k::Int, j::Int)
 
 ## Finite difference expansions
 
-Finite-difference calculus builds on the *finite-difference expansion*.
+Finite-difference calculus builds on *finite-difference expansions* on a uniform grid.
 
 **Forward difference notation**
 
@@ -221,7 +221,7 @@ fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ## Lagrange interpolation
 
 The *Lagrange polynomial* of degree ``k`` on a uniform grid is the polynomial running 
-through ``k+1`` subsequent points on the [`Grid`](@ref). We derive expressions for 
+through ``k+1`` subsequent points on the grid. We derive expressions for 
 interpolation in both forward- and backward-difference notation. Beware 
 that Lagrange interpolation becomes inaccurate if the tabulated function cannot be 
 approximated by a polynomial of degree ``k``.
@@ -396,14 +396,14 @@ with respect to ``-x``,
 
 ```math
 -\frac{df}{dx}[n-x]
-=-ln(1+Δ)\ (1+Δ)^{-x}f[n]
-=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(x)∇^{p}f[n]+⋯.
+=ln(1+Δ)\ (1+Δ)^{-x}f[n]
+=\sum_{q=1}^{k}\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(x)Δ^{p}f[n]+⋯.
 ```
 
 Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 
 ```math
-\frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)∇^{p}f[n]+⋯,
+\frac{df}{dx}[n+x]=\sum_{p=1}^{k}β_p(x)Δ^{p}f[n]+⋯,
 ```
 
 where ``β_p(x)`` represents the *finite-difference expansion coefficients*
