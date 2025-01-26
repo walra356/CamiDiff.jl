@@ -264,8 +264,8 @@ with
 \end{cases}
 ```
 being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find 
-``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above for 
-the generic finite-difference expansion. 
+``α_p ≡ α_p(1) ≡ (-1)^p``, regaining the expansion coefficients obtained above in the 
+example of [`CamiDiff.fdiff_expansion`](@ref). 
 
 For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
 ``n ≤ x ≤ n+k``. Outside this interval, in particular for ``σ > 0``, the method amounts to 
@@ -332,8 +332,8 @@ f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} l_p(σ) ∇^p f[n],
 ```
 where ``β_p(σ) = l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient* 
 for lagrangian interpolation, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  
-Note that for ``σ = 1`` we find ``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients 
-obtained above for the generic finite-difference expansion. 
+Note that for ``σ = 1`` we find ``β_p ≡ β_p(1) ≡ 1``, regaining the expansion coefficients obtained above in the 
+example of [`CamiDiff.fdiff_expansion`](@ref). 
 
 For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
 ``n-k ≤ x ≤ n``, outside this interval, in particular for ``σ > 0``, the method amounts to 
