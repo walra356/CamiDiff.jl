@@ -350,7 +350,7 @@ where the expansion coefficients are given by
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
-if `f[n:n+k] are known. More generally, it can serve to *interpolate* to (real or integral) positions 
+if `f[n:n+k]`` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
 ``n ≤ v ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real or integral) positions `v<n` 
 (using ``σ > 0``) or `v>n+k` (using ``σ < -k``).  NB. ``σ\equiv n-v``.
 
@@ -368,7 +368,7 @@ where the expansion coefficients are given by
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
-if `f[n-k:n]`` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
+if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real or integral) positions 
 ``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real or integral) 
 positions ``v<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). NB. ``σ\equiv n-v``.
 
