@@ -278,11 +278,9 @@ if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real)
 positions ``xv<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``). NB. The backward offset 
 is given by ``σ ≡ -(n-x)``.
 
-#### Example 1 - extrapolation on a uniform grid
+#### Example:
 ```
 julia> σ = 1; # offset
-
-julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
@@ -290,54 +288,11 @@ julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [6, -15, 20, -15, 6, -1]
 
-julia> Fk ⋅ f[5:10] == f[4] == 16
-true
-
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
 β = [1, 1, 1, 1, 1, 1]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [-1, 6, -15, 20, -15, 6]
-
-julia> revBk ⋅ f[1:6] == f[7] == 49
-true
-
-```
-#### Example 2 - forward-difference interpolation on a uniform grid
-```
-julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-julia> x = 7.25; n = 5; k = 5;
-
-julia> σ = n-x # offset (case: forward-difference interpolation)
--2.25
-
-julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
-α = [1.0, 2.25, 1.40625, 0.1171875, -0.02197265625, 0.0076904296875]
-
-julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-Fk = [0.0093994140625, -0.0845947265625, 0.845947265625, 0.281982421875, -0.0604248046875, 0.0076904296875]
-
-julia> Fk ⋅ f[n:n+k] ≈ x == 7.25
-true
-```
-#### Example 3 - backward-difference interpolation on a uniform grid
-```
-julia> f = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-julia> x = 7.25; n = 9; k = 5;
-
-julia> σ = -(n-x) # offset (case: backward-difference interpolation)
--1.75
-
-julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
-β = [1.0, -1.75, 0.65625, 0.0546875, 0.01708984375, 0.0076904296875]
-
-julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
-revBk = [-0.0076904296875, 0.0555419921875, -0.199951171875, 0.999755859375, 0.1666259765625, -0.0142822265625]
-
-julia> revBk ⋅ f[n-k:n] ≈ x == 7.25
-true
 ```
 """
 function fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
