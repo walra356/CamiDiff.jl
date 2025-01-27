@@ -433,18 +433,6 @@ are the ``k^{th}``-order *lagrangian-differentiation weights*
 
 [`fdiff_expansion_weights(α, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``.
 
-After changing dummy index to reverse the summation the expansion becomes
-
-```math
-\frac{df}{dσ}[n+σ]
-=\sum_{j=0}^{k}\bar{B}^k_j(σ)f[n-k+j]
-=\bar{B}^k(σ) ⋅ f[n-k:n],
-```
-
-where
-
-[`fdiff_expansion_weights(α, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``.
-
 **backward difference notation** (`notation = bwd`)
 
 To derive the *lagrangian differentiation* formulas we formally differentiate
