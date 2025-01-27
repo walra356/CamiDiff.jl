@@ -379,8 +379,8 @@ lagrangian-interpolation expansion.
 
 ```@docs
 fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
-fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
-fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
+# fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
+# fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 ```
 
 ## Lagrangian differentiation
