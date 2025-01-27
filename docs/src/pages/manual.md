@@ -413,14 +413,14 @@ are obtained by polynomial multiplication using the function
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
 The resulting coefficients are contained in the following [`CamiMath.polynom`](@extref CamiMath.polynom) vector of order ``k``, 
 
-[`fdiff_differentiation_expansion_polynom(σ,fwd;k=5)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, with ``α_0(σ)≡ 0``.
+[`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, with ``α_0(σ)≡ 0``.
 
 Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
 
 ```math
-\frac{df}{dσ}[n+σ]
-=\sum_{j=0}^{k}B_j^k(σ)f[n-j]
-=B^k(σ) ⋅ f[n:-1:n-k],
+-\frac{df}{dσ}[n-σ]
+=\sum_{j=0}^{k}F_j^k(σ)f[n+j]
+= F^k(σ) ⋅ f[n:n+k],
 ```
 
 where the ``k+1`` *weights*
