@@ -215,7 +215,7 @@ differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, bwd)
 
 ```@docs
 #fdiff_expansion(polynom, f, notation=CamiMath.bwd)
-#fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
+fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ```
 
 ## Lagrange interpolation
