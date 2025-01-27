@@ -443,6 +443,33 @@ where the vector ``F_j^k(σ)`` contains the ``k^{th}``-order *lagrangian-differe
 
 [`fdiff_expansion_weights(α, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``.
 
+##### Example:
+First derivative of the tabulated function ``f[n:n+k]`` at the position ``v = 6.5`` (zero-offset)
+```
+n=5; v=6.5; k=5;
+
+julia> σ = n-v # forward offset at grid position ``v``.
+-1.5
+
+julia> α = fdiff_differentiation_expansion_polynom(σ, fwd; k); println("α = $α")
+α = [0.0, 1.0, 1.0, -0.041666666666666685, 0.0, 0.004687500000000011]
+
+julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
+Fk = [0.036979166666666674, -1.1015625, 1.078125, 0.005208333333333426, -0.023437500000000056, 0.004687500000000011]
+
+julia> f = [v^2 for v=1:10]; println("f = $f")
+f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+julia> Fk ⋅ f[n:n+k] ≈ 2v
+true
+
+julia> f = [v^3 for v=1:10]; println("f = $f")
+f = [1, 8, 27, 64, 125, 216, 343, 512, 729, 1000]
+
+julia> Fk ⋅ f[n:n+k] ≈ 3v^2
+true
+```
+
 **backward difference notation** (`notation = bwd`)
 
 To derive the *lagrangian differentiation* formulas we formally differentiate
@@ -502,7 +529,26 @@ where
 
 [`fdiff_expansion_weights(β, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B^k_k(σ),⋯\ B^k_0(σ)]``.
 
+##### Example:
+First derivative of the tabulated function ``f[n-k:n]`` at the position ``v = n`` (zero-offset)
+```
+julia> n=9; v=9; k=5;
 
+julia> σ = -(n-v) # backward offset at grid position ``v``.
+0
+
+julia> β = fdiff_differentiation_expansion_polynom(σ, bwd; k); println("β = $β")
+β = Rational{Int64}[0, 1, 1//2, 1//3, 1//4, 1//5]
+
+julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
+revBk = Rational{Int64}[-1//5, 5//4, -10//3, 5, -5, 137//60]
+
+julia> f = [v^2 for v=1:10]; println("f = $f")
+f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+julia> revBk ⋅ f[n-k:n] ≈ 2v
+true
+```
 
 ```@docs
 fdiff_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
