@@ -25,13 +25,13 @@ module CamiDiff
 import Documenter
 import DocumenterInterLinks
 import CamiMath
+import LinearAlgebra
 
 fwd = CamiMath.fwd
 bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-#import LinearAlgebra
 
 export Grid
 export gridtypename
