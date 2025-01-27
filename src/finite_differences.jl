@@ -646,7 +646,7 @@ function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_differentiation_expansion_polynom(ξ::T [, k=3 [, notation=bwd]]) where T<:Real
+    fdiff_differentiation_expansion_polynom(σ::T [, notation=bwd [; k=5]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining ``k^{th}``-order
 *lagrangian differentiation* of the tabulated analytic function ``f[n]``
@@ -678,10 +678,10 @@ o = fdiff_differentiation_expansion_polynom(ξ, k); println(o)
  [0.0, 1.0, -1.5]
 ```
 """
-function fdiff_differentiation_expansion_polynom(α::T, notation=bwd; k=5) where T<:Real
+function fdiff_differentiation_expansion_polynom(σ::T, notation=bwd; k=5) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(α; k) :
-                                       bwd_differentiation_expansion_polynom(α; k)
+    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(σ; k) :
+                                       bwd_differentiation_expansion_polynom(σ; k)
     return o
 
 end
