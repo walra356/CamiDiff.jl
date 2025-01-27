@@ -431,8 +431,8 @@ function create_lagrange_differentiation_matrix(k::Int)
     m = Matrix{Rational{Int}}(undef,k+1,k+1)
 
     for i=0:k
-        polynom = CamiDiff.fdiff_differentiation_expansion_polynom(k-i,k)
-        m[1+i,1:k+1] = fdiff_expansion_weights(polynom)
+        polynom = CamiDiff.fdiff_differentiation_expansion_polynom(i-k, bwd; k)
+        m[1+i,1:k+1] = fdiff_expansion_weights(polynom, bwd, rev)
     end
 
     return m
