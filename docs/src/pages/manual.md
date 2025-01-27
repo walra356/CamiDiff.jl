@@ -234,7 +234,7 @@ f[n]=(1+Δ)f[n-1],
 ```
 we obtain by formal operator inversion
 ```math
-f[n-1] = (1 + Δ)^{-1} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p Δ^p f[n],
+f[n-1] = (1 + Δ)^{-1} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p Δ^p f[n]+⋯,
 ```
 ```math
 f[n-2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
@@ -272,38 +272,18 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
-Evaluating the finite-difference expansion up to order ``k`` we obtain  
+At this point, the interpolation-expansion coefficient vector ``α(σ)`` can be calculated to order ``k``,
 
+`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
+with ``α_p(σ) = (-1)^p l_p(σ)``.
+
+Once we have this vector the expansion weight can be calculated with
+[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
+
+and the result of the interpolation expansion is given by
 ```math
-f[n-σ] =\sum_{p=0}^{k}α_p(σ)Δ^pf[n]
-=\sum_{j=0}^{k}F_j^k(σ)f[n+j]
-=F^k(σ) \cdot f[n:n+k],
+f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
 ```
-
-where the ``k+1`` *weights*
-
-```math
-F_j^k(σ)= \sum_{p=j}^{k} (-1)^k α_p(σ) c_j^p
-=\sum_{p=j}^{k} (-1)^j \binom{p}{j}(σ)_p/p!
-```
-are the *lagrangian interpolation weights* corresponding to the point ``f[n-σ]``.
-
-Symmetry relation:
-
-```math
-\bar{F}^k(-k-σ) = F^k(σ)
-```
-
-Weight functions:
-
-[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
-`` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k]``,
-
-where the vector
-
-`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
-`` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``  contains the coefficients of the
-lagrangian-interpolation expansion.
 
 **Backward difference notation**
 
@@ -328,7 +308,7 @@ index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} l_p(σ) ∇^p f[n],
+f[n+σ] = (1 - ∇)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} l_p(σ) ∇^p f[n]⋯,
 ```
 where ``β_p(σ) = l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient* 
 for lagrangian interpolation, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  
@@ -340,42 +320,18 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
-Evaluating the finite-difference expansion up to order ``k`` we obtain
+At this point, the interpolation-expansion coefficient vector ``β(σ)`` can be calculated to order ``k``,
 
+`polynom = `[`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
+with ``β_p(σ) = l_p(σ)``.
+
+Once we have this vector the expansion weight can be calculated with
+[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
+
+and the result of the interpolation expansion is given by
 ```math
-f[n+σ] =\sum_{p=0}^{k}β_p(σ)∇^pf[n]
-= \sum_{j=0}^{k}B^k_j(σ)f[n-j]
-= \bar{B}^k(σ) ⋅ f[n-k:n],
+f[n+σ] = \bar{B}^k(σ) \cdot f[n:n+k].
 ```
-
-where the ``k+1`` *weights*
-
-```math
-B^k_j(σ)= \sum_{p=j}^{k} β_p(σ) c_j^p
-```
-
-are the corresponding *lagrangian interpolation weights*.  
-
-Symmetry relations:
-
-```math
-B^k(σ) = F^k(σ) = \bar{B}^k(-k-σ)
-```
-
-```math
-\bar{B}^k(σ) = B^k(-k-σ)
-```
-
-Weight function:
-
-[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
-`` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
-
-where the vector
-
-`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k=3, notation=bwd)`](@ref)
-`` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]`` contains the coefficients of the
-lagrangian-interpolation expansion.
 
 ```@docs
 fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
