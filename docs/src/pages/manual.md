@@ -110,7 +110,7 @@ Evaluated to order ``k``, the expansion is defined by ``k+1`` *finite-difference
 supplied by the user in the form of the expansion vector, ``α = [α_{0},⋯\ α_{k}]``. This vector contains the
 coefficients in the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion 
 as a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of
-*growing* grid position). Substituting the definition of the forward difference, ``Δ = f[n+1] - f[n]``, 
+*growing* grid position). Substituting the forward difference, ``Δ = f[n+1] - f[n]``, 
 the finite-difference expression takes the form
 
 ```math
@@ -214,8 +214,8 @@ differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, bwd)
   Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, bwd)`](@ref)
 
 ```@docs
-fdiff_expansion(polynom, f, notation=CamiMath.bwd)
-fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
+#fdiff_expansion(polynom, f, notation=CamiMath.bwd)
+#fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ```
 
 ## Lagrange interpolation

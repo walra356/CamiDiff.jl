@@ -116,7 +116,7 @@ of a (user-defined) finite-difference expansion.
 
 **Forward-difference notation** (`notation = fwd`)
 
-The weights vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponds in this case to the expansion coefficient 
+The weights vector ``F^k ≡ [F_k^k,⋯\ F_0^k]`` corresponds to the expansion coefficient 
 vector `` α ≡ [α_0,⋯\ α_k]`` of the ``k^{th}``-order *forward-difference* expansion (`polynom = α`).
 
 ```math
@@ -136,8 +136,8 @@ indicate that the weights must be evaluated in forward-difference notation.
 
 **Backward difference notation** (`notation = bwd`)
 
-The weights vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponds in this case to the expansion c
-oefficient vector ``β ≡ [β_0,⋯\ β_k]`` of the ``k^{th}``-order *backward-difference* expansion (`polynom = β`).
+The weights vector ``\bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]`` corresponds to the expansion coefficient 
+vector ``β ≡ [β_0,⋯\ β_k]`` of the ``k^{th}``-order *backward-difference* expansion (`polynom = β`).
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n]
@@ -637,7 +637,7 @@ function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
     b = 1 ./ b; b[1] = 0
 
     α == 0 && return b
-    β = fdiff_interpolation_expansion_polynom(α, bwd; k=5)
+    β = fdiff_interpolation_expansion_polynom(α, bwd; k)
 
     b,β = Base.promote(b,β)
 
