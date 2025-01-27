@@ -214,7 +214,7 @@ differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, bwd)
   Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, bwd)`](@ref)
 
 ```@docs
-fdiff_expansion(polynom, f, notation=CamiMath.bwd)
+#fdiff_expansion(polynom, f, notation=CamiMath.bwd)
 fdiff_expansion_weights(polynom, notation=CamiMath.bwd, ordering=CamiMath.rev)
 ```
 

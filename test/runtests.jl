@@ -173,9 +173,9 @@ rev = CamiMath.rev
     @test fdiff_expansion_weights([0, 1, 2, 3, 4, 5], bwd, rev) == [-5, 29, -69, 85, -55, 15]
     @test fdiff_expansion_weights([0, 1, 2, 3, 4, 5], bwd, reg) == [15, -55, 85, -69, 29, -5]
     @test fdiff_expansion_weights([0, 1, 2, 3, 4, 5]) == [-5, 29, -69, 85, -55, 15]
-    @test fdiff_expansion([1, -1, 1, -1], [1, 4, 9, 16], fwd) == 0
-    @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16], bwd) == 25
-    @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16]) == 25
+  #  @test fdiff_expansion([1, -1, 1, -1], [1, 4, 9, 16], fwd) == 0
+  #  @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16], bwd) == 25
+  #  @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16]) == 25
    #@test fdiff_differentiation_expansion_polynom(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
    #@test fdiff_differentiation_expansion_polynom(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
    #@test create_lagrange_differentiation_matrix(3) == [-11//6 3//1 -3//2 1//3; -1//3 -1//2 1//1 -1//6; 1//6 -1//1 1//2 1//3; -1//3 3//2 -3//1 11//6]

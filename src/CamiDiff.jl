@@ -46,7 +46,7 @@ export grid_integration
 
 export fdiff_weight
 export fdiff_expansion_weights
-export fdiff_expansion
+#export fdiff_expansion
 
 export fdiff_interpolation_expansion_polynom
 export fdiff_interpolation_expansion_weights
