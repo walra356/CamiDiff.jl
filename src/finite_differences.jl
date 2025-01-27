@@ -256,8 +256,9 @@ where the expansion coefficients are given by
 Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
 if `f[n:n+k]` are known. More generally, it can serve to *interpolate* to (real) positions 
 ``n ≤ x ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real) 
-positions ``x<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``).  NB. The forward offset 
-is given by ``σ ≡ n-x``.
+positions ``x<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``).  
+
+NB. The forward offset is defined by ``σ ≡ n-x``.
 
 **Backward difference notation** (`notation = bwd`)
 
@@ -275,12 +276,13 @@ where the expansion coefficients are given by
 Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
 if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real) positions 
 ``n-k ≤ x ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
-positions ``xv<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``). NB. The backward offset 
-is given by ``σ ≡ -(n-x)``.
+positions ``xv<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``). 
+
+NB. The backward offset is defined by ``σ ≡ -(n-x)``.
 
 #### Example:
 ```
-julia> σ = 1; # offset
+julia> σ = 1; # offset correponding to extrapolation
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]

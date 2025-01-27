@@ -335,7 +335,7 @@ and the interpolation/exterpolation to grid position `n+σ` evaluates to
 f[n+σ] = \bar{B}^k(σ) \cdot f[n:n+k].
 ```
 ##### Example 1:
-Here we demonstrate forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
+Demonstration of forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
 ```
 julia> n=5; v=4; k=5;
 
@@ -354,7 +354,7 @@ julia> Fk ⋅ f[n:n+k] == f[4] == 16
 true
 ```
 ##### Example 2:
-Here we demonstrate forward-difference *interpolation* to grid position 'v=6.25`
+Demonstration of forward-difference *interpolation* to grid position 'v=6.25`
 ```
 julia> n=5; v=6.25; k=5;
 
@@ -374,7 +374,7 @@ true
 ```
 ##### Example 3:
 
-Here we demonstrate backward-difference *interpolation* to grid position 'v=6.25`
+Demonstration of backward-difference *interpolation* to grid position 'v=6.25`
 ```
 julia> n=9; v=6.25; k=5;
 
