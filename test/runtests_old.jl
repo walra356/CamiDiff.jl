@@ -265,3 +265,82 @@ rev = CamiMath.rev
     @test create_adams_bashford_weights(5; rationalize=false) == [-0.3298611111111111, 1.9979166666666666, -5.0680555555555555, 6.9319444444444445, -5.502083333333333, 2.970138888888889]
     
 end
+
+
+@doc raw"""
+    fdiff_expansion(polynom, f, notation=bwd)
+
+Finite difference expansion evaluated to ``k^{th}`` order for the analytical 
+function ``f``, tabulated in *regular order* (growing index) at ``k+1`` positions 
+on a [`Grid`](@ref). The expansion coefficients are specified by the vector 
+`polynom`. By default the expansion is calculated in backward-difference notation (`bwd`). 
+
+**Forward difference notation** (`notation = fwd`)
+```math
+\sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^{k} \cdot f[n:n+k],
+```
+where ``f[n:n+k]`` are elements of the analytical function ``f`` (tabulated in 
+*forward* order) and `polynom` is the (user-supplied) expansion coefficient vector 
+``α ≡ [α_0,⋯\ α_k]``.
+
+**Backward difference notation** (`notation = bwd`)
+```math
+\sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k \cdot f[n-k:n].
+```
+where ``f[n-k:n]`` are elements of the
+analytical function ``f`` (tabulated in *forward* order) and `polynom` is the (user-supplied)
+expansion coefficient vector ``β ≡ [β_0,⋯\ β_k]``.
+
+NB. The vector `polynom` determines the order of the expansion, 
+``k+1 = \rm{length}(α) = \rm{length}(β)``. The weights vectors ``F^k`` and 
+``\bar{B}^k`` are *internally generated* by the function
+[`fdiff_expansion_weights(polynom, notation, ordering)`](@ref).
+
+#### Examples:
+Consider the function ``f(x)=x^2`` and the expansions,
+```math
+\begin{aligned}
+f[n-1]=(1+Δ)^{-1}&=(1-Δ+Δ^2-Δ^3+⋯)f[n]=F^{k} \cdot f[n:n+k],\\
+f[n]=(1+Δ)^{-1}&=(1-Δ+Δ^2-Δ^3+⋯)f[n+1]=F^{k} \cdot f[n+1:n+k+1],
+\end{aligned}
+```
+```math
+\begin{aligned}
+f[n+1]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n]=\bar{B}^k \cdot f[n-k:n],\\
+f[n]=(1-∇)^{-1}&=(1+∇+∇^2+∇^3+⋯)f[n-1]=\bar{B}^k \cdot f[n-k-1:n-1]
+\end{aligned}
+```
+Note that, in these examples, to fourth order in the expansion ``(k=4)``, 
+the forward- and backward-difference coefficient vectors `polynom` are 
+given by ``α=[1,-1,1,-1,1]`` and ``β=[1,1,1,1,1]``, respectively. 
+```
+julia> f = [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
+
+julia> α = [1,-1,1,-1,1];
+
+julia> β = [1,1,1,1,1];
+
+julia> fdiff_expansion(α,f[7:11],fwd)
+25
+
+julia> fdiff_expansion(β,f[1:5],fwd)
+25
+
+julia> f[6]
+25
+```
+In these cases the results are exact because the function is quadratic and
+the expansion is third order (based on the polynomial of ``k^{th}`` degree
+running through the ``k+1`` points of the tabulated function). Compare with 
+the example of [`fdiff_interpolation(f, v, k=3)`](@ref).
+"""
+function fdiff_expansion(polynom, f, notation=bwd)
+
+    ordering = CamiMath.isforward(notation) ? reg : rev
+    w = fdiff_expansion_weights(polynom, notation, ordering)
+
+    #return LinearAlgebra.dot(w, f)
+    return sum(w .* f)
+
+
+end
