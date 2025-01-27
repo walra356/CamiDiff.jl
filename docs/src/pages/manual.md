@@ -277,10 +277,11 @@ At this point, the interpolation-expansion coefficient vector ``α(σ)`` can be 
 `polynom = `[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
 with ``α_p(σ) = (-1)^p l_p(σ)``.
 
-Once we have this vector the expansion weight can be calculated with
-[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
+Using this vector the interpolation-expansion weights can be calculated with
 
-and the result of the interpolation expansion is given by
+`F^k(σ)` = [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
+
+and the interpolation expansion evaluates to
 ```math
 f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
 ```
@@ -325,10 +326,11 @@ At this point, the interpolation-expansion coefficient vector ``β(σ)`` can be 
 `polynom = `[`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
 with ``β_p(σ) = l_p(σ)``.
 
-Once we have this vector the expansion weight can be calculated with
-[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
+Using this vector the interpolation-expansion weights can be calculated with
 
-and the result of the interpolation expansion is given by
+``\bar{B}^k(σ)`` = [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
+
+and the interpolation expansion evaluates to
 ```math
 f[n+σ] = \bar{B}^k(σ) \cdot f[n:n+k].
 ```
