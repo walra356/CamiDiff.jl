@@ -49,8 +49,8 @@ export fdiff_expansion_weights
 #export fdiff_expansion
 
 export fdiff_interpolation_expansion_polynom
-export fdiff_interpolation_expansion_weights
-export fdiff_interpolation
+#export fdiff_interpolation_expansion_weights
+#export fdiff_interpolation
 
 export fdiff_differentiation_expansion_polynom
 export create_lagrange_differentiation_matrix
