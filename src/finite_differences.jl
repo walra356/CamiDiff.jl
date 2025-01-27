@@ -207,7 +207,7 @@ end
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    fdiff_expansion(polynom, f [, notation=bwd])
+    fdiff_expansion(polynom, f, notation=bwd)
 
 Finite difference expansion evaluated to ``k^{th}`` order for the analytical 
 function ``f``, tabulated in *regular order* (growing index) at ``k+1`` positions 
