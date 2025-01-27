@@ -334,25 +334,27 @@ and the interpolation/exterpolation to grid position `n+σ` evaluates to
 ```math
 f[n+σ] = \bar{B}^k(σ) \cdot f[n:n+k].
 ```
-#### Example 1 - forward-difference extrapolation to 'next point' (grid position 'v=n-1')
+##### Example 1:
+Here we demonstrate forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
 ```
-julia> n=5; v=4; 
+julia> n=5; v=4; k=5;
 
 julia> σ = n-v; # offset of 'next point'
 1
 
 julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [6, -15, 20, -15, 6, -1]
 
-julia> Fk ⋅ f[5:10] == f[4] == 16
+julia> Fk ⋅ f[n:n+k] == f[4] == 16
 true
 ```
-#### Example 2 - forward-difference interpolation to grid position 'v=6.25`
+##### Example 2:
+Here we demonstrate forward-difference *interpolation* to grid position 'v=6.25`
 ```
 julia> n=5; v=6.25; k=5;
 
@@ -370,7 +372,9 @@ Fk = [-0.0281982421875, 0.7049560546875, 0.469970703125, -0.201416015625, 0.0640
 julia> Fk ⋅ f[n:n+k] ≈ v^2
 true
 ```
-#### Example 3 - backward-difference interpolation to grid position 'v=6.25`
+##### Example 3:
+
+Here we demonstrate backward-difference *interpolation* to grid position 'v=6.25`
 ```
 julia> n=9; v=6.25; k=5;
 
