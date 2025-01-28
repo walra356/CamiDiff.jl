@@ -367,7 +367,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 and the *interpolated value* at grid position `n+σ` evaluates  (in backward-difference notation) to
 ```math
-f[n+σ] = \bar{B}^k(σ) \cdot f[n:n+k].
+f[n+σ] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
 ##### Example 1:
 Demonstration of forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
