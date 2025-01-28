@@ -382,10 +382,8 @@ Demonstration of forward-difference *extrapolation* to 'next point' (grid positi
 ```
 julia> n=5; v=4; k=5;
 
-julia> σ = n-v; # offset of 'next point'
+julia> σ = n-v # fwd offset to 'next point'
 1
-
-julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
 
 julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
@@ -393,7 +391,10 @@ julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [6, -15, 20, -15, 6, -1]
 
-julia> Fk ⋅ f[n:n+k] == f[4] == 16
+julia> f = [v^2 for v=1:10]; println("f = $f")
+f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+julia> Fk ⋅ f[n:n+k] == f[n-1] == v^2
 true
 ```
 ##### Example 2:
@@ -404,13 +405,14 @@ julia> n=5; v=6.25; k=5;
 julia> σ = n-v # fwd offset of interpolation position
 -1.25
 
-julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
-
 julia> fdiff_differentiation_expansion_polynom(k,σ)
 α = [1.0, 1.25, 0.15625, -0.0390625, 0.01708984375, -0.0093994140625]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [-0.0281982421875, 0.7049560546875, 0.469970703125, -0.201416015625, 0.0640869140625, -0.0093994140625]
+
+julia> f = [v^2 for v=1:10]; println("f = $f")
+f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
 julia> Fk ⋅ f[n:n+k] ≈ v^2
 true
@@ -424,13 +426,14 @@ julia> n=9; v=6.25; k=5;
 julia> σ = -(n-v) # bwd-offset of interpolation position
 -1.25
 
-julia> f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
-
 julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
 β = [1.0, -2.75, 2.40625, -0.6015625, -0.03759765625, -0.0093994140625]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [0.0093994140625, -0.0845947265625, 0.845947265625, 0.281982421875, -0.0604248046875, 0.0076904296875]
+
+julia> f = [v^2 for v=1:10]; println("f = $f")
+f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
 julia> revBk ⋅ f[n-k:n] ≈ v^2
 true
