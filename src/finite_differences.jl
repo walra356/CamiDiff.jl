@@ -258,7 +258,7 @@ if `f[n:n+k]` are known. More generally, it can serve to *interpolate* to (real)
 ``n ≤ x ≤ n+k`` (using ``-k ≤ σ ≤ 0``) and predict `f[n-σ]` by *extrapolation* to (real) 
 positions ``x<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``).  
 
-NB. The forward offset is defined by ``σ ≡ n-x``.
+NB. The forward offset is defined as ``σ ≡ n-x``.
 
 **Backward difference notation** (`notation = bwd`)
 
@@ -278,7 +278,7 @@ if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real)
 ``n-k ≤ x ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
 positions ``xv<n`` (using ``σ > 0``) or ``x>n+k`` (using ``σ < -k``). 
 
-NB. The backward offset is defined by ``σ ≡ -(n-x)``.
+NB. The backward offset is defined as ``σ ≡ -(n-x)``.
 
 #### Example:
 ```

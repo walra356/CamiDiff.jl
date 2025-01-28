@@ -94,7 +94,7 @@ fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 ## Finite differences
 
 Let ``f(x)`` be a continuously differentiable function of the variable ``x``. 
-The *forward difference* between ``f(x+h)`` and ``f(x)`` is defined by 
+The *forward difference* between ``f(x+h)`` and ``f(x)`` is defined as 
 
 ```math
 Δ f(x)=f(x+h)-f(x).
