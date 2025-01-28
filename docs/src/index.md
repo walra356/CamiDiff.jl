@@ -57,13 +57,14 @@ f[n] = f(x[n]),
 ```
 
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. This represents 
-the tabulated function that has to be provided by the user. 
+the tabulated function which is to be provided by the user. 
 
-NB. The discrete function ``f[n]`` is defined on the *uniform grid of the natural numbers*. This uniformity greatly 
-simplifies the numerical analysis. The stepsize ``h`` determines the *coarseness* of the grid. The results 
-of a finite-difference calculation on a coarse grid will be less accurate than those on a fine grid, but 
-the algorithm is identical, because the relevant finite-difference expansions only depend on ``h`` *implicitely*. 
-Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index convention implies ``f[1] = f(0)``.  
+NB. The discrete function ``f[n]`` is defined on the *grid of the natural numbers*, a uniform grid with unit stepsize. 
+This uniformity greatly simplifies the numerical analysis. The stepsize of the *ticks function*, ``h``, determines 
+the *coarseness* of the grid. The results of a finite-difference calculation on a coarse grid will be less accurate 
+than those on a fine grid, but the algorithm is identical, because the relevant finite-difference expansions only 
+depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
+convention implies ``f[1] = f(0)``.  
 
 ## Grid
 
