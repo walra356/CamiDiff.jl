@@ -271,17 +271,17 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
-In `CamiDiff`, the interpolation-expansion coefficient vector, ``α(σ)``, is calculated with
+In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
 
-`α(σ)=` [`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
+`polynom =` [`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
 where ``α_p(σ) = (-1)^pl_p(σ)``.
 
-Once we have the *coefficients* we can calculate the *weights* (the interpolation-expansion 
-weights vector) in reg-fwd-notation,
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *fwd weights* 
+(the *fwd-interpolation* expansion weights vector) in reg-fwd-notation,
 
-`F^k(σ) =` [`fdiff_expansion_weights(α(σ), fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
+``F^k(σ) =`` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
 
-and the interpolation/exterpolation to grid position `n-σ` evaluates to
+and the *fwd-interpolation* to grid position `n-σ` evaluates to
 ```math
 f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
 ```
@@ -321,15 +321,15 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
-In `CamiDiff`, the interpolation-expansion coefficient vector, ``β(σ)``, is calculated with
+In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated by
 
-`β(σ) =` [`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
+`polynom =` [`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
 where ``β_p(σ) = l_p(σ)``.
 
-Once we have the *coefficients* we can calculate the *weights* (the interpolation-expansion 
-weights vector) in rev-bwd-notation,
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *bwd weights*
+(the *bwd-interpolation* expansion weights vector) in rev-bwd-notation,
 
-`\bar{B}^k(σ) =` [`fdiff_expansion_weights(β(σ), bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
+``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
 and the interpolation/exterpolation to grid position `n+σ` evaluates to
 ```math
@@ -428,19 +428,18 @@ for *lagrangian differentiation* at position ``n-σ``. The coefficients ``α_p(�
 are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are coefficient vectors. 
+ 
+In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
 
-In `CamiDiff`, the differentiation-expansion coefficient vector, ``α(σ)``, is calculated 
-(to order ``k``) with 
-
-`α(σ) =` [`fdiff_differentiation_expansion_polynom(α(σ), fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, 
+`polynom =` [`fdiff_differentiation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, 
 with ``α_0(σ)≡ 0``.
 
-Once we have the *coefficients* we can calculate the *weights* (the *differentiation* 
-weights vector) in reg-fwd-notation,
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *fwd-weights* 
+(the *fwd-differentiation* weights vector) in reg-fwd-notation,
 
-`F^k(σ) = ` [`fdiff_expansion_weights(α(σ), fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``,
+`F^k(σ) = ` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``,
 
-and the *lagrangian derivative* at grid position `n-σ` evaluates to
+and the *forward-difference derivative* at grid position `n-σ` evaluates to
 
 ```math
 -\frac{df}{dσ}[n-σ]
@@ -522,18 +521,17 @@ After changing dummy index to reverse the summation the expansion becomes
 =\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
-In `CamiDiff`, the differentiation-expansion coefficient vector, ``β(σ)``, is calculated 
-(to order ``k``) with  
+In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
 
-`β(σ) =` [`fdiff_differentiation_expansion_polynom(k,σ)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_p(σ)]``, 
+`polynom =` [`fdiff_differentiation_expansion_polynom(σ, fwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``, 
 with ``β_0(σ)≡ 0``.
 
-Once we have the *coefficients* we can calculate the *weights* (the *differentiation* 
-weights vector) in reg-fwd-notation,
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *backward weights* 
+(the *backward-differentiation* weights vector) in rev-bwd-notation,
 
-`B^k(σ) =` [`fdiff_expansion_weights(β, bwd, reg)`](@ref) `` → B^k(σ) ≡ [B^k_0(σ),⋯\ B^k_k(σ)]``.
+``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
+and the *backward-difference derivative* at grid position `n+σ` evaluates to 
 
 ```math
 \frac{df}{dσ}[n+σ]=\bar{B}^k(σ) ⋅ f[n-k:n],
