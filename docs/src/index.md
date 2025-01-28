@@ -93,8 +93,8 @@ fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 
 ## Finite differences
 
-Having discretized the *analytic* function ``f(x)``, one defines finite differences. 
-The *forward difference* of ``f(x+h)`` and ``f(x)`` is defined by 
+Let ``f(x)`` be a continuously differentiable function of the variable ``x``. 
+The *forward difference* between ``f(x+h)`` and ``f(x)`` is defined by 
 
 ```math
 Δ f(x)=f(x+h)-f(x).
