@@ -135,17 +135,17 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
----
+===
 
-In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
+In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
-Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *fwd-weights* 
-(the *fwd-differentiation* weights vector) in reg-fwd-notation,
+Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *weights* 
+(the *fwd-difference* weights vector),
 
-`F^k(σ) = ` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
+``F^k = `` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
 
 and the result of the expansion is obtained by evaluating a single inner product  
 
