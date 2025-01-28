@@ -100,7 +100,7 @@ The *forward difference* between ``f(x+h)`` and ``f(x)`` is defined as
 Δ f(x)=f(x+h)-f(x).
 ```
 
-Here, ``Δ`` is called the *forward-difference operator*. Likewise one defines backward differences 
+Here, ``Δ`` is called the *forward-difference operator*. Likewise, one defines backward differences 
 with the *backward-difference operator* ``∇``, 
 
 ```math
@@ -117,6 +117,17 @@ where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differen
 
 ```math
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
+```
+In terms of *backward differences*, the derivative of ``f(x)`` is given by 
+
+```math
+f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x)-f(x-h)}{h}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇ f(x)}{∇ x},
+```
+
+where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
+
+```math
+D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇}{∇ x}=\underset{h→0}{\mathrm{lim}}\,\frac{∇}{h}.
 ```
 
 ## Translation operators 
