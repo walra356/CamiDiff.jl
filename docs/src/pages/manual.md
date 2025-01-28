@@ -264,22 +264,22 @@ with
 \end{cases}
 ```
 being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we find 
-``α_p ≡ α_p(1) ≡ (-1)^p``, which are the coefficients for the 
-'next-point' expansion. 
+``α_p ≡ α_p(1) ≡ (-1)^p``, which are the coefficients for the 'next-point' expansion. 
 
 For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
 ``n ≤ x ≤ n+k``. Outside this interval, in particular for ``σ > 0``, the method amounts to 
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
-At this point, the interpolation-expansion coefficient vector ``α(σ)`` can be calculated to order ``k``,
+In `CamiDiff`, the interpolation-expansion coefficient vector, ``α(σ)``, is calculated with
 
-`polynom = `[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
-with ``α_p(σ) = (-1)^p l_p(σ)``.
+[`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
+where ``α_p(σ) = (-1)^pl_p(σ)``.
 
-With `polynom`, the interpolation-expansion weights vector can be calculated with
+Once we have the *coefficients* we can calculate the *weights* (the interpolation-expansion 
+weights vector) in reg-fwd-notation,
 
-[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
+[`fdiff_expansion_weights(α(σ), fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
 
 and the interpolation/exterpolation to grid position `n-σ` evaluates to
 ```math
@@ -321,14 +321,15 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
-At this point, the interpolation-expansion coefficient vector ``β(σ)`` can be calculated to order ``k``,
+In `CamiDiff`, the interpolation-expansion coefficient vector, ``β(σ)``, is calculated with
 
-`polynom = `[`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
-with ``β_p(σ) = l_p(σ)``.
+[`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
+where ``β_p(σ) = l_p(σ)``.
 
-With `polynom`, the interpolation-expansion weights vector can be calculated with
+Once we have the *coefficients* we can calculate the *weights* (the interpolation-expansion 
+weights vector) in rev-bwd-notation,
 
-[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
+[`fdiff_expansion_weights(β(σ), bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
 and the interpolation/exterpolation to grid position `n+σ` evaluates to
 ```math
@@ -427,21 +428,25 @@ for *lagrangian differentiation* at position ``n-σ``. The coefficients ``α_p(�
 are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are coefficient vectors. 
-The resulting coefficients are contained in the following vector of order ``k``, 
 
-[`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, with ``α_0(σ)≡ 0``.
+In `CamiDiff`, the differentiation-expansion coefficient vector, ``α(σ)``, is calculated 
+(to order ``k``) with 
 
-Substituting the *finite-difference operators*, the *lagrangian derivative* takes the form  
+[`fdiff_differentiation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, 
+with ``α_0(σ)≡ 0``.
+
+Once we have the *coefficients* we can calculate the *weights* (the *differentiation* 
+weights vector) in reg-fwd-notation,
+
+[`fdiff_expansion_weights(α, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``,
+
+and the *lagrangian derivative* at grid position `n-σ` evaluates to
 
 ```math
 -\frac{df}{dσ}[n-σ]
 =\sum_{j=0}^{k}F_j^k(σ)f[n+j]
 = F^k(σ) ⋅ f[n:n+k],
 ```
-
-where the vector ``F_j^k(σ)`` contains the ``k^{th}``-order *lagrangian-differentiation weights*
-
-[`fdiff_expansion_weights(α, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``.
 
 ##### Example:
 First derivative of the tabulated function ``f[n:n+k]`` at the position ``v = 6.5`` (zero-offset)
