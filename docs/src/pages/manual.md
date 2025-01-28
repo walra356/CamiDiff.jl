@@ -138,14 +138,16 @@ where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 ---
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
-(the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
+(the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
 Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *fwd-weights* 
 (the *fwd-differentiation* weights vector) in reg-fwd-notation,
 
-`F^k(σ) = ` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``.and the expansion evaluates to
+`F^k(σ) = ` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
+
+and the result of the expansion is obtained by evaluating a single inner product  
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = \bar{B}^k \cdot f[n:n+k].
@@ -217,7 +219,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 ``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-and the expansion evaluates to
+and the result of the expansion is obtained by evaluating a single inner product
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n:n+k].
