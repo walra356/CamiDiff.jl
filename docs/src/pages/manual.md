@@ -135,7 +135,7 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
-===
+``\line``
 
 In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
@@ -150,7 +150,7 @@ Once we have the *coefficients* (in the form of the `polynom`), we can calculate
 and the result of the expansion is obtained by evaluating a single inner product  
 
 ```math
-\sum_{p=0}^{k}α_{p}Δ^{p}f[n] = \bar{B}^k \cdot f[n:n+k].
+\sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^k \cdot f[n:n+k].
 ```
 
 Examples:
@@ -207,7 +207,7 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
-===
+``\line``
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
