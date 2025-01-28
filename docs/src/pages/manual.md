@@ -135,7 +135,7 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
-**Implementation:**
+Implementation:
 
 In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
@@ -207,7 +207,7 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
-**Implementation:**
+Implementation:
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
@@ -222,7 +222,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 and the result of the expansion is obtained by evaluating a single inner product (in backward-difference notation),
 
 ```math
-\sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n:n+k].
+\sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
 
 Examples:
@@ -295,7 +295,7 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
-**Implementation:**
+Implementation:
 
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
 
@@ -347,7 +347,7 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
----
+Implementation:
 
 In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated by
 
