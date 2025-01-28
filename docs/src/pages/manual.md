@@ -233,8 +233,6 @@ and the result of the expansion is obtained by evaluating a single inner product
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
 
----
-
 Examples:
 
 The `polynom`s of 4 common expansions in *backward*-difference notation are:
@@ -378,9 +376,6 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 and the *interpolated value* at grid position `n+σ` evaluates  (in backward-difference notation) to
 ```math
 f[n+σ] = \bar{B}^k(σ) \cdot f[n-k:n].
-
----
-
 ```
 ##### Example 1:
 Demonstration of forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
@@ -498,8 +493,6 @@ and the *derivative* at grid position `n-σ` in forward-difference notation eval
 = F^k(σ) ⋅ f[n:n+k],
 ```
 
----
-
 ##### Example:
 First derivative of the tabulated function ``f[n:n+k]`` at the position ``v = 6.5`` (zero-offset)
 ```
@@ -595,8 +588,6 @@ and the *derivative* at grid position `n+σ` in backward-difference notation eva
 ```math
 \frac{df}{dσ}[n+σ]=\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
-
----
 
 ##### Example:
 First derivative of the tabulated function ``f[n-k:n]`` at the position ``v = n`` (zero-offset)
