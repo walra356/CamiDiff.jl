@@ -151,7 +151,7 @@ Once we have the *coefficients* (in the form of the `polynom`), we can calculate
 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
 
-and the result of the expansion is obtained by evaluating the following inner product (in forward-difference notation)  
+and the result of the expansion is obtained by evaluating the following inner product (in *fwd-difference* notation)  
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^k \cdot f[n:n+k].
@@ -227,7 +227,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 `weights =` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-and the result of the expansion is obtained by evaluating the following inner product (in backward-difference notation),
+and the result of the expansion is obtained by evaluating the following inner product (in *bwd-difference* notation),
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n-k:n].
@@ -282,7 +282,7 @@ index units) these expansions can be generalized to the form of
 ```math
 f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} (-1)^p l_p(σ) Δ^p f[n],
 ```
-where ``α_p(σ) = (-1)^p l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient*
+where ``α_p(σ) = (-1)^p\ l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient*
 for lagrangian interpolation. Here we define 
 
 ```math
@@ -310,7 +310,7 @@ Implementation:
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
 
 `polynom =` [`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
-where ``α_p(σ) = (-1)^pl_p(σ)``.
+where ``α_p(σ) = (-1)^p\ l_p(σ)``.
 
 Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights* 
 (the *fwd-interpolation* expansion weights vector) in reg-fwd-notation,
