@@ -137,6 +137,8 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
+---
+
 Implementation:
 
 In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
@@ -155,6 +157,8 @@ and the result of the expansion is obtained by evaluating a single inner product
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^k \cdot f[n:n+k].
 ```
 
+---
+
 Examples:
 
 The `polynom`s of 4 common expansions in *forward*-difference notation are:
@@ -166,8 +170,6 @@ differentiation: [`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref)
 Adams-Bashford: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
 
 Adams-Moulton: [`fdiff_adams_moulton_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
-
----
 
 **Backward difference notation**
 
@@ -211,6 +213,8 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
+---
+
 Implementation:
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
@@ -228,6 +232,8 @@ and the result of the expansion is obtained by evaluating a single inner product
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
+
+---
 
 Examples:
 
@@ -299,6 +305,8 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
+---
+
 Implementation:
 
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
@@ -353,6 +361,8 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
 
+---
+
 Implementation:
 
 In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated by
@@ -368,6 +378,9 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 and the *interpolated value* at grid position `n+σ` evaluates  (in backward-difference notation) to
 ```math
 f[n+σ] = \bar{B}^k(σ) \cdot f[n-k:n].
+
+---
+
 ```
 ##### Example 1:
 Demonstration of forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
@@ -463,6 +476,8 @@ are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are coefficient vectors. 
 
+---
+
 Implementation:
  
 In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
@@ -482,6 +497,8 @@ and the *derivative* at grid position `n-σ` in forward-difference notation eval
 =\sum_{j=0}^{k}F_j^k(σ)f[n+j]
 = F^k(σ) ⋅ f[n:n+k],
 ```
+
+---
 
 ##### Example:
 First derivative of the tabulated function ``f[n:n+k]`` at the position ``v = 6.5`` (zero-offset)
@@ -559,6 +576,8 @@ After changing dummy index to reverse the summation the expansion becomes
 =\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
+---
+
 Implementation:
 
 In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
@@ -576,6 +595,9 @@ and the *derivative* at grid position `n+σ` in backward-difference notation eva
 ```math
 \frac{df}{dσ}[n+σ]=\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
+
+---
+
 ##### Example:
 First derivative of the tabulated function ``f[n-k:n]`` at the position ``v = n`` (zero-offset)
 ```
