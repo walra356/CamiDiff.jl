@@ -106,7 +106,7 @@ with the *backward-difference operator* ``∇``,
 ```math
 ∇ f(x)=f(x)-f(x-h).
 ```
-
+**Forward difference notation**
 We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 
 ```math
@@ -118,16 +118,17 @@ where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differen
 ```math
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
+**Backward difference notation**
 In terms of *backward differences*, the derivative of ``f(x)`` is given by 
 
 ```math
-f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x)-f(x-h)}{h}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇ f(x)}{∇ x},
+f^′(x)=\underset{h→0}{\mathrm{lim}}\,\frac{f(x)-f(x-h)}{h}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇ f(x)}{Δ x},
 ```
 
 where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differential operator, ``f^′(x) ≡ Df(x)``, we have 
 
 ```math
-D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇}{∇ x}=\underset{h→0}{\mathrm{lim}}\,\frac{∇}{h}.
+D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{∇}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{∇}{h}.
 ```
 
 ## Translation operators 
