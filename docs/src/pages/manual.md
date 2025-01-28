@@ -135,23 +135,33 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
-Coefficients:
+---
 
-[`fdiff_expansion_weights(polynom, fwd, reg)`](@ref)
-``→ F^k ≡ [F_0^k,⋯\ F_k^k]``,
+In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
+(the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
 
-where `polynom` is the expansion vector ``α ≡ [α_0,⋯\ α_k]``, which has to be supplied by the user 
-to define the expansion under consideration.  
+`polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
-Some common cases are:
+Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *fwd-weights* 
+(the *fwd-differentiation* weights vector) in reg-fwd-notation,
 
-  interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, fwd)`](@ref)
+`F^k(σ) = ` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``.and the expansion evaluates to
 
-differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, fwd)`](@ref)
+```math
+\sum_{p=0}^{k}α_{p}Δ^{p}f[n] = \bar{B}^k \cdot f[n:n+k].
+```
 
- Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref)
+Examples:
 
-  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, fwd)`](@ref)
+The `polynom`s of 4 common expansions in *forward*-difference notation are:
+
+  interpolation expansion: [`fdiff_interpolation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
+
+differentiation expansion: [`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
+
+ Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
+
+  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
 
 **Backward difference notation**
 
@@ -195,23 +205,35 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
-Coefficients:
+---
 
-[`fdiff_expansion_weights(polynom, bwd, rev)`](@ref)
-`` → \bar{B}^{k} ≡ [B_k^k,⋯\ B_0^k]``,
+In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
+(the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
 
-where `polynom` is the expansion vector ``β ≡ [β_0,⋯\ β_k]``, which has to be supplied by the user 
-to define the expansion under consideration. 
+`polynom` `` → β ≡ [β_0,⋯\ β_k]``.
 
-Some common cases are:
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *bwd weights*
+(the *bwd-interpolation* expansion weights vector) in rev-bwd-notation,
 
-  interpolation expansion: [`fdiff_interpolation_expansion_polynom(ξ, k, bwd)`](@ref)
+``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-differentiation expansion: [`fdiff_differentiation_expansion_polynom(ξ, k, bwd)`](@ref)
+and the expansion evaluates to
 
- Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, bwd)`](@ref)
+```math
+\sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n:n+k].
+```
 
-  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, bwd)`](@ref)
+Examples:
+
+The `polynom`s of 4 common expansions in *backward*-difference notation are:
+
+  interpolation expansion: [`fdiff_interpolation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
+
+differentiation expansion: [`fdiff_differentiation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
+
+ Adams-Bashford expansion: [`fdiff_adams_bashford_expansion_polynom(k, bwd)`](@ref) `` → β(σ) ≡ [β_0,⋯\ β_k]``
+
+  Adams-Moulton expansion: [`fdiff_adams_moulton_expansion_polynom(k, bwd)`](@ref)`` → β(σ) ≡ [β_0,⋯\ β_k]``
 
 ```@docs
 # fdiff_expansion(polynom, f, notation=bwd)
