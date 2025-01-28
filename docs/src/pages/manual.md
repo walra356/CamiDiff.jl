@@ -48,6 +48,8 @@ In inner product form the result becomes
 
 where ``\bar{c}^k  ≡ [c_k^k,⋯\ c_0^k]``.
 
+---
+
 **Backward difference notation**
 
 The *backward translation* from position ``n`` to position ``n-1`` on 
@@ -164,6 +166,8 @@ differentiation: [`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref)
 Adams-Bashford: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
 
 Adams-Moulton: [`fdiff_adams_moulton_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
+
+---
 
 **Backward difference notation**
 
@@ -312,6 +316,8 @@ and the *interpolated value* at grid position `n-σ` evaluates (in forward-diffe
 f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
 ```
 
+---
+
 **Backward difference notation**
 
 Starting from the relation
@@ -457,7 +463,7 @@ are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are coefficient vectors. 
 
-**Implementation:**
+Implementation:
  
 In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
 
@@ -503,6 +509,8 @@ f = [1, 8, 27, 64, 125, 216, 343, 512, 729, 1000]
 julia> Fk ⋅ f[n:n+k] ≈ 3v^2
 true
 ```
+
+---
 
 **backward difference notation** (`notation = bwd`)
 
@@ -551,7 +559,7 @@ After changing dummy index to reverse the summation the expansion becomes
 =\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
-**Implementation:**
+Implementation:
 
 In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
 
