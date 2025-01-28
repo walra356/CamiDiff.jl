@@ -143,7 +143,7 @@ In `CamiDiff`, a general finite-difference expansion is defined by its (user-sup
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
 Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *weights* 
-(the *fwd-difference* weights vector),
+(the *fwd-difference* weights vector) in reg-fwd-notation,
 
 ``F^k = `` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
 
@@ -207,15 +207,15 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
----
+===
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
 
 `polynom` `` → β ≡ [β_0,⋯\ β_k]``.
 
-Once we have the *coefficients* (in the form of `polynom`) we can calculate the *bwd weights*
-(the *bwd-interpolation* expansion weights vector) in rev-bwd-notation,
+Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights*
+(the *bwd-difference* weights vector) in rev-bwd-notation,
 
 ``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
