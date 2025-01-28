@@ -2,8 +2,8 @@
 
 ## Finite differences
 
-Let ``f[n]`` be the 'function of interest' tabulated in *forward order*  
-(growing index) on the *grid of natural numbers* (unit step size).
+Let ``f[n]`` be the 'function of interest', tabulated in *forward order*  
+(growing index) on the *grid of natural numbers*.
 
 **Forward difference notation**
 
@@ -141,7 +141,7 @@ where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
 Implementation:
 
-In `CamiDiff`, any finite-difference expansion is defined by its (user-supplied) `polynom` 
+In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
@@ -161,7 +161,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of 4 common expansions in *forward*-difference notation are:
+The `polynom`s of four common expansions in *forward*-difference notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
 
@@ -217,7 +217,7 @@ which is not unique (it depends on the expansion under consideration).
 
 Implementation:
 
-In `CamiDiff`, any finite-difference expansion is defined by the (user-supplied) `polynom` 
+In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
 
 `polynom` `` → β ≡ [β_0,⋯\ β_k]``.
@@ -235,7 +235,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of 4 common expansions in *backward*-difference notation are:
+The `polynom`s of four common expansions in *backward*-difference notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
 
