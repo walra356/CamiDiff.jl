@@ -275,12 +275,12 @@ f[n-2] = (1 + Δ)^{-2} f[n] ≡ \sum_{p=0}^{\infty}(-1)^p pΔ^p f[n],
 \vdots
 ```
 where ``p`` is called the order of the expansion and ``n`` is the index of the reference
-position. For interpolation position ``n-σ`` (where ``σ`` may be *real* valued in
+position. For interpolation position ``v=n-σ`` (where ``σ`` may be *real* valued in
 index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
 ```math
-f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} (-1)^p l_p(σ) Δ^p f[n],
+f[n-σ] = (1 + Δ)^{-σ} f[n] ≡ \sum_{p=0}^{\infty} (-1)^p\ l_p(σ) Δ^p f[n],
 ```
 where ``α_p(σ) = (-1)^p\ l_p(σ)`` is the ``p^{th}``-order *finite-difference expansion coefficient*
 for lagrangian interpolation. Here we define 
@@ -309,7 +309,7 @@ NB. The forward offset is defined as ``σ ≡ n-v``.
 
 Implementation:
 
-In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
+In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated with
 
 `polynom =` [`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
 where ``α_p(σ) = (-1)^p\ l_p(σ)``.
@@ -320,6 +320,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
 
 and the *interpolated value* at grid position `n-σ` evaluates (in forward-difference notation) to
+
 ```math
 f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
 ```
@@ -344,7 +345,7 @@ f[n+2] = (1 - ∇)^{-2} f[n] ≡ \sum_{p=0}^{\infty}p∇^p f[n],
 ```
 
 where ``k`` is called the order of the expansion and ``n`` is the reference
-index. For interpolation position ``n-σ`` (where σ may be *real* valued in
+index. For interpolation position ``v=σ-n`` (where σ may be *real* valued in
 index units) these expansions can be generalized to the form of
 *lagrangian interpolation*,
 
@@ -367,7 +368,7 @@ NB. The backward offset is defined as ``σ ≡ -(n-v)``.
 
 Implementation:
 
-In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated by
+In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated with
 
 `polynom =` [`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
 where ``β_p(σ) = l_p(σ)``.

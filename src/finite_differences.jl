@@ -278,7 +278,7 @@ if `f[n-k:n]` are known. More generally, it can serve to *interpolate* to (real)
 ``n-k ≤ v ≤ n`` (using ``-k ≤ σ ≤ 0``) and predict `f[n+σ]` by *extrapolation* to (real) 
 positions ``xv<n`` (using ``σ > 0``) or ``v>n+k`` (using ``σ < -k``). 
 
-NB. The backward offset is defined as ``σ ≡ -(n-x)``.
+NB. The backward offset is defined as ``σ ≡ -(n-v)``.
 
 #### Example:
 ```
