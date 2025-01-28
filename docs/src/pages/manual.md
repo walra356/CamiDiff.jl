@@ -135,7 +135,7 @@ with ``j=0,⋯\ k``. In inner product form, the expansion becomes
 
 where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
----
+**Implementation:**
 
 In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
@@ -207,7 +207,7 @@ in reversed order.
 The relation between ``B^k`` and ``F^k`` depends on the relation between the expansion polynoms ``α`` and ``β``,
 which is not unique (it depends on the expansion under consideration).
 
----
+**Implementation:**
 
 In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
@@ -295,7 +295,7 @@ For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
 position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
 
----
+**Implementation:**
 
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated by
 
@@ -457,7 +457,7 @@ are obtained by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are coefficient vectors. 
 
----
+**Implementation:**
  
 In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
 
@@ -551,7 +551,7 @@ After changing dummy index to reverse the summation the expansion becomes
 =\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
----
+**Implementation:**
 
 In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
 
