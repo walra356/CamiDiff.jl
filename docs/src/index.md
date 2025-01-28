@@ -107,6 +107,7 @@ with the *backward-difference operator* ``∇``,
 ∇ f(x)=f(x)-f(x-h).
 ```
 **Forward difference notation**
+
 We first focus on *forward differences*. The derivative of ``f(x)`` is given by 
 
 ```math
@@ -119,6 +120,7 @@ where ``h ≡ Δx ≥ 0`` is the *difference interval*. Introducing the differen
 D≡\frac{d}{dx}=\underset{Δ x→0}{\mathrm{lim}}\,\frac{Δ}{Δ x}=\underset{h→0}{\mathrm{lim}}\,\frac{Δ}{h}.
 ```
 **Backward difference notation**
+
 In terms of *backward differences*, the derivative of ``f(x)`` is given by 
 
 ```math
@@ -147,7 +149,7 @@ Comparing the operator expression for the *forward* translation with the Taylor 
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1}.
 ```
-With this procedure, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``Δ`` ,
+Since ``Δ`` depends implicitely on ``h``, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``Δ`` ,
 ```math
 f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
@@ -155,7 +157,7 @@ By choosing the proper expansion order, ``f(x-h)`` can be approximated to any de
 
 **Backward difference notation**
 
-Likewise, for *backward differences*, we rewrite the backward-difference definition in the form 
+For *backward differences*, we rewrite the backward-difference definition in the form 
 ```math
 f(x-h)=(1-∇)f(x),
 ```
@@ -163,7 +165,7 @@ where ``B≡(1-∇)`` is the *backward translation operator*. Comparing this *ba
 ```math
 B≡(1-∇)=e^{-hD}=T^{-1}\,\,\,⇒\,\,\,T=e^{hD}=(1+∇)^{-1}.
 ```
-Note how the *backward* translation operator was identified with the inverse *forward* translation operator, ``B=T^{-1}``. When using backward differences, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``∇``, 
+Note how the *backward* translation operator was identified with the inverse *forward* translation operator, ``B=T^{-1}``. As with forward differences, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``∇``, 
 ```math
 f(x+h)=(1-∇)^{-1}f(x)=(1+∇+∇^{2}+∇^3+⋯)f(x).
 ```
