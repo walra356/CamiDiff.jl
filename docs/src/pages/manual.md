@@ -2,8 +2,8 @@
 
 ## Finite differences
 
-Consider the analytical function ``f`` tabulated in *forward order*  
-(growing index) at ``n`` positions on a *uniform grid*.
+Let ``f[n]`` be the 'function of interest' tabulated in *forward order*  
+(growing index) on the *grid of natural numbers* (unit step size).
 
 **Forward difference notation**
 
@@ -112,8 +112,8 @@ Evaluated to order ``k``, the expansion is defined by ``k+1`` *finite-difference
 supplied by the user in the form of the expansion vector, ``α = [α_{0},⋯\ α_{k}]``. This vector contains the
 coefficients in the *regular* ordering of *growing index*. It takes some bookkeeping to rewrite the expansion 
 as a *weighted sum* over the ``k+1`` *function values* ``f[n:n+k]`` (note the *regular* ordering of
-*growing* grid position). Substituting the forward difference, ``Δ = f[n+1] - f[n]``, 
-the finite-difference expression takes the form
+*growing* grid position). After substituting the forward difference, ``Δ = f[n+1] - f[n]``, 
+the finite-difference expansion takes the form
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n]
@@ -141,7 +141,7 @@ where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
 Implementation:
 
-In `CamiDiff`, a general finite-difference expansion is defined by its (user-supplied) `polynom` 
+In `CamiDiff`, any finite-difference expansion is defined by its (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
@@ -151,7 +151,7 @@ Once we have the *coefficients* (in the form of the `polynom`), we can calculate
 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
 
-and the result of the expansion is obtained by evaluating a single inner product (in forward-difference notation)  
+and the result of the expansion is obtained by evaluating the following inner product (in forward-difference notation)  
 
 ```math
 \sum_{p=0}^{k}α_{p}Δ^{p}f[n] = F^k \cdot f[n:n+k].
@@ -217,7 +217,7 @@ which is not unique (it depends on the expansion under consideration).
 
 Implementation:
 
-In `CamiDiff`, a general finite-difference expansion is defined by the (user-supplied) `polynom` 
+In `CamiDiff`, any finite-difference expansion is defined by the (user-supplied) `polynom` 
 (the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
 
 `polynom` `` → β ≡ [β_0,⋯\ β_k]``.
@@ -227,7 +227,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 `weights =` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-and the result of the expansion is obtained by evaluating a single inner product (in backward-difference notation),
+and the result of the expansion is obtained by evaluating the following inner product (in backward-difference notation),
 
 ```math
 \sum_{p=0}^{k}β_{p}∇^{p}f[n] = \bar{B}^k(σ) \cdot f[n-k:n].
