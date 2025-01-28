@@ -299,9 +299,11 @@ being the Pochhammer symbol `CamiMath.pochhammer`. Note that for ``σ = 1`` we f
 ``α_p ≡ α_p(1) ≡ (-1)^p``, which are the coefficients for the 'next-point' expansion. 
 
 For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
-``n ≤ x ≤ n+k``. Outside this interval, in particular for ``σ > 0``, the method amounts to 
+``n ≤ v ≤ n+k``. Outside this interval, in particular for ``σ > 0``, the method amounts to 
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
-position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x > n+k`` is not recommended. 
+position interval ``n-1 ≤ v ≤ n+1``). Extrapolation to values ``v > n+k`` is not recommended. 
+
+NB. The forward offset is defined as ``σ ≡ n-v``.
 
 ---
 
@@ -355,9 +357,11 @@ Note that for ``σ = 1`` we find ``β_p ≡ β_p(1) ≡ 1``, which are the coeff
 'next-point' expansion. 
 
 For ``-k ≤ σ ≤ 0`` the method can be used for *interpolation* over the grid position interval 
-``n-k ≤ x ≤ n``, outside this interval, in particular for ``σ > 0``, the method amounts to 
+``n-k ≤ v ≤ n``, outside this interval, in particular for ``σ > 0``, the method amounts to 
 *extrapolation*. The method is most accurate for ``-1 ≤ σ ≤ 1`` (corresponding to the grid 
-position interval ``n-1 ≤ x ≤ n+1``). Extrapolation to values ``x < n-k`` is not recommended. 
+position interval ``n-1 ≤ v ≤ n+1``). Extrapolation to values ``v < n-k`` is not recommended. 
+
+NB. The backward offset is defined as ``σ ≡ -(n-v)``.
 
 ---
 
@@ -378,6 +382,7 @@ and the *interpolated value* at grid position `n+σ` evaluates  (in backward-dif
 f[n+σ] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
 ##### Example 1:
+
 Demonstration of forward-difference *extrapolation* to 'next point' (grid position 'v=n-1')
 ```
 julia> n=5; v=4; k=5;
@@ -398,26 +403,6 @@ julia> Fk ⋅ f[n:n+k] == f[n-1] == v^2
 true
 ```
 ##### Example 2:
-Demonstration of forward-difference *interpolation* to grid position 'v=6.25`
-```
-julia> n=5; v=6.25; k=5;
-
-julia> σ = n-v # fwd offset of interpolation position
--1.25
-
-julia> fdiff_differentiation_expansion_polynom(k,σ)
-α = [1.0, 1.25, 0.15625, -0.0390625, 0.01708984375, -0.0093994140625]
-
-julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
-Fk = [-0.0281982421875, 0.7049560546875, 0.469970703125, -0.201416015625, 0.0640869140625, -0.0093994140625]
-
-julia> f = [v^2 for v=1:10]; println("f = $f")
-f = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
-
-julia> Fk ⋅ f[n:n+k] ≈ v^2
-true
-```
-##### Example 3:
 
 Demonstration of backward-difference *interpolation* to grid position 'v=6.25`
 ```
