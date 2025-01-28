@@ -68,11 +68,12 @@ convention implies ``f[1] = f(0)``.
 
 ## Grid
 
-The [`Grid`](@ref) object is the backbone for numerical procedures. Its principal fields are `grid.r`, `grid.r′` 
-and `grid.r′′`. These are discrete functions of `N` elements representing the grid function and its first two derivatives. 
-The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function ``r[n]`` represents the transformation by the gridfunction. 
+The [`Grid`](@ref) object is the backbone for numerical procedures on the real domain ``[0, ∞)``. Its principal fields 
+are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N` elements representing the grid function 
+and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function ``r[n]`` 
+represents the transformation by the [`gridfunction`](@ref). 
 
-Once the [`Grid`](@ref) is specified, three basic operations are at our disposal - see [Manual](@ref)
+Once the [`Grid`](@ref) is specified, three [`Grid`](@ref) operations are at our disposal - see [Manual](@ref)
 
 [`grid_interpolation(f, rval, grid)`](@ref)
 
