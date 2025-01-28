@@ -20,7 +20,7 @@ julia> using CamiDiff
 
 # Introduction
 
-`CamiDiff` has been developped to study *continuously differentiable* functions, provided by the user 
+`CamiDiff` has been developped to study *continuously differentiable functions*, provided by the user 
 in *tabulated form*. The package is based on the methods of finite-difference analysis in one dimension. 
 
 Throughout the documentation ``f(x)`` will be our 'function of interest' that will be analyzed. 
@@ -31,7 +31,7 @@ can be linear (uniform) or non-linear as specified by a [`gridfunction`](@ref) -
 The current implementation of `CamiDiff` was developped for *real functions of a single variable*. 
 A set of four predefined [`gridfunction`](@ref)`s` is included in the package: 'exponential', 
 'quasi-exponential', 'linear' and 'polynomial'. These are restricted to the domain ``[0, ∞)``. 
-To underline the restriction to the non-negative domain, we shall use the variable ``r`` 
+To underline this restriction to the non-negative domain, we shall use the variable ``r`` 
 rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
 ## Discretization
@@ -59,11 +59,11 @@ f[n] = f(x[n]),
 we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. This represents 
 the tabulated function to be provided by the user. 
 
-NB. The discrete function ``f[n]`` is defined on the *grid of the natural numbers*, a uniform grid with unit stepsize. 
+NB. The discrete function ``f[n]`` is defined on the *grid of natural numbers*, a uniform grid with unit step size. 
 This uniformity greatly simplifies the numerical analysis. The stepsize of the *ticks function*, ``h``, determines 
 the *coarseness* of the grid. The results of a finite-difference calculation on a coarse grid will be less accurate 
 than those on a fine grid, but the algorithm is identical, because the relevant finite-difference expansions only 
-depend on ``h`` *implicitely*. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
+depend on ``h``, *implicitely*. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
 convention implies ``f[1] = f(0)``.  
 
 ## Grid
