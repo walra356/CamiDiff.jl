@@ -20,7 +20,7 @@ julia> using CamiDiff
 
 # Introduction
 
-`CamiDiff` has been developped to analyze mathematical functions, provided by the user 
+`CamiDiff` has been developed to analyze mathematical functions, provided by the user 
 *in tabulated form*. The package is based on finite-difference analysis methods in one dimension. 
 
 Throughout the documentation ``f(x)`` will be the 'function of interest' to be analyzed. In tabulated 
@@ -28,7 +28,7 @@ form we write ``f[n]``. This form can be regarded as the result of the discretiz
 on a [`Grid`](@ref) of ``N`` points, addressable by the *grid index* ``n = 1, ⋯ N``. The [`Grid`](@ref) 
 can be linear (uniform) or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
-The current implementation of `CamiDiff` was developped for *real functions of a single variable*. 
+The current implementation of `CamiDiff` was developed for *real functions of a single variable*. 
 A set of four predefined [`gridfunction`](@ref)`s` is included in the package: 'exponential', 
 'quasi-exponential', 'linear' and 'polynomial'. These are restricted to the domain ``[0, ∞)``. 
 When applicable, we shall underline this restriction to the non-negative domain by using the variable ``r`` 
@@ -63,7 +63,7 @@ NB. The discrete function ``f[n]`` is defined on the *grid of natural numbers*, 
 This uniformity greatly simplifies the numerical analysis. The stepsize of the *ticks function*, ``h``, determines 
 the *coarseness* of the grid. The results of a finite-difference calculation on a coarse grid will be less accurate 
 than those on a fine grid, but the algorithm is identical, because the relevant finite-difference expansions only 
-depend *implicitely* on ``h``. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
+depend *implicitly* on ``h``. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
 convention implies ``f[1] = f(0)``.  
 
 ## Grid
@@ -149,7 +149,7 @@ Comparing the operator expression for the *forward* translation with the Taylor 
 ```math
 T≡(1+Δ)=e^{hD}\,\,\,⇒\,\,\,T^{-1}=e^{-hD}=(1+Δ)^{-1}.
 ```
-Since ``Δ`` depends implicitely on ``h``, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``Δ`` ,
+Since ``Δ`` depends implicitly on ``h``, the explicit dependence on ``h`` can be replaced by an implicit dependence on ``h`` through an expansion in powers of ``Δ`` ,
 ```math
 f(x-h)=(1+Δ)^{-1}f(x)=(1-Δ+Δ^{2}-Δ^3+⋯)f(x).
 ```
