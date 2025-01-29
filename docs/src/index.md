@@ -24,8 +24,8 @@ julia> using CamiDiff
 *in tabulated form*. The package is based on the methods of finite-difference analysis in one dimension. 
 
 Throughout the documentation ``f(x)`` will be the 'function of interest' to be analyzed. 
-In tabulated form, ``f[n]`` can be regarded as the result of the discretization of ``f(x)``, onto a 
-[`Grid`](@ref) of ``N`` points, addressable by the *gridindex* ``n = 1, ⋯ N``. The [`Grid`](@ref) 
+The tabulated form, ``f[n]``, can be regarded as the result of the discretization of ``f(x)`` 
+on a [`Grid`](@ref) of ``N`` points, addressable by the *grid index* ``n = 1, ⋯ N``. The [`Grid`](@ref) 
 can be linear (uniform) or non-linear as specified by a [`gridfunction`](@ref) - see [Discretization](@ref).
 
 The current implementation of `CamiDiff` was developped for *real functions of a single variable*. 
