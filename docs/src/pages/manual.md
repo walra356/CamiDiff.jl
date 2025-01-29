@@ -458,7 +458,7 @@ Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain to ord
 where ``α_p(σ)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n-σ``. 
 
-In the general case (``σ ≠ 0``), the coefficients ``α_p(σ)`` are obtained numerically 
+In the general case ``(σ ≠ 0)``, the coefficients ``α_p(σ)`` are obtained numerically 
 by polynomial multiplication using the function
 [`CamiMath.polynom_product(p_a, p_b_)`](@extref CamiMath.polynom_product), where
 
@@ -553,7 +553,7 @@ Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain to or
 where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+σ``. 
 
-In the general case (``σ ≠ 0``), the coefficients ``β_p(σ)`` 
+In the general case ``(σ ≠ 0)``, the coefficients ``β_p(σ)`` 
 are obtained numerically by polynomial multiplication using the function
 [`CamiMath.polynom_product(p_a, p_b)`](@extref CamiMath.polynom_product), where 
 
