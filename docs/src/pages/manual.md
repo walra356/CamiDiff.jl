@@ -464,7 +464,7 @@ by polynomial multiplication using the function
 
 ```math
 \begin{aligned}
-p_1 &= [0, -1, 1//2, ⋯ (-1)^k\ 1//k]
+p_1 &= [0, -1, 1/2, ⋯ (-1)^k\ 1/k] \\
 p_2 &= [l_0(σ), -l_1(σ), ⋯ (-1)^k l_k(σ)].
 \end{aligned}
 ```
