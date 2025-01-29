@@ -20,7 +20,7 @@ julia> using CamiDiff
 
 # Introduction
 
-`CamiDiff` has been developped to analyze tabulated functions provided by the user. 
+`CamiDiff` has been developped to analyze tabulated functions, provided by the user. 
 The package is based on the methods of finite-difference analysis in one dimension. 
 
 Throughout the documentation ``f(x)`` will be our 'function of interest' that will be analyzed. 
