@@ -614,7 +614,7 @@ true
 ```
 
 ```@docs
-fdiff_differentiation_expansion_polynom(σ, k=5, notation=bwd) where T<:Real
+fdiff_differentiation_expansion_polynom(σ::T, k=5, notation=bwd) where T<:Real
 create_lagrange_differentiation_matrix(k::Int)
 ```
 
