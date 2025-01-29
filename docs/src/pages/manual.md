@@ -536,7 +536,7 @@ Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 
 where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
 for *lagrangian differentiation* at position ``n+σ``. The coefficients ``β_p(σ)`` 
-are obtained by polynomial multiplication using the function
+are obtained numerically by polynomial multiplication using the function
 [`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
 where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
 
