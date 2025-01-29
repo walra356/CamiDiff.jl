@@ -307,7 +307,7 @@ end
 
 
 # ------------------------------------------------------------------------------
-#                fdiff_differentiation_expansion_polynom(ξ, k)
+#                fdiff_differentiation_expansion_polynom(σ, k)
 # ------------------------------------------------------------------------------
 
 function fwd_differentiation_expansion_polynom(σ::T; k=5) where T<:Real
@@ -340,7 +340,7 @@ function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
 # ==============================================================================
 #   Backward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n-k,n] and
-#   evaluated at the interpolation position n+ξ.
+#   evaluated at the interpolation position n+σ.
 # ==============================================================================
     Float = (Float64, Float32, Float16, BigFloat) #######################################################################################
 
@@ -367,32 +367,32 @@ end
 
 Finite-difference expansion coefficient vector defining ``k^{th}``-order
 *lagrangian differentiation* of the tabulated analytic function ``f[n]``
-at offset ``ξ`` (with respect to index position ``n``), which is positive
-for increasing index and negative for decreasing index.
+at position  ``v=n-σ``.
 
 **Forward difference notation** (`notation = fwd`)
 
 ```math
-\frac{df}{dξ}[n+ξ]=\sum_{p=0}^kα_p(ξ)Δ^{p}f[n]
+\frac{df}{dσ}[n+σ]=\sum_{p=0}^kα_p(σ)Δ^{p}f[n]
 ```
 
-Offset convention: ``ξ = -σ`` with respect to index ``n`` in tabulated
+Offset convention: ``σ = n-v`` with respect to index ``n`` in tabulated
 interval ``f[n:n+k]``
 
 **Backward difference notation** (`notation = bwd`)
 
 ```math
-\frac{df}{dξ}[n+ξ]=\sum_{p=0}^kβ_p(ξ)∇^{p}f[n]
+\frac{df}{dσ}[n+σ]=\sum_{p=0}^kβ_p(σ)∇^{p}f[n]
 ```
-where ``β(ξ) ≡ [β_0(ξ),\ ⋯,\ β_p(ξ)]``
+where ``β(σ) ≡ [β_0(σ),\ ⋯,\ β_p(σ)]``
 
-Offset convention: ``ξ = σ`` with respect to index ``n`` in tabulated
+Offset convention: ``σ = -(n-v)`` with respect to index ``n`` in tabulated
 interval ``f[n-k:n]``
 #### Example:
 ```
-k = 2; ξ = 0
-o = fdiff_differentiation_expansion_polynom(ξ, k); println(o)
- [0.0, 1.0, -1.5]
+julia> σ = 0; # offset correponding to differentiation
+
+julia> o = fdiff_differentiation_expansion_polynom(0, fwd; k=5); println(o)
+Rational{Int64}[0, 1, -1//2, 1//3, -1//4, 1//5]
 ```
 """
 function fdiff_differentiation_expansion_polynom(σ::T, notation=bwd; k=5) where T<:Real
