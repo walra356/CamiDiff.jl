@@ -211,7 +211,7 @@ end
 #           fdiff_interpolation_expansion_polynom(k, x, notation=bwd)
 # ------------------------------------------------------------------------------
 
-function fwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
+function fwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
 
     o = Base.ones(T,k+1)
     σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -221,7 +221,7 @@ function fwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
 
 end
 #...............................................................................
-function bwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
+function bwd_interpolation_expansion_polynom(σ::T, k::Int) where T<:Real
 
     o = Base.ones(T,k+1)
     σ == 0 ? (for p=2:k+1; o[p] = 0 end) :
@@ -232,7 +232,7 @@ function bwd_interpolation_expansion_polynom(σ::T; k=3) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_interpolation_expansion_polynom(σ::T [, notation=bwd [; k=3]]) where T<:Real
+    fdiff_interpolation_expansion_polynom(σ::T [, k=3 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining the ``k^{th}``-order
 (default *third* order) Lagrange-polynomial interpolation of a tabulated
@@ -250,7 +250,7 @@ f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, fwd; k=3)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n-1]` by *extrapolation* (using ``σ=1``) 
@@ -270,7 +270,7 @@ f[n+σ] = \sum_{p=0}^k β_p(σ) ∇^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, bwd; k=3)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref)
 `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``. 
 
 Application: This polynom can serve to predict `f[n+1]` by *extrapolation* (using ``σ=1``) 
@@ -284,33 +284,33 @@ NB. The backward offset is defined as ``σ ≡ -(n-v)``.
 ```
 julia> σ = 1; # offset correponding to extrapolation
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k=5); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
 Fk = [6, -15, 20, -15, 6, -1]
 
-julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k=5); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
 β = [1, 1, 1, 1, 1, 1]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [-1, 6, -15, 20, -15, 6]
 ```
 """
-function fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
+function fdiff_interpolation_expansion_polynom(σ::T, k=3, notation=bwd) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ; k) :
-                                       bwd_interpolation_expansion_polynom(σ; k)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_polynom(σ, k) :
+                                       bwd_interpolation_expansion_polynom(σ, k)
     return o
 
 end
 
 
 # ------------------------------------------------------------------------------
-#                fdiff_differentiation_expansion_polynom(σ, k)
+#                fdiff_differentiation_expansion_polynom(σ, k, fwd)
 # ------------------------------------------------------------------------------
 
-function fwd_differentiation_expansion_polynom(σ::T; k=5) where T<:Real
+function fwd_differentiation_expansion_polynom(σ::T, k::Int) where T<:Real
 # ==============================================================================
 #   Forward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n,n+k] and
@@ -328,7 +328,7 @@ function fwd_differentiation_expansion_polynom(σ::T; k=5) where T<:Real
     a = 1 ./ a; a[1] = 0
 
     σ == 0 && return a
-    α = fdiff_interpolation_expansion_polynom(σ, fwd; k)
+    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
 
     a,α = Base.promote(a,α)
 
@@ -336,7 +336,7 @@ return CamiMath.polynom_product_expansion(a, α, k)
 
 end
 #...............................................................................
-function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
+function bwd_differentiation_expansion_polynom(α::T, k::Int) where T<:Real
 # ==============================================================================
 #   Backward difference expansion coefficients for differentiation of an
 #   analytic function f(x) tabulated under the convention f[n-k,n] and
@@ -354,7 +354,7 @@ function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
     b = 1 ./ b; b[1] = 0
 
     α == 0 && return b
-    β = fdiff_interpolation_expansion_polynom(α, bwd; k)
+    β = fdiff_interpolation_expansion_polynom(α, k, bwd)
 
     b,β = Base.promote(b,β)
 
@@ -363,7 +363,7 @@ function bwd_differentiation_expansion_polynom(α::T; k=5) where T<:Real
 end
 #...............................................................................
 @doc raw"""
-    fdiff_differentiation_expansion_polynom(σ::T [, notation=bwd [; k=5]]) where T<:Real
+    fdiff_differentiation_expansion_polynom(σ::T [, k=5 [, notation=bwd]]) where T<:Real
 
 Finite-difference expansion coefficient vector defining ``k^{th}``-order
 *lagrangian differentiation* of the tabulated analytic function ``f[n]``
@@ -389,16 +389,16 @@ Offset convention: ``σ = -(n-v)`` with respect to index ``n`` in tabulated
 interval ``f[n-k:n]``
 #### Example:
 ```
-julia> σ = 0; # offset correponding to differentiation
+julia> k = 5; σ = 0; # offset correponding to differentiation
 
-julia> o = fdiff_differentiation_expansion_polynom(0, fwd; k=5); println(o)
+julia> o = fdiff_differentiation_expansion_polynom(0, k, fwd); println(o)
 Rational{Int64}[0, 1, -1//2, 1//3, -1//4, 1//5]
 ```
 """
-function fdiff_differentiation_expansion_polynom(σ::T, notation=bwd; k=5) where T<:Real
+function fdiff_differentiation_expansion_polynom(σ::T, k=5, notation=bwd) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(σ; k) :
-                                       bwd_differentiation_expansion_polynom(σ; k)
+    o = CamiMath.isforward(notation) ? fwd_differentiation_expansion_polynom(σ, k) :
+                                       bwd_differentiation_expansion_polynom(σ, k)
     return o
 
 end
@@ -431,7 +431,7 @@ function create_lagrange_differentiation_matrix(k::Int)
     m = Matrix{Rational{Int}}(undef,k+1,k+1)
 
     for i=0:k
-        polynom = CamiDiff.fdiff_differentiation_expansion_polynom(i-k, bwd; k)
+        polynom = CamiDiff.fdiff_differentiation_expansion_polynom(i-k, k, bwd)
         m[1+i,1:k+1] = fdiff_expansion_weights(polynom, bwd, rev)
     end
 

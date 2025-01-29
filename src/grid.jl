@@ -442,8 +442,8 @@ function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
 
     n = gridPos(rval, grid)
-    ξ = fracPos(n, rval, grid; ϵ = 1e-12, k = 7)
-    α = fdiff_interpolation_expansion_polynom(-ξ, k, fwd)
+    σ = fracPos(n, rval, grid; ϵ = 1e-12, k = 7)
+    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     #o = LinearAlgebra.dot(Fk, f[n:n+k])
     o = sum(Fk .* f[n:n+k])

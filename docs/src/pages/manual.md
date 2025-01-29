@@ -163,9 +163,9 @@ Examples:
 
 The `polynom`s of four common expansions in *fwd-difference* notation are:
 
-interpolation: [`fdiff_interpolation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
+interpolation: [`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
 
-differentiation: [`fdiff_differentiation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
+differentiation: [`fdiff_differentiation_expansion_polynom(σ, k, fwd)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
 
 Adams-Bashford: [`fdiff_adams_bashford_expansion_polynom(k, fwd)`](@ref) `` → α ≡ [α_0,⋯\ α_k]``
 
@@ -237,9 +237,9 @@ Examples:
 
 The `polynom`s of four common expansions in *bwd-difference* notation are:
 
-interpolation: [`fdiff_interpolation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
+interpolation: [`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
 
-differentiation: [`fdiff_differentiation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
+differentiation: [`fdiff_differentiation_expansion_polynom(σ, k, bwd)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
 
 Adams-Bashford: [`fdiff_adams_bashford_expansion_polynom(k, bwd)`](@ref) `` → β(σ) ≡ [β_0,⋯\ β_k]``
 
@@ -311,7 +311,7 @@ Summary:
 
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated with
 
-`polynom =` [`fdiff_interpolation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
+`polynom =` [`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``,
 where ``α_p(σ) = (-1)^p\ l_p(σ)``.
 
 Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights* 
@@ -370,7 +370,7 @@ Summary:
 
 In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated with
 
-`polynom =` [`fdiff_interpolation_expansion_polynom(σ, bwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
+`polynom =` [`fdiff_interpolation_expansion_polynom(σ, k, bwd)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``,
 where ``β_p(σ) = l_p(σ)``.
 
 Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights*
@@ -391,7 +391,7 @@ julia> n=5; v=4; k=5;
 julia> σ = n-v # fwd offset to 'next point'
 1
 
-julia> α = fdiff_interpolation_expansion_polynom(σ, fwd; k); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(σ, k, fwd); println("α = $α")
 α = [1, -1, 1, -1, 1, -1]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
@@ -412,7 +412,7 @@ julia> n=9; v=6.25; k=5;
 julia> σ = -(n-v) # bwd-offset of interpolation position
 -1.25
 
-julia> β = fdiff_interpolation_expansion_polynom(σ, bwd; k); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(σ, k, bwd); println("β = $β")
 β = [1.0, -2.75, 2.40625, -0.6015625, -0.03759765625, -0.0093994140625]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
@@ -426,7 +426,7 @@ true
 ```
 
 ```@docs
-fdiff_interpolation_expansion_polynom(σ::T, notation=bwd; k=3) where T<:Real
+fdiff_interpolation_expansion_polynom(σ::T, k=3, notation=bwd) where T<:Real
 # fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
 # fdiff_interpolation(f::Vector{T}, v::V; k=3) where {T<:Real, V<:Real}
 ```
@@ -483,7 +483,7 @@ Summary:
  
 In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
 
-`polynom =` [`fdiff_differentiation_expansion_polynom(σ, fwd; k)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, 
+`polynom =` [`fdiff_differentiation_expansion_polynom(σ, k, fwd)`](@ref) `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``, 
 with ``α_0(σ)≡ 0``.
 
 Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights* 
@@ -507,7 +507,7 @@ n=5; v=6.5; k=5;
 julia> σ = n-v # forward offset at grid position ``v``.
 -1.5
 
-julia> α = fdiff_differentiation_expansion_polynom(σ, fwd; k); println("α = $α")
+julia> α = fdiff_differentiation_expansion_polynom(σ, k, fwd); println("α = $α")
 α = [0.0, 1.0, 1.0, -0.041666666666666685, 0.0, 0.004687500000000011]
 
 julia> Fk = fdiff_expansion_weights(α, fwd, reg); println("Fk = $(Fk)")
@@ -578,7 +578,7 @@ Summary:
 
 In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
 
-`polynom =` [`fdiff_differentiation_expansion_polynom(σ, fwd; k)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``, 
+`polynom =` [`fdiff_differentiation_expansion_polynom(σ, k, fwd)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``, 
 with ``β_0(σ)≡ 0``.
 
 Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights* 
@@ -600,7 +600,7 @@ julia> n=9; v=9; k=5;
 julia> σ = -(n-v) # backward offset at grid position ``v``.
 0
 
-julia> β = fdiff_differentiation_expansion_polynom(σ, bwd; k); println("β = $β")
+julia> β = fdiff_differentiation_expansion_polynom(σ, k, bwd); println("β = $β")
 β = Rational{Int64}[0, 1, 1//2, 1//3, 1//4, 1//5]
 
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
@@ -614,7 +614,7 @@ true
 ```
 
 ```@docs
-fdiff_differentiation_expansion_polynom(ξ::T, k=3) where T<:Real
+fdiff_differentiation_expansion_polynom(σ, k=5, notation=bwd) where T<:Real
 create_lagrange_differentiation_matrix(k::Int)
 ```
 

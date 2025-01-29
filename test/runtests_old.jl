@@ -252,8 +252,8 @@ rev = CamiMath.rev
     @test fdiff_expansion([1, -1, 1, -1], [1, 4, 9, 16], fwd) == 0
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16], bwd) == 25
     @test fdiff_expansion([1, 1, 1, 1], [1, 4, 9, 16]) == 25
-    @test fdiff_differentiation_expansion_polynom(0, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
-    @test fdiff_differentiation_expansion_polynom(1, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
+    @test fdiff_differentiation_expansion_polynom(0, bwd, 3) == [0 // 1, 1 // 1, 1 // 2, 1 // 3]
+    @test fdiff_differentiation_expansion_polynom(1, bwd, 3) == [0 // 1, 1 // 1, -1 // 2, -1 // 6]
     @test create_lagrange_differentiation_matrix(3) == [-11//6 3//1 -3//2 1//3; -1//3 -1//2 1//1 -1//6; 1//6 -1//1 1//2 1//3; -1//3 3//2 -3//1 11//6]
     @test trapezoidal_epw(5; rationalize=true) == [95 // 288, 317 // 240, 23 // 30, 793 // 720, 157 // 160]
     @test trapezoidal_integration([1.0, 4.0, 15.0, 40.0, 85.0, 156.0], 0.0, 5.0, [3 // 8, 7 // 6, 23 // 24]) ≈ 215.4166666
@@ -355,7 +355,7 @@ end
 
 function fwd_interpolation_expansion_weights(σ::T, ordering=reg; k=3) where T<:Real
 
-    α = fdiff_interpolation_expansion_polynom(σ, fwd; k)
+    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
     o = fdiff_expansion_weights(α, fwd, ordering)
 
     return o
@@ -364,7 +364,7 @@ end
 #...............................................................................
 function bwd_interpolation_expansion_weights(σ::T, ordering=rev; k=3) where T<:Real
 
-    β = fdiff_interpolation_expansion_polynom(σ, bwd; k)
+    β = fdiff_interpolation_expansion_polynom(σ, k, bwd)
     o = fdiff_expansion_weights(β, bwd, ordering)
 
     return o
@@ -391,7 +391,7 @@ f[n-σ] = \sum_{p=0}^k α_p(σ) Δ^p f[n] + ⋯,
 ```
 where the expansion coefficients are given by
 
-[`fdiff_interpolation_expansion_polynom(σ, fwd; k=3)`](@ref)
+[`fdiff_interpolation_expansion_polynom(σ, k, fwd)`](@ref)
 `` → α(σ) ≡ [α_0(σ),⋯\ α_k(σ)]``. In this notation the range
 ``-k ≤ σ ≤ 1`` corresponds to interpolation and the ranges ``σ < -k`` and
 ``σ > 1k`` to extrapolation.
@@ -413,19 +413,15 @@ where the expansion coefficients are given by
 
 #### Examples:
 ```
-julia> Fk1 = fdiff_interpolation_expansion_weights(1, fwd, reg; k=4); println("Fk1 = $(Fk1)")
-Fk1 = [5, -10, 10, -5, 1]
+julia> k=4;
 
-julia> revBk1 = fdiff_interpolation_expansion_weights(1, bwd, rev; k=4); println("revBk1 = $(revBk1)")
-revBk1 = [1, -5, 10, -10, 5]
-
-julia> α = fdiff_interpolation_expansion_polynom(1, fwd; k=4); println("α = $α")
+julia> α = fdiff_interpolation_expansion_polynom(1, k, fwd); println("α = $α")
 α = [1, -1, 1, -1, 1]
 
 julia> Fk1 = fdiff_interpolation_expansion_weights(α, fwd, reg); println("Fk1 = $(Fk1)")
 Fk1 = [5, -10, 10, -5, 1]
 
-julia> β = fdiff_interpolation_expansion_polynom(1, bwd; k=4); println("β = $β")
+julia> β = fdiff_interpolation_expansion_polynom(1, k, bwd); println("β = $β")
 β = [1, 1, 1, 1, 1]
 
 julia> revBk1 = fdiff_interpolation_expansion_weights(β, bwd, rev); println("revBk1 = $(revBk1)")
@@ -434,8 +430,8 @@ revBk1 = [1, -5, 10, -10, 5]
 """
 function fdiff_interpolation_expansion_weights(σ::T, notation=bwd, ordering=rev; k=3) where T<:Real
 
-    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, ordering; k) :
-                                       bwd_interpolation_expansion_weights(σ, ordering; k)
+    o = CamiMath.isforward(notation) ? fwd_interpolation_expansion_weights(σ, k, ordering) :
+                                       bwd_interpolation_expansion_weights(σ, k, ordering)
     return o
 
 end
@@ -506,7 +502,7 @@ function fdiff_interpolation(f::Vector{T}, v::V; k=4) where {T<:Real, V<:Real}
     k = min(k,l-1)
     k > 0 || error("Error: k ≥ 1 required for lagrangian interpolation")
     n = v < 1 ? 1 : v < l-k ? floor(Int,v) : l-k
-    α = fdiff_interpolation_expansion_polynom(n-v, fwd; k)
+    α = fdiff_interpolation_expansion_polynom(n-v, k, fwd)
     o = fdiff_expansion(α, f[n:n+k], fwd)
 
     return o

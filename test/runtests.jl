@@ -156,76 +156,76 @@ rev = CamiMath.rev
 #   -----------------------------------------------------------------------------------------
     n = 5; k=5; 
     v = 4; σ = n-v # fwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, fwd; k)
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, fwd)
     Fk = fdiff_expansion_weights(polynom, fwd, reg) 
     @test polynom == [1, -1, 1, -1, 1, -1] 
     @test Fk ⋅ f[n:n+k] ≈ v^3
 
     v = 5; σ = n-v # fwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, fwd; k) 
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, fwd) 
     Fk = fdiff_expansion_weights(polynom, fwd, reg) 
     @test polynom == [1, 0, 0, 0, 0, 0]
     @test Fk ⋅ f[n:n+k] ≈ v^3 
 
     v = 7.5; σ = n-v # fwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, fwd; k)
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, fwd)
     Fk = fdiff_expansion_weights(polynom, fwd, reg)  
     @test polynom == [1.0, 2.5, 1.875, 0.3125, -0.0390625, 0.01171875]
     @test Fk ⋅ f[n:n+k] ≈ v^3
 #   -----------------------------------------------------------------------------------------
     n = 8; k=5; 
     v = 9; σ = -(n-v) # bwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, bwd; k)
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, bwd)
     revBk = fdiff_expansion_weights(polynom, bwd, rev)  
     @test polynom == [1, 1, 1, 1, 1, 1]
     @test revBk ⋅ f[n-k:n] ≈ v^3
      
     v = 8; σ = -(n-v) # bwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, bwd; k)
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, bwd)
     revBk = fdiff_expansion_weights(polynom, bwd, rev)   
     @test polynom == [1, 0, 0, 0, 0, 0]
     @test revBk ⋅ f[n-k:n] ≈ v^3
      
     v = 5.5; σ = -(n-v) # bwd offset
-    polynom = fdiff_interpolation_expansion_polynom(σ, bwd; k)
+    polynom = fdiff_interpolation_expansion_polynom(σ, k, bwd)
     revBk = fdiff_expansion_weights(polynom, bwd, rev)   
     @test polynom == [1.0, -2.5, 1.875, -0.3125, -0.0390625, -0.01171875]
     @test revBk ⋅ f[n-k:n] ≈ v^3
     #   -----------------------------------------------------------------------------------------
     n = 5; k=5; 
     v = 4; σ = n-v # fwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, fwd; k) 
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, fwd) 
     Fk = fdiff_expansion_weights(polynom, fwd, reg)  
     @test polynom == [0, 1, -3//2, 11//6, -25//12, 137//60]
     @test Fk ⋅ f[n:n+k] ≈ 3v^2
  
     v = 5; σ = n-v # fwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, fwd; k)
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, fwd)
     Fk = fdiff_expansion_weights(polynom, fwd, reg)   
     @test polynom == [0, 1, -1//2, 1//3, -1//4, 1//5]
     @test Fk ⋅ f[n:n+k] ≈ 3v^2
  
     v = 7.5; σ = n-v # fwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, fwd; k) 
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, fwd) 
     Fk = fdiff_expansion_weights(polynom, fwd, reg)  
     @test polynom == [0.0, 1.0, 2.0, 0.9583333333333333, -0.04166666666666674, 0.004687500000000011]
     @test Fk ⋅ f[n:n+k] ≈ 3v^2
     #   -----------------------------------------------------------------------------------------n = 8; k=5; 
     n = 8; k=5; 
     v = 9; σ = -(n-v) # bwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, bwd; k)
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, bwd)
     revBk = fdiff_expansion_weights(polynom, bwd, rev)   
     @test polynom == [0, 1, 3//2, 11//6, 25//12, 137//60]
     @test revBk ⋅ f[n-k:n] ≈ 3v^2
  
     v = 8; σ = -(n-v) # bwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, bwd; k)
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, bwd)
     revBk = fdiff_expansion_weights(polynom, bwd, rev)   
     @test polynom == [0, 1, 1//2, 1//3, 1//4, 1//5]
     @test revBk ⋅ f[n-k:n] ≈ 3v^2
  
     v = 5.5; σ = -(n-v) # bwd offset
-    polynom = fdiff_differentiation_expansion_polynom(σ, bwd; k) 
+    polynom = fdiff_differentiation_expansion_polynom(σ, k, bwd) 
     revBk = fdiff_expansion_weights(polynom, bwd, rev)  
     @test polynom == [0.0, 1.0, -2.0, 0.9583333333333333, 0.04166666666666674, 0.004687500000000011]
     @test revBk ⋅ f[n-k:n] ≈ 3v^2
