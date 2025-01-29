@@ -452,7 +452,7 @@ where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `
 Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain to order ``k``
 
 ```math
--\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n],
+-\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n]=BF^k(σ) ⋅ f[n:n+k],
 ```
 
 where ``α_p(σ)`` represents the *finite-difference expansion coefficients*
@@ -460,7 +460,7 @@ for *lagrangian differentiation* at position ``n-σ``.
 
 In the general case ``(σ ≠ 0)``, the coefficients ``α_p(σ)`` are obtained numerically 
 by polynomial multiplication using the function
-[`CamiMath.polynom_product(p_a, p_b_)`](@extref CamiMath.polynom_product), where
+[`CamiMath.polynom_product(p_a, p_b)`](@extref CamiMath.polynom_product), where
 
 ```math
 \begin{aligned}
@@ -547,7 +547,7 @@ where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `
 Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain to order ``k``
 
 ```math
-\frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)∇^{p}f[n]+⋯,
+\frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)∇^{p}f[n]=\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
 where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
@@ -559,7 +559,7 @@ are obtained numerically by polynomial multiplication using the function
 
 ```math
 \begin{aligned}
-p_a &= [0, 1, 1/2, ⋯ 1/k]
+p_a &= [0, 1, 1/2, ⋯ 1/k]\\
 p_b &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
 \end{aligned}
 ```
@@ -570,34 +570,6 @@ coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
 
 ```math
 β^k = β^k(0) = p_a = [0, 1, 1/2, ⋯  1/k].
-```
-
-
-
-
-
-
-
-
-
-```math
-\frac{df}{dσ}[n+σ]
-=\sum_{j=0}^{k}B_j^k(σ)f[n-j]
-=B^k(σ) ⋅ f[n:-1:n-k],
-```
-
-where the ``k+1`` *weights*
-
-```math
- B_j^k(σ)=\sum_{p=j}^{k}β_p(σ)c_{j}^{p}
-```
-
-After changing dummy index to reverse the summation the expansion becomes
-
-```math
-\frac{df}{dσ}[n+σ]
-=\sum_{j=0}^{k}\bar{B}^k_j(σ)f[n-k+j]
-=\bar{B}^k(σ) ⋅ f[n-k:n],
 ```
 
 ---
