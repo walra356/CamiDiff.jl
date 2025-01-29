@@ -445,11 +445,11 @@ with respect to ``-σ``,
 ```math
 -\frac{df}{dσ}[n-σ]
 =ln(1+Δ)\ (1+Δ)^{-σ}f[n]
-=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^p\ l_{p}(σ)Δ^{p}f[n],
+=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^p\ l_{p}(σ)Δ^{p}f[n]+⋯,
 ```
 
 where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  
-Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain
+Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain to order ``k``
 
 ```math
 -\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n],
@@ -544,7 +544,7 @@ with respect to ``σ``,
 ```
 
 where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.
-Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
+Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain to order ``k``
 
 ```math
 \frac{df}{dσ}[n+σ]=\sum_{p=1}^{k}β_p(σ)∇^{p}f[n]+⋯,
@@ -565,7 +565,7 @@ p_2 &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
 ```
 Special case:
 
-In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯, 0]`` and the *fwd-difference* 
+In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯, 0]`` and the *bwd-difference* 
 coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
 
 ```math
