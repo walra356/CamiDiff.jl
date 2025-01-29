@@ -139,10 +139,10 @@ where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 
 ---
 
-Implementation:
+Summary:
 
 In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
-(the vector of expansion coefficients). In forward-difference notation this `polynom` is denoted by 
+(the vector of expansion coefficients). In *forward-difference* notation we write
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
@@ -161,7 +161,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of four common expansions in *forward*-difference notation are:
+The `polynom`s of four common expansions in *forward-difference* notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
 
@@ -215,10 +215,10 @@ which is not unique (it depends on the expansion under consideration).
 
 ---
 
-Implementation:
+Summary:
 
 In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
-(the vector of expansion coefficients). In forward-difference notation the `polynom` is denoted by 
+(the vector of expansion coefficients). In *backward-difference* notation we write
 
 `polynom` `` → β ≡ [β_0,⋯\ β_k]``.
 
@@ -235,7 +235,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of four common expansions in *backward*-difference notation are:
+The `polynom`s of four common expansions in *backward-difference* notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
 
@@ -307,7 +307,7 @@ NB. The forward offset is defined as ``σ ≡ n-v``.
 
 ---
 
-Implementation:
+Summary:
 
 In `CamiDiff`, the `polynom` of the *fwd-interpolation* expansion is calculated with
 
@@ -366,7 +366,7 @@ NB. The backward offset is defined as ``σ ≡ -(n-v)``.
 
 ---
 
-Implementation:
+Summary:
 
 In `CamiDiff`, the `polynom` of the *bwd-interpolation* expansion is calculated with
 
@@ -462,7 +462,7 @@ where ``p_1`` and ``p_2`` are coefficient vectors.
 
 ---
 
-Implementation:
+Summary:
  
 In `CamiDiff`, the `polynom` of the *forward-differentiation* expansion is calculated by
 
@@ -560,7 +560,7 @@ After changing dummy index to reverse the summation the expansion becomes
 
 ---
 
-Implementation:
+Summary:
 
 In `CamiDiff`, the `polynom` of the *backward-differentiation* expansion is calculated by
 
