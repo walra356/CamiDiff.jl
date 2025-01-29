@@ -142,12 +142,12 @@ where ``F^k  ≡ [F_0^k,⋯\ F_k^k]``.
 Summary:
 
 In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
-(the vector of expansion coefficients). In *forward-difference* notation we write
+(the vector of expansion coefficients). In *fwd-difference* notation we write
 
 `polynom` `` → α ≡ [α_0,⋯\ α_k]``.
 
-Once we have the *coefficients* (in the form of the `polynom`), we can calculate the *weights* 
-(the *fwd-difference* weights vector) in reg-fwd-notation,
+Examples are given below. Once we have the *coefficients* (in the form of the `polynom`), 
+we can calculate the *weights* (the *fwd-difference* weights vector) in reg-fwd-notation,
 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k ≡ [F^k_0,⋯\ F^k_k]``
 
@@ -161,7 +161,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of four common expansions in *forward-difference* notation are:
+The `polynom`s of four common expansions in *fwd-difference* notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, fwd; k=5)`](@ref) `` → α ≡ [α_0(σ),⋯\ α_k(σ)]``
 
@@ -218,11 +218,11 @@ which is not unique (it depends on the expansion under consideration).
 Summary:
 
 In `CamiDiff`, any finite-difference expansion is defined by a (user-supplied) `polynom` 
-(the vector of expansion coefficients). In *backward-difference* notation we write
+(the vector of expansion coefficients). In *bwd-difference* notation we write
 
 `polynom` `` → β ≡ [β_0,⋯\ β_k]``.
 
-Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights*
+Examples are given below. Once we have the *coefficients* (in the form of `polynom`) we can calculate the *weights*
 (the *bwd-difference* weights vector) in rev-bwd-notation,
 
 `weights =` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
@@ -235,7 +235,7 @@ and the result of the expansion is obtained by evaluating the following inner pr
 
 Examples:
 
-The `polynom`s of four common expansions in *backward-difference* notation are:
+The `polynom`s of four common expansions in *bwd-difference* notation are:
 
 interpolation: [`fdiff_interpolation_expansion_polynom(σ, bwd; k=5)`](@ref) `` → β(σ) ≡ [β_0(σ),⋯\ β_k(σ)]``
 
@@ -319,7 +319,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) ``→ F^k(σ) ≡ [F_0^k(σ),⋯\ F_k^k(σ)]``,
 
-and the *interpolated value* at grid position `n-σ` evaluates (in forward-difference notation) to
+and the *interpolated value* at grid position `n-σ` evaluates (in fwd-difference notation) to
 
 ```math
 f[n-σ] = F^{k}(σ) \cdot f[n:n+k].
@@ -378,7 +378,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 `weights =` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-and the *interpolated value* at grid position `n+σ` evaluates  (in backward-difference notation) to
+and the *interpolated value* at grid position `n+σ` evaluates  (in *bwd-difference* notation) to
 ```math
 f[n+σ] = \bar{B}^k(σ) \cdot f[n-k:n].
 ```
@@ -474,7 +474,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 `weights =` [`fdiff_expansion_weights(polynom, fwd, reg)`](@ref) `` → F^k(σ) ≡ [F^k_0(σ),⋯\ F^k_k(σ)]``,
 
-and the *derivative* at grid position `n-σ` in forward-difference notation evaluates to
+and the *derivative* at grid position `n-σ` in fwd-difference notation evaluates to
 
 ```math
 -\frac{df}{dσ}[n-σ]
@@ -572,7 +572,7 @@ Once we have the *coefficients* (in the form of `polynom`) we can calculate the 
 
 ``\bar{B}^k(σ) =`` [`fdiff_expansion_weights(polynom, bwd, rev)`](@ref) `` → \bar{B}^k(σ) ≡ [B_k^k(σ),⋯\ B_0^k(σ)]``,
 
-and the *derivative* at grid position `n+σ` in backward-difference notation evaluates to 
+and the *derivative* at grid position `n+σ` in *bwd-difference* notation evaluates to 
 
 ```math
 \frac{df}{dσ}[n+σ]=\bar{B}^k(σ) ⋅ f[n-k:n],
