@@ -460,21 +460,21 @@ for *lagrangian differentiation* at position ``n-σ``.
 
 In the general case (``σ ≠ 0``), the coefficients ``α_p(σ)`` are obtained numerically 
 by polynomial multiplication using the function
-[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where
+[`CamiMath.polynom_product(p_a, p_b_)`](@extref CamiMath.polynom_product), where
 
 ```math
 \begin{aligned}
-p_1 &= [0, -1, 1/2, ⋯ (-1)^k\ 1/k] \\
-p_2 &= [l_0(σ), -l_1(σ), ⋯ (-1)^k l_k(σ)].
+p_a &= [0, -1, 1/2, ⋯ (-1)^k\ 1/k] \\
+p_b &= [l_0(σ), -l_1(σ), ⋯ (-1)^k l_k(σ)].
 \end{aligned}
 ```
 Special case:
 
-In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯ 0]`` and the *fwd-difference* 
+In the special case ``σ = 0``, we have ``p_b = [ 1, 0, ⋯, 0]`` and the *fwd-difference* 
 coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
 
 ```math
-α^k = α^k(0) = p_1 = [0, -1, 1//2, \cdots (-1)^k\ 1//k].
+α^k = α^k(0) = p_a = [0, -1, 1/2, ⋯ (-1)^k\ 1/k].
 ```
 
 ---
@@ -555,21 +555,21 @@ for *lagrangian differentiation* at position ``n+σ``.
 
 In the general case (``σ ≠ 0``), the coefficients ``β_p(σ)`` 
 are obtained numerically by polynomial multiplication using the function
-[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where 
+[`CamiMath.polynom_product(p_a, p_b)`](@extref CamiMath.polynom_product), where 
 
 ```math
 \begin{aligned}
-p_1 &= [0, 1, 1//2, ⋯ 1//k]
-p_2 &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
+p_a &= [0, 1, 1//2, ⋯ 1//k]
+p_b &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
 \end{aligned}
 ```
 Special case:
 
-In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯, 0]`` and the *bwd-difference* 
+In the special case ``σ = 0``, we have ``p_b = [ 1, 0, ⋯, 0]`` and the *bwd-difference* 
 coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
 
 ```math
-β^k = β^k(0) = p_1 = [0, 1, 1//2, ⋯  1//k].
+β^k = β^k(0) = p_a = [0, 1, 1//2, ⋯  1//k].
 ```
 
 
