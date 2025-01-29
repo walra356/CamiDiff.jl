@@ -456,10 +456,26 @@ Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain
 ```
 
 where ``α_p(σ)`` represents the *finite-difference expansion coefficients*
-for *lagrangian differentiation* at position ``n-σ``. The coefficients ``α_p(σ)`` 
-are obtained by polynomial multiplication using the function
-[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
-where ``p_1`` and ``p_2`` are coefficient vectors. 
+for *lagrangian differentiation* at position ``n-σ``. 
+
+In the general case (``σ ≠ 0``), the coefficients ``α_p(σ)`` are obtained numerically 
+by polynomial multiplication using the function
+[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where
+
+```math
+\begin{aligned}
+p_1 &= [0, -1, 1//2, ⋯ (-1)^k\ 1//k]
+p_2 &= [l_0(σ), -l_1(σ), ⋯ (-1)^k l_k(σ)].
+\end{aligned}
+```
+Special case:
+
+In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯ 0]`` and the *fwd-difference* 
+coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
+
+```math
+α^k = α^k(0) = p_1 = [0, -1, 1//2, \cdots (-1)^k\ 1//k].
+```
 
 ---
 
@@ -535,10 +551,34 @@ Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 ```
 
 where ``β_p(σ)`` represents the *finite-difference expansion coefficients*
-for *lagrangian differentiation* at position ``n+σ``. The coefficients ``β_p(σ)`` 
+for *lagrangian differentiation* at position ``n+σ``. 
+
+In the general case (``σ ≠ 0``), the coefficients ``β_p(σ)`` 
 are obtained numerically by polynomial multiplication using the function
-[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), 
-where ``p_1`` and ``p_2`` are [`CamiMath.polynom`](@extref CamiMath.polynom) vectors. 
+[`CamiMath.polynom_product(p1,p2)`](@extref CamiMath.polynom_product), where 
+
+```math
+\begin{aligned}
+p_1 &= [0, 1, 1//2, ⋯ 1//k]
+p_2 &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
+\end{aligned}
+```
+Special case:
+
+In the special case ``σ = 0``, we have ``p_2 = [ 1, 0, ⋯, 0]`` and the *fwd-difference* 
+coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
+
+```math
+β^k = β^k(0) = p_1 = [0, 1, 1//2, ⋯  1//k].
+```
+
+
+
+
+
+
+
+
 
 ```math
 \frac{df}{dσ}[n+σ]
