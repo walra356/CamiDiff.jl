@@ -559,7 +559,7 @@ are obtained numerically by polynomial multiplication using the function
 
 ```math
 \begin{aligned}
-p_a &= [0, 1, 1//2, ⋯ 1//k]
+p_a &= [0, 1, 1/2, ⋯ 1/k]
 p_b &= [l_0(σ), l_1(σ), ⋯ l_k(σ)].
 \end{aligned}
 ```
@@ -569,7 +569,7 @@ In the special case ``σ = 0``, we have ``p_b = [ 1, 0, ⋯, 0]`` and the *bwd-d
 coefficient vector for *lagrangian differentiation* at position ``n`` reduces to
 
 ```math
-β^k = β^k(0) = p_a = [0, 1, 1//2, ⋯  1//k].
+β^k = β^k(0) = p_a = [0, 1, 1/2, ⋯  1/k].
 ```
 
 
