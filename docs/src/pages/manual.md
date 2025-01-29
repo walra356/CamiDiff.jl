@@ -452,7 +452,7 @@ where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `
 Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain to order ``k``
 
 ```math
--\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n]=BF^k(σ) ⋅ f[n:n+k],
+-\frac{df}{dσ}[n-σ]=\sum_{p=1}^{k}α_p(σ)Δ^{p}f[n]=F^k(σ) ⋅ f[n:n+k],
 ```
 
 where ``α_p(σ)`` represents the *finite-difference expansion coefficients*
