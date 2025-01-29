@@ -445,9 +445,10 @@ with respect to ``-σ``,
 ```math
 -\frac{df}{dσ}[n-σ]
 =ln(1+Δ)\ (1+Δ)^{-σ}f[n]
-=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^pl_{p}(σ)Δ^{p}f[n].
+=\sum_{q=1}^{k}(-1)^q\tfrac{1}{q}Δ^{q}\sum_{p=0}^{k}(-1)^p\ l_{p}(σ)Δ^{p}f[n],
 ```
 
+where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.  
 Rewriting the r.h.s. as a single expansion in powers of ``Δ``, we obtain
 
 ```math
@@ -523,9 +524,10 @@ with respect to ``σ``,
 ```math
 \frac{df}{dσ}[n+σ]
 =-ln(1-∇)\ (1-∇)^{-σ}f[n]
-=\sum_{q=1}^{k}\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(σ)∇^{p}f[n]+⋯.
+=\sum_{q=1}^{k}\tfrac{1}{q}∇^{q}\sum_{p=0}^{k}l_{p}(σ)∇^{p}f[n]+⋯,
 ```
 
+where ``l_p(σ) ≡ (σ)_p/p!``, with ``(σ)_{p}`` being the Pochhammer symbol `CamiMath.pochhammer`.
 Rewriting the r.h.s. as a single expansion in powers of ``∇``, we obtain
 
 ```math
