@@ -32,10 +32,15 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
+    @test _gridspecs(1, 1000, Float64) == "Grid: exponential, Float64, rmax = Inf, Ntot = 1000, h = 1, r0 = 1"
+    @test _gridspecs(2, 1000, Float64) == "Grid: quasi-exponential, Float64, rmax = 25125501503000//3, Ntot = 1000, p = 5, h = 1, r0 = 1"
+    @test _gridspecs(3, 1000, Float64) == "Grid: linear (uniform), Float64, rmax = 1000, Ntot = 1000, p = 1, h = 1, r0 = 1"
+    @test _gridspecs(4, 1000, Float64) == "Grid: polynomial of degree 1, Float64, rmax = 1000, Ntot = 1000, polynom = [0, 1], h = 1, r0 = 1"
+
     grid1 = castGrid(1, 4, Float64; h = 0.1, r0 = 2.0);
     grid2 = castGrid(2, 4, Float64; h = 0.1, r0 = 2.0, p=1);
     grid3 = castGrid(3, 4, Float64; h = 0.1, r0 = 2.0);
-    grid4 = castGrid("polynomial", 4, Float64; h = 0.1, r0 = 2.0, polynom=[0, 1], msg=true);
+    grid4 = castGrid("polynomial", 4, Float64; h = 0.1, r0 = 2.0, polynom=[0, 1], msg=false);
     @test [grid2.r, grid2.r′, grid2.r′′] ≈ [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]
     @test [grid1.r, grid1.r′, grid1.r′′] == [[0.0, 0.21034183615129542, 0.4428055163203397, 0.6997176151520064], [0.2, 0.22103418361512955, 0.244280551632034, 0.26997176151520064], [0.020000000000000004, 0.022103418361512958, 0.024428055163203403, 0.02699717615152007]]
     @test grid1.name == "exponential"
@@ -49,10 +54,10 @@ rev = CamiMath.rev
     @test_throws DomainError gridtypeID("logarithm") 
 #   -----------------------------------------------------------------------------------------
     gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
-    grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
-    grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=false);
-    grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=false);
-    grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=false);
+    grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.06137, msg=true);
+    grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.0999, p=5, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.0901, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.000902, polynom=[0,0,1], msg=false);
     r1 = grid1.r;
     r2 = grid2.r;
     r3 = grid3.r;
@@ -70,10 +75,10 @@ rev = CamiMath.rev
     @test o2 ≈ 1.0
     @test o3 ≈ 1.0
     @test o4 ≈ 1.0
-    o1 = grid_integration(f1, grid1, 1:900);
-    o2 = grid_integration(f2, grid2, 1:900);
-    o3 = grid_integration(f3, grid3, 1:900);
-    o4 = grid_integration(f4, grid4, 1:900);
+    o1 = grid_integration(f1, grid1, 1:950);
+    o2 = grid_integration(f2, grid2, 1:950);
+    o3 = grid_integration(f3, grid3, 1:950);
+    o4 = grid_integration(f4, grid4, 1:950);
     @test o1 ≈ 1.0
     @test o2 ≈ 1.0
     @test o3 ≈ 1.0
@@ -87,13 +92,6 @@ rev = CamiMath.rev
     o2 = grid_differentiation(f2, grid2);
     o3 = grid_differentiation(f3, grid3);
     o4 = grid_differentiation(f4, grid4);
-    
-    println("f′1: ", f′1[992:1000])
-    println("o1: ", o1[992:1000])
-    grid_differentiation(f1, grid1, 900);
-    grid_differentiation(f1, grid1, 990);
-    grid_differentiation(f1, grid1, 995);
-
     @test f′1 ≈ o1
     @test f′2 ≈ o2
     @test f′3 ≈ o3
@@ -101,11 +99,7 @@ rev = CamiMath.rev
     a1 = f′1 ./ o1
     a2 = f′2 ./ o2
     a3 = f′3 ./ o3
-    a4 = f′4 ./ o4    
-    println("a1: ", a1[992:1000])
-    println("a2: ", a2[992:1000])
-    println("a3: ", a3[992:1000])
-    println("a4: ", a4[992:1000])
+    a4 = f′4 ./ o4 
     o1 = grid_differentiation(f1, grid1, 1:900);
     o2 = grid_differentiation(f2, grid2, 1:900);
     o3 = grid_differentiation(f3, grid3, 1:900);
@@ -117,9 +111,9 @@ rev = CamiMath.rev
 #   -----------------------------------------------------------------------------------------
     exponential(r) = exp(-r);
     grid1 = castGrid(1, 1000, Float64; h = 0.01, r0 = 0.001, msg=true);
-    grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=6, msg=true);
-    grid3 = castGrid(3, 1000, Float64; h = 0.01, r0 = 2.0, msg=true);
-    grid4 = castGrid(4, 1000, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=true);
+    grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=6, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.01, r0 = 2.0, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=false);
     r1 = grid1.r;
     r2 = grid2.r;
     r3 = grid3.r;
@@ -152,10 +146,10 @@ rev = CamiMath.rev
     f′3 = -f3;
     f′4 = -f4;
 #   -----------------------------------------------------------------------------------------
-    grid1 = castGrid(1, 5, Float64; h = 0.01, r0 = 0.001, msg=true);
-    grid2 = castGrid(2, 5, Float64; h = 0.01, r0 = 0.02, p=5, msg=true);
-    grid3 = castGrid(3, 5, Float64; h = 0.01, r0 = 2.0, msg=true);
-    grid4 = castGrid(4, 5, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=true);
+    grid1 = castGrid(1, 5, Float64; h = 0.01, r0 = 0.001, msg=false);
+    grid2 = castGrid(2, 5, Float64; h = 0.01, r0 = 0.02, p=5, msg=false);
+    grid3 = castGrid(3, 5, Float64; h = 0.01, r0 = 2.0, msg=false);
+    grid4 = castGrid(4, 5, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=false);
     r1 = grid1.r;
     r2 = grid2.r;
     r3 = grid3.r;

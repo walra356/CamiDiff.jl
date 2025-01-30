@@ -339,15 +339,9 @@ function fdiff_expansion(polynom, f, notation=bwd)
     ordering = CamiMath.isforward(notation) ? reg : rev
     w = fdiff_expansion_weights(polynom, notation, ordering)
 
-    #return LinearAlgebra.dot(w, f)
-    return sum(w .* f)
-
+    return LinearAlgebra.dot(w, f)
 
 end
-
-
-
-
 
 # ------------------------------------------------------------------------------
 #                  fdiff_interpolation_expansion_weights(polynom)

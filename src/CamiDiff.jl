@@ -32,7 +32,7 @@ bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-
+export _gridspecs
 export Grid
 export gridtypename
 export gridtypeID
