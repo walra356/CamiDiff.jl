@@ -154,7 +154,7 @@ The actual [`Grid`](@ref) is given by
 ```
 where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based indexing of [Julia](http://julialang.org).
 
-NB. For all [`gridfunction`](@ref)`s` we have ``t[1] = 0`` and ``r[1] = 0``.
+NB. All [`gridfunction`](@ref)`s` satisfy the properties ``t[1] = 0`` and ``r[1] = 0``.
 #### Examples:
 ```
 julia> h = 0.1; r0=1.0; N=4;
