@@ -90,6 +90,9 @@ rev = CamiMath.rev
     
     println("f′1: ", f′1[992:1000])
     println("o1: ", o1[992:1000])
+    grid_differentiation(f1, grid1, 900);
+    grid_differentiation(f1, grid1, 990);
+    grid_differentiation(f1, grid1, 995);
 
     @test f′1 ≈ o1
     @test f′2 ≈ o2

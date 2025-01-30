@@ -128,7 +128,7 @@ end
 @doc raw"""
     gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
 
-`CamiDiff` offers three internal gridfunctions:
+`CamiDiff` offers three internal grid functions:
 
 * `ID = 1`: exponential grid function,
 ```math
@@ -146,15 +146,15 @@ end
 ```math
     g(t) = c_0 + c_1 t + c_2 t^2 + ⋯ + c_p t^p,
 ```
-with ``c_0 ≡ 0`` because, *by definition*, all grid functions run through the origin, ``g(0) = 0``. 
+with ``c_0 ≡ 0`` because, *by definition*, all [`gridfunction`](@ref)`s` run through the origin, ``g(0) = 0``. 
 
-The actual grid is given by 
+The actual [`Grid`](@ref) is given by 
 ```math
-    x[n] = r_0 * g(t[n]),
+    r[n] = r_0 * g(t[n]),
 ```
 where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based indexing of [Julia](http://julialang.org).
 
-NB. Note that ``t[1] = 0`` and ``x[1] = 0`` for all grid functions.
+NB. For all [`gridfunction`](@ref)`s` we have ``t[1] = 0`` and ``r[1] = 0``.
 #### Examples:
 ```
 julia> h = 0.1; r0=1.0; N=4;
@@ -510,6 +510,28 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     f′= append!(f′, g′)
     
     return _regularize_ratio(f′, r′; k)
+
+end
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int; k=5) where T<:Real
+
+    N = grid.N
+    r′= grid.r′
+    k = min(k,N÷2)
+    k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    
+    α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+    β = fdiff_differentiation_expansion_polynom(0, k, bwd)
+    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+    Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+
+ #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
+ #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
+    f′= sum(Fk .* f[n:n+k])
+    g′= sum(Bkrev .* f[n-k+1:n+1])
+    println("f′ = ", f′)
+    println("g′ = ", g′)
+    
+    return f′/r′
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
