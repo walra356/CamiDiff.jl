@@ -475,8 +475,7 @@ end
 tabulated in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``.
 #### Example:
 ```
-julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=true);
-Grid: linear (uniform), Float64, rmax = 6.28947, Ntot = 1001, p = 1, h = 0.00628319, r0 = 1.0
+julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=false);
 
 julia> f = [sin(grid.r[i]) for i=1:grid.N]
 
@@ -485,9 +484,9 @@ julia> f′ = [cos(grid.r[i]) for i=1:grid.N]
 julia> grid_differentiation(f, grid) ≈ f′
 true
 ```
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, rval::T, notation=fwd; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* ``f′(r=rval)`` of the function ``f(r)``, tabulated 
+``k^{th}``-order lagrangian *derivative* ``f′(rv)`` of the function ``f(r)``, tabulated 
 in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``. 
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
@@ -522,7 +521,8 @@ true
     grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
 
 ``k^{th}``-order lagrangian *derivative* ``f′[n1:n2]`` of the regular function ``f(r)``, tabulated 
-in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``, ``n1=itr.start``, ``n2=itr.stop``.  
+in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``.
+* ``n1=itr.start``, ``n2=itr.stop``.  
 
 
 """
