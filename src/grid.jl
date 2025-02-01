@@ -469,12 +469,10 @@ function _regularize_origin(f′::Vector{T}, r′::Vector{T}, k::Int) where T<:R
 
 end
 @doc raw"""
-    grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:real
 
-``k^{th}``-order lagrangian *differentiation* of the analytic function ``f(x)``,
-tabulated in forward order on a [`Grid`](@ref) of ``n`` points, ``f[1:n]``.
+``k^{th}``-order lagrangian *differentiation* of the function ``f(r)``,
+tabulated in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``.
 #### Example:
 ```
 julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=true);
@@ -482,11 +480,51 @@ Grid: linear (uniform), Float64, rmax = 6.28947, Ntot = 1001, p = 1, h = 0.00628
 
 julia> f = [sin(grid.r[i]) for i=1:grid.N]
 
-julia> g = [cos(grid.r[i]) for i=1:grid.N]
+julia> f′ = [cos(grid.r[i]) for i=1:grid.N]
 
-julia> grid_differentiation(f, grid) ≈ g
+julia> grid_differentiation(f, grid) ≈ f′
 true
 ```
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, rval::T, notation=fwd; k=5) where T<:Real
+
+``k^{th}``-order lagrangian *derivative* ``f′(r=rval)`` of the function ``f(r)``, tabulated 
+in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``. 
+* `fwd` using fwd-difference notation  
+* `bwd` using bwd-difference notation
+
+#### Example:
+```
+julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=false);
+
+julia> f = [sin(grid.r[i]) for i=1:grid.N];
+
+julia> grid_differentiation(f, grid, float(π), fwd) ≈ cos(π)
+true
+```
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
+
+``k^{th}``-order lagrangian *derivative* ``f′[n]`` of the regular function ``f(r)``, tabulated 
+in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``. 
+
+#### Example:
+```
+julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=false);
+
+julia> f = [sin(grid.r[i]) for i=1:grid.N];
+
+julia> f′ = [cos(grid.r[i]) for i=1:grid.N]
+
+julia> grid_differentiation(f, grid, 500, fwd) ≈ f′[500]
+true
+```
+
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
+
+``k^{th}``-order lagrangian *derivative* ``f′[n1:n2]`` of the regular function ``f(r)``, tabulated 
+in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``, ``n1=itr.start``, ``n2=itr.stop``.  
+
+
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
