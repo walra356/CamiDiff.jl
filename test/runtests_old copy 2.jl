@@ -20,54 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-module CamiDiff
+using CamiDiff
+using Test # to use runtests with @testset
 
-import Documenter
-import DocumenterInterLinks
 import CamiMath
-import LinearAlgebra
-
 fwd = CamiMath.fwd
 bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-export sdot
-export _gridspecs
-export Grid
-export gridtypename
-export gridtypeID
-export gridfunction
-export castGrid
-export gridPos
-export fracPos
-export grid_interpolation
-export grid_differentiation
-export grid_integration
-
-export fdiff_weight
-export fdiff_expansion_weights
-#export fdiff_expansion
-
-export fdiff_interpolation_expansion_polynom
-#export fdiff_interpolation_expansion_weights
-#export fdiff_interpolation
-
-export fdiff_differentiation_expansion_polynom
-export create_lagrange_differentiation_matrix
-export fdiff_adams_moulton_expansion_coeff
-export fdiff_adams_moulton_expansion_polynom
-export create_adams_moulton_weights
-export fdiff_adams_bashford_expansion_coeff
-export fdiff_adams_bashford_expansion_polynom
-export create_adams_bashford_weights
-export trapezoidal_epw
-export trapezoidal_integration
 
 
-include("finite_differences.jl")
-include("finite_difference_adams.jl")
-include("grid.jl")
-
-
-end
+ 
+#   -----------------------------------------------------------------------------------------
+    gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
+    #grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=false);
+    grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.06137, msg=true);
+    r1 = grid1.r;
+    f1 = [gaussian(r1[n]) for n=1:grid1.N];
+#   -----------------------------------------------------------------------------------------
+    o1 = grid_integration(f1, grid1);
+    @test o1 ≈ 1.0
+    o1 = grid_integration(f1, grid1, 1:950);
+    @test o1 ≈ 1.0
+#   -----------------------------------------------------------------------------------------
+    f′1 = -r1 .* f1;
+    o1 = grid_differentiation(f1, grid1);
+    @test f′1 ≈ o1
+    a1 = f′1 ./ o1
+    println("a1: ", a1[993:1000])
+    println("f′1: ", f′1[993:1000])
+    println("o1: ", o1[993:1000])

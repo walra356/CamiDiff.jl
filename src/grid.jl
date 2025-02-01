@@ -507,27 +507,53 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     return _regularize_origin(f′, r′, k)
 
 end
-function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int; k=5) where T<:Real
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
     N = grid.N
     r′= grid.r′
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
     
-    α = fdiff_differentiation_expansion_polynom(0, k, fwd)
-    β = fdiff_differentiation_expansion_polynom(0, k, bwd)
-    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-    revBk = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+    if CamiMath.isforward(notation)
+        α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+        f′= LinearAlgebra.dot(Fk, f[n:n+k])/r′[n]
+    else
+        β = fdiff_differentiation_expansion_polynom(0, k, bwd)
+        Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+        f′= LinearAlgebra.dot(Bkrev, f[n-k:n])/r′[n]
+    end
+ 
+    return f′
 
- #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
- #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
-    f′= sum(Fk .* f[n:n+k])/r′[n]
-    g′= sum(revBk .* f[n-k:n])/r′[n]
-    println("n = $n, k = $k, n+k = ", n+k)
-    println("f′ = ", f′)
-    println("g′ = ", g′)
+end
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, rval::T, notation=fwd; k=5) where T<:Real
 
-    return nothing
+    n = gridPos(rval, grid)
+    Δn = fracPos(n, rval, grid; ϵ = T(1e-8), k)
+    v = n + Δn
+
+    N = grid.N
+    r = grid.r
+    r′= grid.r′
+    k = min(k,N÷2)
+    k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    
+    if CamiMath.isforward(notation)
+        σ = n-v
+        α = fdiff_differentiation_expansion_polynom(σ, k, fwd)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+        r′= LinearAlgebra.dot(Fk, r[n:n+k])
+        f′= LinearAlgebra.dot(Fk, f[n:n+k])/r′
+    else
+        σ = v-n
+        β = fdiff_differentiation_expansion_polynom(σ, k, bwd)
+        Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+        r′= LinearAlgebra.dot(Bkrev, r[n-k:n])
+        f′= LinearAlgebra.dot(Bkrev, f[n-k:n])/r′
+    end
+ 
+    return f′
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real

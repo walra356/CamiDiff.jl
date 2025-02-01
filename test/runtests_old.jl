@@ -502,3 +502,42 @@ function fdiff_interpolation(f::Vector{T}, v::V; k=4) where {T<:Real, V<:Real}
     return o
 
 end
+
+
+
+
+
+function sdot(x::Vector{T}, y::Vector{T}) where T<:Real
+
+    n = length(x)
+
+    n == length(y) || error("Error: vectors must have the same length")
+
+    s = T(0)
+
+    for i = 1:n
+        s += x[i] * y[i]
+    end
+
+    return s
+
+end
+function sdot1(x::Vector{T}, y::Vector{T}) where T<:Real
+
+    n = length(x)
+
+    n == length(y) || error("Error: vectors must have the same length")
+
+    s1 = s2 = T(0)
+
+    for i = 1:n
+        if (x[i] < 0) ⊻ (y[i] < 0)
+            s1 += x[i] * y[i]
+        else
+            s2 += x[i] * y[i]
+        end
+    end
+
+    return s1+s2
+
+end

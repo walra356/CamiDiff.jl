@@ -32,6 +32,8 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
+    println("CamiDiff.jl  | 97 runtests (9.7s) | start")
+
     @test _gridspecs(1, 1000, Float64) == "Grid: exponential, Float64, rmax = Inf, Ntot = 1000, h = 1, r0 = 1"
     @test _gridspecs(2, 1000, Float64) == "Grid: quasi-exponential, Float64, rmax = 25125501503000//3, Ntot = 1000, p = 5, h = 1, r0 = 1"
     @test _gridspecs(3, 1000, Float64) == "Grid: linear (uniform), Float64, rmax = 1000, Ntot = 1000, p = 1, h = 1, r0 = 1"
@@ -123,7 +125,6 @@ rev = CamiMath.rev
     f3 = [exponential(r3[n]) for n=1:grid3.N];
     f4 = [exponential(r4[n]) for n=1:grid4.N];
 #   -----------------------------------------------------------------------------------------
-    rval=2.1
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);
@@ -145,6 +146,21 @@ rev = CamiMath.rev
     f′2 = -f2;
     f′3 = -f3;
     f′4 = -f4;
+    o1fwd = grid_differentiation(f1, grid1, 500, fwd);
+    o1bwd = grid_differentiation(f1, grid1, 500, bwd);
+    o2fwd = grid_differentiation(f2, grid2, 500, fwd);
+    o2bwd = grid_differentiation(f2, grid2, 500, bwd);
+    o3fwd = grid_differentiation(f3, grid3, 500, fwd);
+    o3bwd = grid_differentiation(f3, grid3, 500, bwd); 
+    o4fwd = grid_differentiation(f4, grid4, 500, fwd);
+    o4bwd = grid_differentiation(f4, grid4, 500, bwd);
+    @test f′1[500] ≈ o1fwd ≈ o1bwd
+    @test f′2[500] ≈ o2fwd ≈ o2bwd
+    @test f′3[500] ≈ o3fwd ≈ o3bwd
+    @test f′4[500] ≈ o4fwd ≈ o4bwd
+#   -----------------------------------------------------------------------------------------
+    rval = 1.0;
+    @test grid_differentiation(f1, grid1, rval, fwd) ≈ -exp(-1.0)
 #   -----------------------------------------------------------------------------------------
     grid1 = castGrid(1, 5, Float64; h = 0.01, r0 = 0.001, msg=false);
     grid2 = castGrid(2, 5, Float64; h = 0.01, r0 = 0.02, p=5, msg=false);
@@ -188,6 +204,7 @@ rev = CamiMath.rev
     @test o2 ≈ [-0.9999684369099704, -0.9997674803104111, -0.9995645451149201, -0.9993600409372991, -0.9991530903064654]
     @test o3 ≈ [-0.9998686481325542, -0.9800699223805415, -0.960663237665263, -0.9416370637447824, -0.9229914006191109]
     @test o4 ≈ [-1.0001249955642058, -1.0000499920670425, -0.9999749885698793, -0.9998500107336976, -0.9997125393138017]
+
     o1 = grid_differentiation(f1, grid1, 1:5);
     o2 = grid_differentiation(f2, grid2, 1:5);
     o3 = grid_differentiation(f3, grid3, 1:5);
