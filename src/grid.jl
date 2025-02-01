@@ -486,7 +486,7 @@ true
 ```
     grid_differentiation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* ``f′(rv)`` of the function ``f(r)``, tabulated 
+``k^{th}``-order lagrangian *derivative* ``f^′(rv)`` of the function ``f(r)``, tabulated 
 in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``. 
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
@@ -502,7 +502,7 @@ true
 ```
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* ``f′[n]`` of the regular function ``f(r)``, tabulated 
+``k^{th}``-order lagrangian *derivative* ``f^′[n]`` of the regular function ``f(r)``, tabulated 
 in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``. 
 
 #### Example:
@@ -522,7 +522,7 @@ true
 
 ``k^{th}``-order lagrangian *derivative* ``f′[n1:n2]`` of the regular function ``f(r)``, tabulated 
 in forward order on a [`Grid`](@ref) of ``N`` points, ``f[1:N]``.
-* ``n1=itr.start``, ``n2=itr.stop``.  
+* `n1=itr.start`, `n2=itr.stop`.  
 
 
 """
