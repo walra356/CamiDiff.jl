@@ -166,22 +166,23 @@ NB. All [`gridfunction`](@ref)`s` satisfy the properties ``t[1] = 0`` and ``r[1]
 ```
 julia> h = 0.1; r0=1.0; N=4; T=Float64;
 
-julia> r = r0 .* [gridfunction(1, n, T; h) for n=1:N]; println("r = ", r)
+julia> r = [r0*gridfunction(1, n, T; h) for n=1:N]; println("r = ", r)
 r = [0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032]
 
-julia> r′ = r0 .* [gridfunction(1, n, T; h, deriv=1) for n=1:N]; println("r′ = ", r′)
+julia> r′= r0 .* [r0*gridfunction(1, n, T; h, deriv=1) for n=1:N]; println("r′= ", r′)
 r′ = [0.1, 0.11051709180756478, 0.122140275816017, 0.13498588075760032]
 
-julia> r′′= r0 .* [gridfunction(1, n, T; h, deriv=2) for n=1:N]; println("r′′ = ", r′′)
+julia> r′′= [r0*gridfunction(1, n, T; h, deriv=2) for n=1:N]; println("r′′= ", r′′)
 r′′ = [0.010000000000000002, 0.011051709180756479, 0.012214027581601701, 0.013498588075760034]
 
-julia> r = r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1]) for n=1:N]; println("r = ",r )
+julia> r = [r0*gridfunction(4, n, T; h, polynom=[0,0,1]) for n=1:N]; println("r = ", r)
 r = [0.0, 0.010000000000000002, 0.04000000000000001, 0.09000000000000002]
 
-julia> r′ = r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1], deriv=1) for n=1:N]; println("r′ = ", r′)
-r′ = [0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
+julia> r′= [r0*gridfunction(4, n, T; h, polynom=[0,0,1], deriv=1) for n=1:N]; println("r′= ", r′)
+r′= [0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
 
-julia> r′′= r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1], deriv=2) for n=1:N]; println("r′′= ", r′′)
+julia> r′′= [r0*gridfunction(4, n, T; h, polynom=[0,0,1], deriv=2) for n=1:N]; println("r′′= ", r′′)
+r′′= [0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
 ```
 """
 function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
@@ -248,7 +249,7 @@ julia> r = grid.r[1:4]; println("r = ", r)
 r = [0.0, 1.002003004005006e-5, 4.008012016020024e-5, 9.018027036045053e-5]
 
 julia> r = grid.r[997:1000]; println("r = ", r)
-r = [9.9400301202103, 9.96000004008012, 9.979990000010021, 10.0]
+r = [9.9400301202103, 9.96000004008012, 9.979990000010021, 10.0] # note the end of the range (r = rmax) 
 
 julia> r′= grid.r′[1:4]; println("r′ = ", r′)
 r′ = [0.0, 2.0040060080100123e-5, 4.008012016020025e-5, 6.012018024030035e-5]
@@ -459,25 +460,36 @@ function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:R
 end
 
 # ------------------------------------------------------------------------------
-#                       grid_interpolation(f, rval, grid; k=5)
+#                       grid_interpolation(f, grid, rv; k=5)
 # ------------------------------------------------------------------------------
 
 @doc raw"""
-    grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
+    grid_interpolation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
-Interpolated value for f(rval), with `rval` not on the [`Grid`](@ref) (`rval ∉ grid.r`).
+Interpolated value for f(rv), with `r=rv` not on the [`Grid`](@ref) (`rv ∉ grid.r`).
 """
-function grid_interpolation(f::Vector{T}, rval::T, grid::Grid{T}; k=5) where T<:Real
+function grid_interpolation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
     N = grid.N
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
 
-    n = gridPos(rval, grid)
-    σ = fracPos(n, rval, grid; ϵ = 1e-12, k = 7)
-    α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
-    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-    o = LinearAlgebra.dot(Fk, f[n:n+k])
+    n = gridPos(rv, grid)
+    Δn = fracPos(n, rv, grid; ϵ = T(1e-8), k)
+    v = n + Δn
+    
+    if CamiMath.isforward(notation)
+        σ = n-v
+        α = fdiff_interpolation_expansion_polynom(σ, k, fwd)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+        o = LinearAlgebra.dot(Fk, f[n:n+k])
+    else
+        σ = v-n
+        β = fdiff_interpolation_expansion_polynom(σ, k, bwd)
+        Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+        o = LinearAlgebra.dot(Bkrev, f[n-k:n])
+    end
     
     return o
 

@@ -32,7 +32,7 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
-    println("CamiDiff.jl  | 128 runtests | runtime 9.7s (estimated) | start")
+    println("CamiDiff.jl  | 141 runtests | runtime 10.2s (estimated) | start")
 
     @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, Ntot = 1000, h = 0.01, r0 = 2.0"
     @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, Ntot = 1000, p = 5, h = 0.01, r0 = 2.0"
@@ -44,7 +44,7 @@ rev = CamiMath.rev
     grid3 = castGrid(3, 1000, Float64; h = 0.1, rmax = 2.0, msg=false);
     grid4 = castGrid("polynomial", 1000, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1], msg=false);
 
-    grid1 = castGrid(1, 4, Float64; h = 0.1, rmax = 2.0, msg=true);
+    grid1 = castGrid(1, 4, Float64; h = 0.1, rmax = 2.0, msg=false);
     grid2 = castGrid(2, 4, Float64; h = 0.1, rmax = 2.0);
     grid3 = castGrid(3, 4, Float64; h = 0.1, rmax = 2.0);
     grid4 = castGrid("polynomial", 4, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1]);
@@ -132,7 +132,12 @@ rev = CamiMath.rev
     @test f′4[500] ≈ o4fwd ≈ o4bwd
 #   -----------------------------------------------------------------------------------------
     r = 1.0;
+    f = gaussian(r);
     f′1 = -r * gaussian(r)
+    @test grid_interpolation(f1, grid1, r, fwd) ≈ f
+    @test grid_interpolation(f2, grid2, r, bwd) ≈ f
+    @test grid_interpolation(f3, grid3, r, fwd) ≈ f
+    @test grid_interpolation(f4, grid4, r, bwd) ≈ f
     @test grid_differentiation(f1, grid1, r, fwd) ≈ f′1
     @test grid_differentiation(f2, grid2, r, bwd) ≈ f′1
     @test grid_differentiation(f3, grid3, r, fwd) ≈ f′1
@@ -206,6 +211,10 @@ rev = CamiMath.rev
     @test f′4[500] ≈ o4fwd ≈ o4bwd
 #   -----------------------------------------------------------------------------------------
     r = 1.0;
+    @test grid_interpolation(f1, grid1, r, fwd) ≈ exp(-r)
+    @test grid_interpolation(f2, grid2, r, bwd) ≈ exp(-r)
+    @test grid_interpolation(f3, grid3, r, fwd) ≈ exp(-r)
+    @test grid_interpolation(f4, grid4, r, bwd) ≈ exp(-r)
     @test grid_differentiation(f1, grid1, r, fwd) ≈ -exp(-r)
     @test grid_differentiation(f2, grid2, r, bwd) ≈ -exp(-r)
     @test grid_differentiation(f3, grid3, r, fwd) ≈ -exp(-r)
@@ -246,14 +255,14 @@ rev = CamiMath.rev
     @test o4 ≈ f′
 #   -----------------------------------------------------------------------------------------
     r = 1.0;
-    o1 = grid_differentiation(f1, grid1, r, fwd);
-    o2 = grid_differentiation(f2, grid2, r, bwd);
-    o3 = grid_differentiation(f3, grid3, r, fwd);
-    o4 = grid_differentiation(f4, grid4, r, bwd);
-    @test o1 ≈ 1.0
-    @test o2 ≈ 1.0
-    @test o3 ≈ 1.0
-    @test o4 ≈ 1.0
+    @test grid_interpolation(f1, grid1, r, fwd) ≈ r
+    @test grid_interpolation(f2, grid2, r, bwd) ≈ r
+    @test grid_interpolation(f3, grid3, r, fwd) ≈ r
+    @test grid_interpolation(f4, grid4, r, bwd) ≈ r
+    @test grid_differentiation(f1, grid1, r, fwd) ≈ 1.0
+    @test grid_differentiation(f2, grid2, r, bwd) ≈ 1.0
+    @test grid_differentiation(f3, grid3, r, fwd) ≈ 1.0
+    @test grid_differentiation(f4, grid4, r, bwd) ≈ 1.0
 #   ========================================================================================= 
     T = Float64
     N=1000
