@@ -133,13 +133,13 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T
     end
 # ..............................................................................
 @doc raw"""
-    gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
+    gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)::T 
 
 `CamiDiff` offers three internal grid functions:
 
 * `ID = 1`: exponential grid function,
 ```math
-    g(t) = e^t - 1
+    g(t) = exp(t) - 1
 ```
 * `ID = 2`: truncated-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
