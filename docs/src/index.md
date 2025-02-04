@@ -84,7 +84,7 @@ Once the [`Grid`](@ref) is specified, three [`Grid`](@ref) operations are at our
 ```@docs
 Grid{T}
 castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
-gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)::T 
+gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 gridtypename(ID::Int)
 gridtypeID(name::String)
 gridPos(rval::T, grid::Grid{T}) where T<:Real

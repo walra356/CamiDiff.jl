@@ -69,7 +69,7 @@ end
 # ------------------------------------------------------------------------------
 #                        gridfunction(n, h; deriv=0)
 # ------------------------------------------------------------------------------
-function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T 
+function _walterjohnson(n::Int, T::Type; h=1, deriv=0)
     # ==============================================================================
     #  gridfunction(n, h) = (exp((n-1) * h)-1.0) # gridfunction from Walter Johnson
     # ==============================================================================
@@ -83,7 +83,7 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T
         
     end
     # ..............................................................................    
-    function _jooks_gridfunction(n::Int, T::Type; h=1, p=5, deriv=0)::T
+    function _jooks_gridfunction(n::Int, T::Type; h=1, p=5, deriv=0)
     # ==============================================================================
     # jooks_gridfunction(n, h [; p=5 [, deriv=0]]) based on truncated exponential 
     # ==============================================================================
@@ -101,7 +101,7 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T
         
     end
     # ..............................................................................     
-    function _linear_gridfunction(n::Int, T::Type; h=1, deriv=0)::T 
+    function _linear_gridfunction(n::Int, T::Type; h=1, deriv=0)
     # ==============================================================================
     #  linear_gridfunction(n, h; deriv) = n * h
     # ==============================================================================
@@ -116,7 +116,7 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T
         
     end
     # ..............................................................................     
-    function _polynomial_gridfunction(n::Int, T::Type; h=1, polynom=[0,1], deriv=0)::T 
+    function _polynomial_gridfunction(n::Int, T::Type; h=1, polynom=[0,1], deriv=0)
     # ==============================================================================
     #  polynomial_gridfunction(n, h; deriv) 
     # ==============================================================================
@@ -133,7 +133,7 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T
     end
 # ..............................................................................
 @doc raw"""
-    gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)::T 
+    gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 
 `CamiDiff` offers three internal grid functions:
 
@@ -185,7 +185,7 @@ julia> r′′= r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1
 [0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
 ```
 """
-function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)::T 
+function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 
     return  ID == 1 ? _walterjohnson(n, T; h, deriv) :
             ID == 2 ? _jooks_gridfunction(n, T; h, deriv, p) :
