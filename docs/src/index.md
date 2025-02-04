@@ -30,7 +30,7 @@ can be linear (uniform) or non-linear as specified by a [`gridfunction`](@ref) -
 
 The current implementation of `CamiDiff` was developed for *real functions of a single variable*. 
 A set of four predefined [`gridfunction`](@ref)`s` is included in the package: 'exponential', 
-'quasi-exponential', 'linear' and 'polynomial'. These are restricted to the domain ``[0, ∞)``. 
+'truncated-exponential', 'linear' and 'polynomial'. These are restricted to the domain ``[0, ∞)``. 
 When applicable, we shall underline this restriction to the non-negative domain by using the variable ``r`` 
 rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 

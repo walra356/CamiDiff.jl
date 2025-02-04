@@ -44,7 +44,7 @@ Type with fields:
 * `.epn`:   number of endpoints used for trapezoidal endpoint correction (must be odd) (`::Int`)
 * `.epw`:   trapezoidal endpoint weights for n=1:epn (`::Vector{Vector{T}}`)
 * `.k`:     finite-difference order (`::Int`)
-* `.p`:     only for quasi-exponential grid; truncation power (`::Int`)
+* `.p`:     only for truncated-exponential grid; truncation power (`::Int`)
 * `.polynom`: only for polynomial grid: polynom (`::Vector{T}`)
 The object `Grid` is best created with the function [`castGrid`](@ref).
 """
@@ -69,61 +69,68 @@ end
 # ------------------------------------------------------------------------------
 #                        gridfunction(n, h; deriv=0)
 # ------------------------------------------------------------------------------
-
-function _walterjohnson(n::Int, h::T; deriv=0) where T <: Real
-# ==============================================================================
-#  gridfunction(n, h) = (exp((n-1) * h)-1.0) # gridfunction from Walter Johnson
-# ==============================================================================
-    deriv ≥ 0 || return 0.0
+function _walterjohnson(n::Int, T::Type; h=1, deriv=0)::T 
+    # ==============================================================================
+    #  gridfunction(n, h) = (exp((n-1) * h)-1.0) # gridfunction from Walter Johnson
+    # ==============================================================================
+        deriv ≥ 0 || return 0.0
     
-    f = deriv > 0 ? h^(deriv)*exp(n*h) : exp(n*h)-1
+        t = T((n-1) * h)
+        
+        f = deriv > 0 ? h^(deriv)*exp(t) : exp(t) - T(1)
+        
+        return T(f)
+        
+    end
+    # ..............................................................................    
+    function _jooks_gridfunction(n::Int, T::Type; h=1, p=5, deriv=0)::T
+    # ==============================================================================
+    # jooks_gridfunction(n, h [; p=5 [, deriv=0]]) based on truncated exponential 
+    # ==============================================================================
+        deriv ≥ 0 || return T(0)
+        deriv ≤ p || return T(0)
     
-    return f
+        t = (n-1) * h
+        nul = typeof(t)(0)
+        
+        f = deriv > 0 ? h^(deriv)*CamiMath.texp(t, nul, p-deriv) : 
+                        CamiMath.texp(t, nul, p) - 1  # note: texp() not exp()
     
-end
-# ..............................................................................    
-function _jw_gridfunction(n::Int, h::T; p=5, deriv=0) where T <: Real
-# ==============================================================================
-# jw_gridfunction(n, h [; p=5[, deriv=0]]) based on truncated exponential 
-# ==============================================================================
-    deriv ≥ 0 || return T(0)
-    deriv ≤ p || return T(0)
+        
+    return T(f)
+        
+    end
+    # ..............................................................................     
+    function _linear_gridfunction(n::Int, T::Type; h=1, deriv=0)::T 
+    # ==============================================================================
+    #  linear_gridfunction(n, h; deriv) = n * h
+    # ==============================================================================
+        deriv ≥ 0 || return T(0)
+        deriv ≤ 1 || return T(0)
     
-    nul = T(0)
+        t = (n-1) * h
     
-    f = deriv > 0 ? h^(deriv)*CamiMath.texp(n*h, nul, p-deriv) : 
-                    CamiMath.texp(n*h, nul, p) - 1  # note: texp() not exp()
+        f = deriv > 0 ? h : t
+        
+        return T(f)
+        
+    end
+    # ..............................................................................     
+    function _polynomial_gridfunction(n::Int, T::Type; h=1, polynom=[0,1], deriv=0)::T 
+    # ==============================================================================
+    #  polynomial_gridfunction(n, h; deriv) 
+    # ==============================================================================
+        p = length(polynom) - 1
+        deriv ≥ 0 || return T(0)
+        deriv ≤ p || return T(0)
     
-return f
+        t = (n-1) * h
     
-end
-# ..............................................................................     
-function _linear_gridfunction(n::Int, h::T; deriv=0) where T <: Real
-# ==============================================================================
-#  linear_gridfunction(n, h; deriv) = n * h
-# ==============================================================================
-    deriv ≥ 0 || return T(0)
-    deriv ≤ 1 || return T(0)
-
-    f = deriv > 0 ? h : h * n
-    
-    return f
-    
-end
-# ..............................................................................     
-function _polynomial_gridfunction(n::Int, h::T; polynom=[0,1], deriv=0) where T <: Real
-# ==============================================================================
-#  polynomial_gridfunction(n, h; deriv) 
-# ==============================================================================
-    p = length(polynom) - 1
-    deriv ≥ 0 || return T(0)
-    deriv ≤ p || return T(0)
-
-    f = deriv > 0 ? h^(deriv) * CamiMath.polynomial(polynom, n*h; deriv) :
-                                CamiMath.polynomial(polynom, n*h)
-    return f
-    
-end
+        f = deriv > 0 ? h^(deriv) * CamiMath.polynomial(polynom, t; deriv) :
+                                    CamiMath.polynomial(polynom, t)
+        return T(f)
+        
+    end
 # ..............................................................................
 @doc raw"""
     gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
@@ -134,7 +141,7 @@ end
 ```math
     g(t) = e^t - 1
 ```
-* `ID = 2`: quasi-exponential grid function of degree `p` (linear grid for `p = 1`),
+* `ID = 2`: truncated-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
     g(t) = t + \frac{1}{2}t^2 + ⋯ + \frac{1}{p!}t^p
 ```
@@ -178,12 +185,12 @@ julia> r′′= r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1
 [0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
 ```
 """
-function gridfunction(ID::Int, n::Int, h::T; p=5, polynom=[0,1], deriv=0) where T <: Real
+function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)::T 
 
-    return  ID == 1 ? _walterjohnson(n, h; deriv) :
-            ID == 2 ? _jw_gridfunction(n, h; deriv, p) :
-            ID == 3 ? _linear_gridfunction(n, h; deriv) :
-            ID == 4 ? _polynomial_gridfunction(n, h; polynom, deriv) : throw(DomainError(ID, "unknown gridfunction"))
+    return  ID == 1 ? _walterjohnson(n, T; h, deriv) :
+            ID == 2 ? _jooks_gridfunction(n, T; h, deriv, p) :
+            ID == 3 ? _linear_gridfunction(n, T; h, deriv) :
+            ID == 4 ? _polynomial_gridfunction(n, T; h, polynom, deriv) : throw(DomainError(ID, "unknown gridfunction"))
 
 end
 
@@ -191,14 +198,8 @@ end
 #            castGrid(ID, T, N; h=1, r0=0.01,  p=5, polynom=[0,1], epn=5, k=7)
 # ------------------------------------------------------------------------------
     
-function _gridspecs(ID::Int, N::Int, T::Type; h=1, r0=1, rmax=0, p=5, polynom=[0,1], epn=5, k=5)
+function _gridspecs(ID::Int, N::Int, T::Type, h, r0, rmax; p=5, polynom=[0,1], epn=5, k=5)
     
-    rmax = ID == 1 ? r0 * _walterjohnson(N, h) :
-           ID == 2 ? r0 * _jw_gridfunction(N, h; p) :
-           ID == 3 ? r0 * _linear_gridfunction(N, h)  :
-           ID == 4 ? r0 * _polynomial_gridfunction(N, h; polynom) : 
-                           throw(DomainError(ID, "unknown gridfunction"))
-
     ID = ID ≠ 2 ? ID : p == 1 ? 3 : 2
     str_d = ID == 4 ? "of degree $(length(polynom)-1)" : nothing
     name = ID == 4 ? gridtypename(ID::Int) * " of degree $(length(polynom)-1)" : gridtypename(ID::Int)
@@ -223,7 +224,7 @@ end
 Method to create the [`Grid`](@ref) object
 
 `ID = 1`: exponential,
-`ID = 2`: quasi-exponential,
+`ID = 2`: truncated-exponential,
 `ID = 3`: linear (uniform)
 `ID = 4`: polynomial
 #### Examples:
@@ -235,7 +236,7 @@ julia> grid = castGrid("exponential", 1000, Float64; h = 0.005, r0 = 0.1, msg=tr
 Grid: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
 
 julia> grid = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
-Grid: quasi-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
+Grid: truncated-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
 
 julia> grid = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
 Grid: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
@@ -256,36 +257,41 @@ julia> grid.r′′[1:4]
  [2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5] 
 ```
 """
-function castGrid(ID::Int, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+function castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
 # ==============================================================================
 #  castGrid: creates the grid object
 # ==============================================================================
-    h = convert(T, rationalize(h))
-    r0 = convert(T, rationalize(r0))
-    polynom = convert(Vector{T}, rationalize.(polynom))
-    epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
+
     name = gridtypename(ID)
+    rmax = convert(T, rationalize(rmax))
+    epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
+    polynom = convert(Vector{T}, rationalize.(polynom))
+    h = rationalize(h)
 
-    r  = r0 .* T[gridfunction(ID, n-1, h; p, polynom) for n=1:N]
-    r′ = r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
-    r′′= r0 .* T[gridfunction(ID, n-1, h; p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
+    r  = T[gridfunction(ID, n, T; h, p, polynom) for n=1:N]
+    r′ = T[gridfunction(ID, n, T; h, p, polynom, deriv=1) for n=1:N]     #  r′= dr/dn
+    r′′= T[gridfunction(ID, n, T; h, p, polynom, deriv=2) for n=1:N]     # r′′= d²r/dn²
 
-    # r[1] = T == BigFloat ? T(eps(Float64)) : T(eps(Float64)) # quasi zero - kanweg
-    rmax = r[N]
+    r0 = rmax/r[N]
+    r .*= r0
+    r′ .*= r0
+    r′′ .*= r0
 
-    msg && println(_gridspecs(ID, N, T; h, r0, rmax, p, polynom, epn, k))
+    h = T(h)
+
+    msg && println(_gridspecs(ID, N, T, h, r0, rmax; p, polynom, epn, k))
 
     return Grid(ID, name, T, N, r, r′, r′′, h, r0, epn, epw, k, p, polynom)
 
 end
-function castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+function castGrid(name::String, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
     
     ID = name == "exponential" ? 1 :
-         name == "quasi-exponential" ? 2 :
+         name == "truncated-exponential" ? 2 :
          name == "linear" ? 3 :
          name == "polynomial" ? 4 : throw(DomainError(ID, "unknown gridfunction"))
 
-    return castGrid(ID, N, T; h, r0, p, polynom, epn, k, msg)
+    return castGrid(ID, N, T; h, rmax, p, polynom, epn, k, msg)
    
 end
 
@@ -297,7 +303,7 @@ Name corresponding to the [`Grid`](@ref) ID.
 #### Example:
 ```
 julia> gridtypename(2)
-"quasi-exponential"
+"truncated-exponential"
 ```
 """
 function gridtypename(ID::Int)
@@ -306,7 +312,7 @@ function gridtypename(ID::Int)
 # ==============================================================================
     
     return ID == 1 ? "exponential" :
-           ID == 2 ? "quasi-exponential" :
+           ID == 2 ? "truncated-exponential" :
            ID == 3 ? "linear (uniform)" :
            ID == 4 ? "polynomial" : throw(DomainError(ID, "unknown gridfunction"))
    
@@ -319,7 +325,7 @@ end
 ID corresponding to the [`gridtypename`](@ref).
 #### Example:
 ```
-julia> gridtypeID("quasi-exponential")
+julia> gridtypeID("truncated-exponential")
 2
 ```
 """
@@ -329,7 +335,7 @@ function gridtypeID(name::String)
 # ==============================================================================
     
     return name == "exponential" ? 1 :
-           name == "quasi-exponential" ? 2 :
+           name == "truncated-exponential" ? 2 :
            name == "linear (uniform)" ? 3 :
            name == "polynomial" ? 4 : throw(DomainError(name, "unknown gridfunction"))
    
@@ -345,16 +351,20 @@ end
 The approximate grid position defined as the largest integer `n` satisfying the 
 condition `grid.r[n] < rval` on the [`Grid`](@ref).
 #### Example:
+Consider the exponential grid of 4 points defined by 
 ```
-julia> h = 0.1; r0 = 1.0;
+julia> grid = castGrid("exponential", 4, Float64; h = 0.1, rmax = 2.0);
 
-julia> grid = castGrid(1, 4, Float64; h, r0);
+julia> println(grid.r)
+[0.0, 0.6012192107114549, 1.265669197778149, 2.0]
+```
+The approximate grid position of the point r = 1.0 is n = 2
+(larger than 0.6012192107114549 but smaller than 1.265669197778149).
+```
+julia> r = 1.0;
 
-julia> r = grid.r; println("r[3] = $(r[3])")
-r[3] = 0.22140275816016985
-
-julia> gridPos(0.222, grid)
-3
+julia> n = gridPos(r, grid)
+2
 ```
 """
 function gridPos(rval::T, grid::Grid{T}) where T<:Real
@@ -362,7 +372,7 @@ function gridPos(rval::T, grid::Grid{T}) where T<:Real
     N = grid.N
     r = grid.r
 
-    r[1] ≤ rval ≤ r[end] || throw(DomainError(rval, "rval = $(rval) outside range $(r[1]) ≤ rval ≤ $(r[end])"))
+    r[1] ≤ rval ≤ r[N] || throw(DomainError(rval, "rval = $(rval) outside range $(r[1]) ≤ rval ≤ $(r[N])"))
     
     n = 1
     m = N
@@ -391,6 +401,28 @@ end
     fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 
 Fractional grid offset with respect to [`Grid`](@ref) position `n`.
+#### Example:
+Consider the exponential grid of 4 points defined by 
+```
+julia> grid = castGrid("exponential", 4, Float64; h = 0.1, rmax = 2.0);
+
+julia> println(grid.r)
+[0.0, 0.6012192107114549, 1.265669197778149, 2.0]
+```
+Te point r = 1.0 is located at approximate n n = 2, 
+with fractional position Δn = 0.6120806373655796.
+```
+julia> r = 1.0;
+
+julia> n = gridPos(r, grid)
+2
+
+julia> Δn = fracPos(n, r, grid);
+
+julia> t = (n+Δn-1)*grid.h;
+
+julia> grid.r0 * (exp(t)-1) ≈ r
+```
 """
 function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:Real
     
@@ -404,7 +436,7 @@ function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:R
      p = grid.p
     polynom = grid.polynom 
 
-    polynom = [r0*gridfunction(ID, n-1, h; p, polynom, deriv=d)/factorial(d) for d=0:k]
+    polynom = [r0*gridfunction(ID, n, T; h, p, polynom, deriv=d)/T(factorial(d)) for d=0:k]
 
     imin = nul   
     imax = one   
@@ -471,8 +503,8 @@ end
 @doc raw"""
     grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)``,
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points.
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)``
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points.
 #### Example:
 ```
 julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=false);
@@ -486,8 +518,8 @@ true
 ```
     grid_differentiation(f::Vector{T}, grid::Grid{T}, r::T, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at position `r`. 
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points.
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at position `r` 
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
 
@@ -502,8 +534,8 @@ true
 ```
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at grid position `n`. 
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points.
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at grid position `n` 
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
 
@@ -513,7 +545,7 @@ julia> grid = castGrid(3, 1001, Float64; h=2π/1000.0, r0=1.0, msg=false);
 
 julia> f = [sin(grid.r[i]) for i=1:grid.N];
 
-julia> f′ = [cos(grid.r[i]) for i=1:grid.N]
+julia> f′ = [cos(grid.r[i]) for i=1:grid.N];
 
 julia> grid_differentiation(f, grid, 500, fwd) ≈ f′[500]
 true
@@ -521,8 +553,8 @@ true
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
     grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` over the grid range `n1 ≤ n ≤ n2`.
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points.
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` over the grid range `n1 ≤ n ≤ n2`
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `n1=itr.start`, `n2=itr.stop`.  
 
 
@@ -530,28 +562,34 @@ true
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
     N = grid.N
+    #r = grid.r
     r′= grid.r′
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
-    
+    N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
+
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)
     Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
     Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
     f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
+    #r′a= [LinearAlgebra.dot(Fk, r[n:n+k]) for n=1:N-k]
     g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
+    #r′b= [LinearAlgebra.dot(Bkrev, r[n-k:n]) for n=N-k+1:N]
+    #r′= append!(r′a, r′b)
     f′= append!(f′, g′)
-    
+
     return _regularize_origin(f′, r′, k)
 
-end
+    end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
     N = grid.N
     r′= grid.r′
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
     
     if CamiMath.isforward(notation)
         α = fdiff_differentiation_expansion_polynom(0, k, fwd)
@@ -566,10 +604,10 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd;
     return f′
 
 end
-function grid_differentiation(f::Vector{T}, grid::Grid{T}, rval::T, notation=fwd; k=5) where T<:Real
+function grid_differentiation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
-    n = gridPos(rval, grid)
-    Δn = fracPos(n, rval, grid; ϵ = T(1e-8), k)
+    n = gridPos(rv, grid)
+    Δn = fracPos(n, rv, grid; ϵ = T(1e-8), k)
     v = n + Δn
 
     N = grid.N
@@ -577,6 +615,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, rval::T, notation=fwd
     r′= grid.r′
     k = min(k,N÷2)
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
     
     if CamiMath.isforward(notation)
         σ = n-v
@@ -603,6 +642,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
     k = min(k,N÷2)
     1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
+    N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
     
     α = fdiff_differentiation_expansion_polynom(0, k, fwd)
     β = fdiff_differentiation_expansion_polynom(0, k, bwd)
@@ -665,7 +705,7 @@ julia> grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
 Grid created: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
 
 julia> grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
-Grid created: quasi-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
+Grid created: truncated-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
 
 julia> grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
 Grid created: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
@@ -690,7 +730,7 @@ julia> println("integral on " * grid1.name * " grid = ", o1)
 integral on exponential grid = 1.0
 
 julia> println("integral on " * grid2.name * " grid = ", o2)
-integral on quasi-exponential grid: 1.0
+integral on truncated-exponential grid: 1.0
 
 julia> println("integral on " * grid3.name * " grid = ", o3)
 integral on linear (uniform) grid = 1.000000000000003

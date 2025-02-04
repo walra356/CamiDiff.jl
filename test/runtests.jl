@@ -32,21 +32,30 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
-    println("CamiDiff.jl  | 97 runtests (9.7s) | start")
+    println("CamiDiff.jl  | 128 runtests | runtime 9.7s (estimated) | start")
 
-    @test _gridspecs(1, 1000, Float64) == "Grid: exponential, Float64, rmax = Inf, Ntot = 1000, h = 1, r0 = 1"
-    @test _gridspecs(2, 1000, Float64) == "Grid: quasi-exponential, Float64, rmax = 25125501503000//3, Ntot = 1000, p = 5, h = 1, r0 = 1"
-    @test _gridspecs(3, 1000, Float64) == "Grid: linear (uniform), Float64, rmax = 1000, Ntot = 1000, p = 1, h = 1, r0 = 1"
-    @test _gridspecs(4, 1000, Float64) == "Grid: polynomial of degree 1, Float64, rmax = 1000, Ntot = 1000, polynom = [0, 1], h = 1, r0 = 1"
+    @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, Ntot = 1000, h = 0.01, r0 = 2.0"
+    @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, Ntot = 1000, p = 5, h = 0.01, r0 = 2.0"
+    @test _gridspecs(3, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: linear (uniform), Float64, rmax = 199.8, Ntot = 1000, p = 1, h = 0.1, r0 = 2.0"
+    @test _gridspecs(4, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: polynomial of degree 1, Float64, rmax = 199.8, Ntot = 1000, polynom = [0, 1], h = 0.1, r0 = 2.0"
+    
+    grid1 = castGrid(1, 1000, Float64; h = 0.01, rmax = 2.0, msg=false);
+    grid2 = castGrid(2, 1000, Float64; h = 0.01, rmax = 2.0, p=5, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.1, rmax = 2.0, msg=false);
+    grid4 = castGrid("polynomial", 1000, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1], msg=false);
 
-    grid1 = castGrid(1, 4, Float64; h = 0.1, r0 = 2.0);
-    grid2 = castGrid(2, 4, Float64; h = 0.1, r0 = 2.0, p=1);
-    grid3 = castGrid(3, 4, Float64; h = 0.1, r0 = 2.0);
-    grid4 = castGrid("polynomial", 4, Float64; h = 0.1, r0 = 2.0, polynom=[0, 1], msg=false);
-    @test [grid2.r, grid2.r′, grid2.r′′] ≈ [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]
-    @test [grid1.r, grid1.r′, grid1.r′′] == [[0.0, 0.21034183615129542, 0.4428055163203397, 0.6997176151520064], [0.2, 0.22103418361512955, 0.244280551632034, 0.26997176151520064], [0.020000000000000004, 0.022103418361512958, 0.024428055163203403, 0.02699717615152007]]
+    grid1 = castGrid(1, 4, Float64; h = 0.1, rmax = 2.0, msg=true);
+    grid2 = castGrid(2, 4, Float64; h = 0.1, rmax = 2.0);
+    grid3 = castGrid(3, 4, Float64; h = 0.1, rmax = 2.0);
+    grid4 = castGrid("polynomial", 4, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1]);
+    @test [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]
+    @test [grid1.r, grid1.r′, grid1.r′′] == [[0.0, 0.6012192107114549, 1.265669197778149, 2.0], [0.5716591827020164, 0.6317811037731619, 0.6982261024798313, 0.7716591827020164], [0.057165918270201635, 0.06317811037731619, 0.06982261024798313, 0.07716591827020164]]
     @test grid1.name == "exponential"
-    @test gridPos(0.25, grid1) == 2
+    n = gridPos(1.0, grid1);
+    @test n == 2
+    Δn = fracPos(n, 1.0, grid1);
+    t = (n+Δn-1)*grid1.h;
+    @test grid1.r0 * (exp(t)-1) ≈ 1.0
     
     @test gridtypename(1) == "exponential"
     @test gridtypeID("exponential") == 1
@@ -54,12 +63,13 @@ rev = CamiMath.rev
     @test_throws DomainError castGrid(5, 1000, Float64)
     @test_throws DomainError gridtypename(5) 
     @test_throws DomainError gridtypeID("logarithm") 
+#   =========================================================================================
+    gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);  
 #   -----------------------------------------------------------------------------------------
-    gaussian(r) = sqrt(2.0/π) * exp(-r^2/2.0);
-    grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.06137, msg=true);
-    grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.0999, p=5, msg=false);
-    grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.0901, msg=false);
-    grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.000902, polynom=[0,0,1], msg=false);
+    grid1 = castGrid(1, 1000, Float64; h = 0.005, rmax=9.0, msg=false);
+    grid2 = castGrid(2, 1000, Float64; h = 0.005, rmax=9.0, p=5, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.1, rmax=9.0, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.1, rmax=9.0, polynom=[0,0,1], msg=false);
     r1 = grid1.r;
     r2 = grid2.r;
     r3 = grid3.r;
@@ -97,11 +107,8 @@ rev = CamiMath.rev
     @test f′1 ≈ o1
     @test f′2 ≈ o2
     @test f′3 ≈ o3
-    @test f′4 ≈ o4 
-    a1 = f′1 ./ o1
-    a2 = f′2 ./ o2
-    a3 = f′3 ./ o3
-    a4 = f′4 ./ o4 
+    @test f′4 ≈ o4  
+#   -----------------------------------------------------------------------------------------
     o1 = grid_differentiation(f1, grid1, 1:900);
     o2 = grid_differentiation(f2, grid2, 1:900);
     o3 = grid_differentiation(f3, grid3, 1:900);
@@ -109,13 +116,34 @@ rev = CamiMath.rev
     @test f′1[1:900] ≈ o1
     @test f′2[1:900] ≈ o2
     @test f′3[1:900] ≈ o3
-    @test f′4[1:900] ≈ o4    
+    @test f′4[1:900] ≈ o4  
 #   -----------------------------------------------------------------------------------------
-    exponential(r) = exp(-r);
-    grid1 = castGrid(1, 1000, Float64; h = 0.01, r0 = 0.001, msg=true);
-    grid2 = castGrid(2, 1000, Float64; h = 0.01, r0 = 0.02, p=6, msg=false);
-    grid3 = castGrid(3, 1000, Float64; h = 0.01, r0 = 2.0, msg=false);
-    grid4 = castGrid(4, 1000, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=false);
+    o1fwd = grid_differentiation(f1, grid1, 500, fwd);
+    o1bwd = grid_differentiation(f1, grid1, 500, bwd);
+    o2fwd = grid_differentiation(f2, grid2, 500, fwd);
+    o2bwd = grid_differentiation(f2, grid2, 500, bwd);
+    o3fwd = grid_differentiation(f3, grid3, 500, fwd);
+    o3bwd = grid_differentiation(f3, grid3, 500, bwd); 
+    o4fwd = grid_differentiation(f4, grid4, 500, fwd);
+    o4bwd = grid_differentiation(f4, grid4, 500, bwd);
+    @test f′1[500] ≈ o1fwd ≈ o1bwd
+    @test f′2[500] ≈ o2fwd ≈ o2bwd
+    @test f′3[500] ≈ o3fwd ≈ o3bwd
+    @test f′4[500] ≈ o4fwd ≈ o4bwd
+#   -----------------------------------------------------------------------------------------
+    r = 1.0;
+    f′1 = -r * gaussian(r)
+    @test grid_differentiation(f1, grid1, r, fwd) ≈ f′1
+    @test grid_differentiation(f2, grid2, r, bwd) ≈ f′1
+    @test grid_differentiation(f3, grid3, r, fwd) ≈ f′1
+    @test grid_differentiation(f4, grid4, r, bwd) ≈ f′1
+#   ========================================================================================= 
+    exponential(r) = exp(-r);    
+#   -----------------------------------------------------------------------------------------
+    grid1 = castGrid(1, 1000, Float64; h = 0.01, rmax=25, msg=false);
+    grid2 = castGrid(2, 1000, Float64; h = 0.01, rmax=25, p=6, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.01, rmax=25, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.01, rmax=25, polynom=[0,0,1], msg=false);
     r1 = grid1.r;
     r2 = grid2.r;
     r3 = grid3.r;
@@ -146,6 +174,24 @@ rev = CamiMath.rev
     f′2 = -f2;
     f′3 = -f3;
     f′4 = -f4;
+    o1 = grid_differentiation(f1, grid1);
+    o2 = grid_differentiation(f2, grid2);
+    o3 = grid_differentiation(f3, grid3);
+    o4 = grid_differentiation(f4, grid4);
+    @test f′1 ≈ o1
+    @test f′2 ≈ o2
+    @test f′3 ≈ o3
+    @test f′4 ≈ o4  
+#   -----------------------------------------------------------------------------------------
+    o1 = grid_differentiation(f1, grid1, 1:900);
+    o2 = grid_differentiation(f2, grid2, 1:900);
+    o3 = grid_differentiation(f3, grid3, 1:900);
+    o4 = grid_differentiation(f4, grid4, 1:900);
+    @test f′1[1:900] ≈ o1
+    @test f′2[1:900] ≈ o2
+    @test f′3[1:900] ≈ o3
+    @test f′4[1:900] ≈ o4  
+#   -----------------------------------------------------------------------------------------
     o1fwd = grid_differentiation(f1, grid1, 500, fwd);
     o1bwd = grid_differentiation(f1, grid1, 500, bwd);
     o2fwd = grid_differentiation(f2, grid2, 500, fwd);
@@ -159,60 +205,144 @@ rev = CamiMath.rev
     @test f′3[500] ≈ o3fwd ≈ o3bwd
     @test f′4[500] ≈ o4fwd ≈ o4bwd
 #   -----------------------------------------------------------------------------------------
-    rval = 1.0;
-    @test grid_differentiation(f1, grid1, rval, fwd) ≈ -exp(-1.0)
+    r = 1.0;
+    @test grid_differentiation(f1, grid1, r, fwd) ≈ -exp(-r)
+    @test grid_differentiation(f2, grid2, r, bwd) ≈ -exp(-r)
+    @test grid_differentiation(f3, grid3, r, fwd) ≈ -exp(-r)
+    @test grid_differentiation(f4, grid4, r, bwd) ≈ -exp(-r)
+#   ========================================================================================= 
+    linear(r) = 1.00r;
 #   -----------------------------------------------------------------------------------------
-    grid1 = castGrid(1, 5, Float64; h = 0.01, r0 = 0.001, msg=false);
-    grid2 = castGrid(2, 5, Float64; h = 0.01, r0 = 0.02, p=5, msg=false);
-    grid3 = castGrid(3, 5, Float64; h = 0.01, r0 = 2.0, msg=false);
-    grid4 = castGrid(4, 5, Float64; h = 0.01, r0 = 0.2, polynom=[0,0,1], msg=false);
-    r1 = grid1.r;
-    r2 = grid2.r;
-    r3 = grid3.r;
-    r4 = grid4.r;
-    f1 = [exponential(r1[n]) for n=1:grid1.N];
-    f2 = [exponential(r2[n]) for n=1:grid2.N];
-    f3 = [exponential(r3[n]) for n=1:grid3.N];
-    f4 = [exponential(r4[n]) for n=1:grid4.N];
+    grid1 = castGrid(1, 1000, Float64; h = 0.001, rmax=2, msg=false);
+    grid2 = castGrid(2, 1000, Float64; h = 0.001, rmax=2, p=5, msg=false);
+    grid3 = castGrid(3, 1000, Float64; h = 0.01, rmax=2, msg=false);
+    grid4 = castGrid(4, 1000, Float64; h = 0.01, rmax=2, polynom=[0,0,1], msg=false);
+    r1 = grid1.r
+    r2 = grid2.r
+    r3 = grid3.r
+    r4 = grid4.r
+    f1 = [linear(r1[n]) for n ∈ eachindex(r1)];
+    f2 = [linear(r2[n]) for n ∈ eachindex(r2)]; 
+    f3 = [linear(r3[n]) for n ∈ eachindex(r3)]; 
+    f4 = [linear(r4[n]) for n ∈ eachindex(r4)]; 
 #   -----------------------------------------------------------------------------------------
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);
     o4 = grid_integration(f4, grid4);
-    @test o1 ≈ 4.081028048564596e-5
-    @test o2 ≈ 0.000815888856047799
-    @test o3 ≈ 0.0768862163847329
-    @test o4 ≈ 0.0003199456063034396
-    o1 = grid_integration(f1, grid1, 1:5);
-    o2 = grid_integration(f2, grid2, 1:5);
-    o3 = grid_integration(f3, grid3, 1:5);
-    o4 = grid_integration(f4, grid4, 1:5);
-    @test o1 ≈ 4.081028048564596e-5
-    @test o2 ≈ 0.000815888856047799
-    @test o3 ≈ 0.0768862163847329
-    @test o4 ≈ 0.0003199456063034396
-    #   -----------------------------------------------------------------------------------------
-    f′1 = -f1;
-    f′2 = -f2;
-    f′3 = -f3;
-    f′4 = -f4;
+    @test o1 ≈ 2.0
+    @test o2 ≈ 2.0
+    @test o3 ≈ 2.0
+    @test o4 ≈ 2.0
+#   -----------------------------------------------------------------------------------------
+    f′ = [1.00 for n ∈ eachindex(r1)];
     o1 = grid_differentiation(f1, grid1);
     o2 = grid_differentiation(f2, grid2);
     o3 = grid_differentiation(f3, grid3);
     o4 = grid_differentiation(f4, grid4);
-    @test o1 ≈ [-0.9999665172233384, -0.9999564684914404, -0.9999463188148598, -0.999936563671822, -0.9999262091385633]
-    @test o2 ≈ [-0.9999684369099704, -0.9997674803104111, -0.9995645451149201, -0.9993600409372991, -0.9991530903064654]
-    @test o3 ≈ [-0.9998686481325542, -0.9800699223805415, -0.960663237665263, -0.9416370637447824, -0.9229914006191109]
-    @test o4 ≈ [-1.0001249955642058, -1.0000499920670425, -0.9999749885698793, -0.9998500107336976, -0.9997125393138017]
-
-    o1 = grid_differentiation(f1, grid1, 1:5);
-    o2 = grid_differentiation(f2, grid2, 1:5);
-    o3 = grid_differentiation(f3, grid3, 1:5);
-    o4 = grid_differentiation(f4, grid4, 1:5);
-    @test o1 ≈ [-0.9999665172233384, -0.9999564684914404, -0.9999463188148598, -0.999936563671822, -0.9999262091385633]
-    @test o2 ≈ [-0.9999684369099704, -0.9997674803104111, -0.9995645451149201, -0.9993600409372991, -0.9991530903064654]
-    @test o3 ≈ [-0.9998686481325542, -0.9800699223805415, -0.960663237665263, -0.9416370637447824, -0.9229914006191109]
-    @test o4 ≈ [-1.0001249955642058, -1.0000499920670425, -0.9999749885698793, -0.9998500107336976, -0.9997125393138017]
+    @test o1 ≈ f′
+    @test o2 ≈ f′
+    @test o3 ≈ f′
+    @test o4 ≈ f′
+#   -----------------------------------------------------------------------------------------
+    r = 1.0;
+    o1 = grid_differentiation(f1, grid1, r, fwd);
+    o2 = grid_differentiation(f2, grid2, r, bwd);
+    o3 = grid_differentiation(f3, grid3, r, fwd);
+    o4 = grid_differentiation(f4, grid4, r, bwd);
+    @test o1 ≈ 1.0
+    @test o2 ≈ 1.0
+    @test o3 ≈ 1.0
+    @test o4 ≈ 1.0
+#   ========================================================================================= 
+    T = Float64
+    N=1000
+    k = 5
+    a = 1.001
+    a = T == BigFloat ? T(rationalize(a)) : a
+    line(r) = T(a*r);
+#   -----------------------------------------------------------------------------------------
+    grid1 = castGrid(1, N, T; h = 0.01, rmax=2, msg=false);
+    grid2 = castGrid(2, N, T; h = 0.01, rmax=2, p=4, msg=false);
+    grid3 = castGrid(3, N, T; h = 0.01, rmax=2, msg=false);
+    grid4 = castGrid(4, N, T; h = 0.01, rmax=2, polynom=[0,0,1], msg=false);
+    r1 = grid1.r
+    r2 = grid2.r
+    r3 = grid3.r
+    r4 = grid4.r
+    f1 = [line(r1[n]) for n ∈ eachindex(r1)];
+    f2 = [line(r2[n]) for n ∈ eachindex(r2)]; 
+    f3 = [line(r3[n]) for n ∈ eachindex(r3)]; 
+    f4 = [line(r4[n]) for n ∈ eachindex(r4)]; 
+#   -----------------------------------------------------------------------------------------
+    int_f1 = a* T(1//2)*r1[N]^2
+    int_f2 = a* T(1//2)*r2[N]^2
+    int_f3 = a* T(1//2)*r3[N]^2
+    int_f4 = a* T(1//2)*r4[N]^2
+    o1 = grid_integration(f1, grid1);
+    o2 = grid_integration(f2, grid2);
+    o3 = grid_integration(f3, grid3);
+    o4 = grid_integration(f4, grid4);
+    @test o1 ≈ int_f1; # println("o1 ", o1)
+    @test o2 ≈ int_f2; # println("o2 ", o2)
+    @test o3 ≈ int_f3; # println("o3 ", o3)
+    @test o4 ≈ int_f4; # println("o4 ", o4)
+#   -----------------------------------------------------------------------------------------
+    f′ = [1.001 for n=1:N];
+    o1 = grid_differentiation(f1, grid1; k); # println("o1 ", o1[N÷2])
+    o2 = grid_differentiation(f2, grid2; k); # println("o2 ", o2[N÷2])
+    o3 = grid_differentiation(f3, grid3; k); # println("o3 ", o3[N÷2])
+    o4 = grid_differentiation(f4, grid4; k); # println("o4 ", o4[N÷2])
+    @test o1 ≈ f′
+    @test o2 ≈ f′
+    @test o3 ≈ f′
+    @test o4 ≈ f′
+#   ========================================================================================= 
+    T = Float64
+    N=1000
+    k = 5
+    a = 1.001
+    a = T == BigFloat ? T(rationalize(a)) : a
+    curve(r) = T(1//2)*T(a)*T(r)*T(r);
+#   -----------------------------------------------------------------------------------------
+    grid1 = castGrid(1, N, T; h = 0.01, rmax=2, msg=false);
+    grid2 = castGrid(2, N, T; h = 0.01, rmax=2, p=4, msg=false);
+    grid3 = castGrid(3, N, T; h = 0.01, rmax=2, msg=false);
+    grid4 = castGrid(4, N, T; h = 0.01, rmax=2, polynom=[0,0,1], msg=false);
+    r1 = grid1.r
+    r2 = grid2.r
+    r3 = grid3.r
+    r4 = grid4.r
+    f1 = [curve(r1[n]) for n ∈ eachindex(r1)];
+    f2 = [curve(r2[n]) for n ∈ eachindex(r2)]; 
+    f3 = [curve(r3[n]) for n ∈ eachindex(r3)]; 
+    f4 = [curve(r4[n]) for n ∈ eachindex(r4)]; 
+#   -----------------------------------------------------------------------------------------
+    int_f1 = a* T(1//6)*r1[N]^3
+    int_f2 = a* T(1//6)*r2[N]^3
+    int_f3 = a* T(1//6)*r3[N]^3
+    int_f4 = a* T(1//6)*r4[N]^3
+    o1 = grid_integration(f1, grid1);
+    o2 = grid_integration(f2, grid2);
+    o3 = grid_integration(f3, grid3);
+    o4 = grid_integration(f4, grid4);
+    @test o1 ≈ int_f1; # println("o1 ", o1)
+    @test o2 ≈ int_f2; # println("o2 ", o2)
+    @test o3 ≈ int_f3; # println("o3 ", o3)
+    @test o4 ≈ int_f4; # println("o4 ", o4)
+#   -----------------------------------------------------------------------------------------        
+    f′1 = [line(r1[n]) for n ∈ eachindex(r1)];
+    f′2 = [line(r2[n]) for n ∈ eachindex(r2)]; 
+    f′3 = [line(r3[n]) for n ∈ eachindex(r3)]; 
+    f′4 = [line(r4[n]) for n ∈ eachindex(r4)]; 
+    o1 = grid_differentiation(f1, grid1; k); # println("o1 ", o1[N÷2])
+    o2 = grid_differentiation(f2, grid2; k); # println("o2 ", o2[N÷2])
+    o3 = grid_differentiation(f3, grid3; k); # println("o3 ", o3[N÷2])
+    o4 = grid_differentiation(f4, grid4; k); # println("o4 ", o4[N÷2])
+    @test o1 ≈ f′1
+    @test o2 ≈ f′2
+    @test o3 ≈ f′3
+    @test o4 ≈ f′4
 #   -----------------------------------------------------------------------------------------
     f = [v^3 for v=1:10];
 #   -----------------------------------------------------------------------------------------
