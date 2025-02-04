@@ -164,25 +164,24 @@ where ``t[n] = (n-1) * h`` is the *ticks function* for the unit-based indexing o
 NB. All [`gridfunction`](@ref)`s` satisfy the properties ``t[1] = 0`` and ``r[1] = 0``.
 #### Examples:
 ```
-julia> h = 0.1; r0=1.0; N=4;
+julia> h = 0.1; r0=1.0; N=4; T=Float64;
 
-julia> r = r0 .* [gridfunction(1, n-1, h) for n=1:N]
-[0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032]
+julia> r = r0 .* [gridfunction(1, n, T; h) for n=1:N]; println("r = ", r)
+r = [0.0, 0.10517091807564771, 0.22140275816016985, 0.3498588075760032]
 
-julia> r′ = r0 .* [gridfunction(1, n-1, h; deriv=1) for n=1:N]
-[0.1, 0.11051709180756478, 0.122140275816017, 0.13498588075760032]
+julia> r′ = r0 .* [gridfunction(1, n, T; h, deriv=1) for n=1:N]; println("r′ = ", r′)
+r′ = [0.1, 0.11051709180756478, 0.122140275816017, 0.13498588075760032]
 
-julia> r′′= r0 .* [gridfunction(1, n-1, h; deriv=2) for n=1:N]
-[0.010000000000000002, 0.011051709180756479, 0.012214027581601701, 0.013498588075760034]
+julia> r′′= r0 .* [gridfunction(1, n, T; h, deriv=2) for n=1:N]; println("r′′ = ", r′′)
+r′′ = [0.010000000000000002, 0.011051709180756479, 0.012214027581601701, 0.013498588075760034]
 
-julia> r = r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1]) for n=1:N]
-[0.0, 0.010000000000000002, 0.04000000000000001, 0.09000000000000002]
+julia> r = r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1]) for n=1:N]; println("r = ",r )
+r = [0.0, 0.010000000000000002, 0.04000000000000001, 0.09000000000000002]
 
-julia> r′ = r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=1) for n=1:N]
-[0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
+julia> r′ = r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1], deriv=1) for n=1:N]; println("r′ = ", r′)
+r′ = [0.0, 0.020000000000000004, 0.04000000000000001, 0.06000000000000001]
 
-julia> r′′= r0 .* [gridfunction(4, n-1, h; polynom=[0,0,1], deriv=2) for n=1:N]
-[0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.020000000000000004]
+julia> r′′= r0 .* [gridfunction(4, n, T; h, polynom=[0,0,1], deriv=2) for n=1:N]; println("r′′= ", r′′)
 ```
 """
 function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
@@ -221,40 +220,41 @@ end
     castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
     castGrid(name::String, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
 
-Method to create the [`Grid`](@ref) object
+Method to create a [`Grid`](@ref) object that covers the radial range [0, rmax] with `N` points.
 
 `ID = 1`: exponential,
 `ID = 2`: truncated-exponential,
 `ID = 3`: linear (uniform)
 `ID = 4`: polynomial
 #### Examples:
+
 ```
-julia> grid = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
-Grid: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
+julia> grid = castGrid(1, 1000, Float64; h = 0.005, rmax = 10, msg=true);
+Grid: exponential, Float64, rmax = 10.0, Ntot = 1000, h = 0.005, r0 = 0.0681789
 
-julia> grid = castGrid("exponential", 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
-Grid: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
+julia> grid = castGrid("exponential", 1000, Float64; h = 0.005, rmax = 10, msg=true);
+Grid: exponential, Float64, rmax = 10.0, Ntot = 1000, h = 0.005, r0 = 0.0681789
 
-julia> grid = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
-Grid: truncated-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
+julia> grid = castGrid(2, 1000, Float64; h = 0.005, rmax = 10, p=5, msg=true);
+Grid: truncated-exponential, Float64, rmax = 10.0, Ntot = 1000, p = 5, h = 0.005, r0 = 0.111
 
-julia> grid = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
-Grid: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
+julia> grid = castGrid(3, 1000, Float64; h = 0.1, rmax = 10, msg=true);
+Grid: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1001
 
-julia> grid = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=true);
-Grid: polynomial of degree 2, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001
+julia> grid = castGrid(4, 1000, Float64; h = 0.1, rmax = 10, polynom=[0,0,1], msg=true);
+Grid: polynomial of degree 2, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001002
 
-julia> grid.r[1:4]
-4-element Vector{Float64}:
- [2.220446049250313e-16, 1.0000000000000003e-5, 4.000000000000001e-5, 9.000000000000003e-5]
+julia> r = grid.r[1:4]; println("r = ", r)
+r = [0.0, 1.002003004005006e-5, 4.008012016020024e-5, 9.018027036045053e-5]
 
-julia> grid.r′[1:4]
-4-element Vector{Float64}:
- [0.0, 2.0000000000000005e-5, 4.000000000000001e-5, 6.0000000000000015e-5]
- 
-julia> grid.r′′[1:4]
-4-element Vector{Float64}:
- [2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5, 2.0000000000000005e-5] 
+julia> r = grid.r[997:1000]; println("r = ", r)
+r = [9.9400301202103, 9.96000004008012, 9.979990000010021, 10.0]
+
+julia> r′= grid.r′[1:4]; println("r′ = ", r′)
+r′ = [0.0, 2.0040060080100123e-5, 4.008012016020025e-5, 6.012018024030035e-5]
+
+julia> r′′= grid.r′′[1:4]; println("r′′ = ", r′′)
+r′′ = [2.004006008010012e-5, 2.004006008010012e-5, 2.004006008010012e-5, 2.004006008010012e-5]
 ```
 """
 function castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
