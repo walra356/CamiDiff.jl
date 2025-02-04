@@ -218,8 +218,8 @@ function _gridspecs(ID::Int, N::Int, T::Type, h, r0, rmax; p=5, polynom=[0,1], e
 end
 # ..............................................................................
 @doc raw"""
-    castGrid(ID::Int, N::Int, T::Type; h=1, r0=1,  p=5, polynom=[0,1], epn=5, k=7, msg=false)
-    castGrid(name::String, N::Int, T::Type; h=1, r0=1, p=5, polynom=[0,1], epn=5, k=7, msg=false)
+    castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+    castGrid(name::String, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
 
 Method to create the [`Grid`](@ref) object
 
