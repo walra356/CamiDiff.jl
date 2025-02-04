@@ -16,3 +16,10 @@ grid = castGrid(4, 1000, Float64; h = 0.1, rmax = 10, polynom=[0,0,1], msg=true)
 r = grid.r[1:4]; println("r = ", r)
 r′= grid.r′[1:4]; println("r′ = ", r′)
 r′′= grid.r′′[1:4]; println("r′′ = ", r′′)
+
+
+grid = castGrid(1, 1000, Float64; h = 0.01, rmax=25, msg=false);
+r = grid.r;
+f = [exp(-r[n]) for n=1:grid.N];
+rv = 1.0;
+grid_interpolation(f1, grid1, rv, fwd) ≈ exp(-rv)
