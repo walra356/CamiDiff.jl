@@ -584,8 +584,6 @@ true
 ``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` over the grid range `n1 ≤ n ≤ n2`
 * `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `n1=itr.start`, `n2=itr.stop`.  
-
-
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
@@ -602,10 +600,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
     f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=1:N-k]
-    #r′a= [LinearAlgebra.dot(Fk, r[n:n+k]) for n=1:N-k]
     g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
-    #r′b= [LinearAlgebra.dot(Bkrev, r[n-k:n]) for n=N-k+1:N]
-    #r′= append!(r′a, r′b)
     f′= append!(f′, g′)
 
     return _regularize_origin(f′, r′, k)
@@ -665,39 +660,26 @@ end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5) where T<:Real
 
     N = grid.N
-    r′= [grid.r′[n] for n=n1:n2]
+    r′= grid.r′[n1:n2]
 
     k = min(k,N÷2)
     1 ≤ n1 ≤ n2 ≤ N || throw(DomainError(n1,n2))
     k > 0 || throw(DomainError("k = $k violates k ≥ 1 as required for lagrangian interpolation"))
     N > 4 || throw(DomainError("N = $N violates N ≥ 5 as required by CamiDiff"))
-    
-    α = fdiff_differentiation_expansion_polynom(0, k, fwd)
-    β = fdiff_differentiation_expansion_polynom(0, k, bwd)
-    Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-    Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
 
-    N-k ≥ n2 || println("Warning: N-k < n2, (n2+k-N = ", n2+k-N, ")")
-
-    n3 = min(n2,N-k)
-    
- #   f′= [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n3]
- #   g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n2-k+1:n2]
- #   n0=1
- #   if n0+k ≤ n1
- #       println("a")
- #       f′ = [sum(Bkrev .* f[n-k+1:n]) for n=n1:n2]
- #   else
- #       println("a")
- #       f′ = [sum(Fk .* f[n:n+k]) for n=n1:n1+k]
- #       g′ = [sum(Bkrev .* f[n-k+1:n]) for n=n1+k+1:n2]
- #       append!(f′, g′)
- #   end    
-
-    f′= [sum(Fk .* f[n:n+k]) for n=n1:n3]
-    g′= [sum(Bkrev .* f[n-k:n]) for n=n2-k+1:n2]
-#    println("[f′[end] = ", f′[])
-    f′= append!(f′, g′)[1:n2-n1+1]
+    if  k+1 ≤ n1 ≤ n2 ≤ N-k        
+        α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+        f′ = [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n2]
+    elseif 1 ≤ n1 ≤ n2 ≤ N-k
+        α = fdiff_differentiation_expansion_polynom(0, k, fwd)
+        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
+        f′ = [LinearAlgebra.dot(Fk, f[n:n+k]) for n=n1:n2]
+    elseif k+1 ≤ n1 ≤ n2 ≤ N
+        β = fdiff_differentiation_expansion_polynom(0, k, bwd)
+        Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
+        f′ = [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n1:n2]
+    end 
     
     return _regularize_origin(f′, r′, k)
 

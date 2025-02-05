@@ -32,7 +32,7 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
-    println("CamiDiff.jl  | 141 runtests | runtime 10.2s (estimated) | start")
+    println("CamiDiff.jl  | 153 runtests | runtime 11.2s (estimated) | start")
 
     @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, Ntot = 1000, h = 0.01, r0 = 2.0"
     @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, Ntot = 1000, p = 5, h = 0.01, r0 = 2.0"
@@ -153,10 +153,10 @@ rev = CamiMath.rev
     r2 = grid2.r;
     r3 = grid3.r;
     r4 = grid4.r;
-    f1 = [exponential(r1[n]) for n=1:grid1.N];
-    f2 = [exponential(r2[n]) for n=1:grid2.N];
-    f3 = [exponential(r3[n]) for n=1:grid3.N];
-    f4 = [exponential(r4[n]) for n=1:grid4.N];
+    f1 = [exp(-r1[n]) for n=1:grid1.N];
+    f2 = [exp(-r2[n]) for n=1:grid2.N];
+    f3 = [exp(-r3[n]) for n=1:grid3.N];
+    f4 = [exp(-r4[n]) for n=1:grid4.N];
 #   -----------------------------------------------------------------------------------------
     o1 = grid_integration(f1, grid1);
     o2 = grid_integration(f2, grid2);
@@ -219,6 +219,58 @@ rev = CamiMath.rev
     @test grid_differentiation(f2, grid2, r, bwd) ≈ -exp(-r)
     @test grid_differentiation(f3, grid3, r, fwd) ≈ -exp(-r)
     @test grid_differentiation(f4, grid4, r, bwd) ≈ -exp(-r)
+#   ========================================================================================= 
+    # f = exp(-r);    
+#   -----------------------------------------------------------------------------------------
+    grid1 = castGrid(1, 250, Float64; h = 0.01, rmax=2.5, msg=false);
+    grid2 = castGrid(2, 250, Float64; h = 0.01, rmax=2.5, p=6, msg=false);
+    grid3 = castGrid(3, 250, Float64; h = 0.01, rmax=2.5, msg=false);
+    grid4 = castGrid(4, 250, Float64; h = 0.01, rmax=2.5, polynom=[0,0,1], msg=false);
+    r1 = grid1.r;
+    r2 = grid2.r;
+    r3 = grid3.r;
+    r4 = grid4.r;
+    f1 = [exp(-r1[n]) for n=1:grid1.N];
+    f2 = [exp(-r2[n]) for n=1:grid2.N];
+    f3 = [exp(-r3[n]) for n=1:grid3.N];
+    f4 = [exp(-r4[n]) for n=1:grid4.N];
+    f′1 = -f1;
+    f′2 = -f2;
+    f′3 = -f3;
+    f′4 = -f4;
+#   -----------------------------------------------------------------------------------------
+    n1 = 1;
+    n2 = 245;
+    o1 = grid_differentiation(f1, grid1, n1:n2);
+    o2 = grid_differentiation(f2, grid2, n1:n2);
+    o3 = grid_differentiation(f3, grid3, n1:n2);
+    o4 = grid_differentiation(f4, grid4, n1:n2);
+    @test f′1[n1:n2] ≈ o1
+    @test f′2[n1:n2] ≈ o2
+    @test f′3[n1:n2] ≈ o3
+    @test f′4[n1:n2] ≈ o4 
+#   -----------------------------------------------------------------------------------------
+    n1 = 6;
+    n2 = 250;
+    o1 = grid_differentiation(f1, grid1, n1:n2);
+    o2 = grid_differentiation(f2, grid2, n1:n2);
+    o3 = grid_differentiation(f3, grid3, n1:n2);
+    o4 = grid_differentiation(f4, grid4, n1:n2);
+    @test f′1[n1:n2] ≈ o1
+    @test f′2[n1:n2] ≈ o2
+    @test f′3[n1:n2] ≈ o3
+    @test f′4[n1:n2] ≈ o4
+#   -----------------------------------------------------------------------------------------
+    n1 = 6;
+    n2 = 245;
+    o1 = grid_differentiation(f1, grid1, n1:n2);
+    o2 = grid_differentiation(f2, grid2, n1:n2);
+    o3 = grid_differentiation(f3, grid3, n1:n2);
+    o4 = grid_differentiation(f4, grid4, n1:n2);
+    @test f′1[n1:n2] ≈ o1
+    @test f′2[n1:n2] ≈ o2
+    @test f′3[n1:n2] ≈ o3
+    @test f′4[n1:n2] ≈ o4
 #   ========================================================================================= 
     linear(r) = 1.00r;
 #   -----------------------------------------------------------------------------------------
