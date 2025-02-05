@@ -161,7 +161,7 @@ rev = CamiMath.rev
         o1 = grid_integration(f1, grid1); println("o1: ", o1)
         o2 = grid_integration(f2, grid2); println("o2: ", o2)
         o3 = grid_integration(f3, grid3); println("o3: ", o3)
-        o4 = grid_integration(f4, grid4); println("o4: ", o4)
+        o4 = grid_integration(f4, grid4); println("o4: ", o4) 
     #    @test o1 ≈ 1.0
     #    @test o2 ≈ 1.0
     #    @test o3 ≈ 1.0
