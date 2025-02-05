@@ -145,6 +145,30 @@ rev = CamiMath.rev
 #   ========================================================================================= 
 #   f = exp(-r)  
 #   -----------------------------------------------------------------------------------------
+        grid1 = castGrid(1, 9, Float64; h = 0.01, rmax=25, msg=false);
+        grid2 = castGrid(2, 9, Float64; h = 0.01, rmax=25, p=6, msg=false);
+        grid3 = castGrid(3, 9, Float64; h = 0.01, rmax=25, msg=false);
+        grid4 = castGrid(4, 9, Float64; h = 0.01, rmax=25, polynom=[0,0,1], msg=false);
+        r1 = grid1.r;
+        r2 = grid2.r;
+        r3 = grid3.r;
+        r4 = grid4.r;
+        f1 = [exp(-r1[n]) for n=1:grid1.N];
+        f2 = [exp(-r2[n]) for n=1:grid2.N];
+        f3 = [exp(-r3[n]) for n=1:grid3.N];
+        f4 = [exp(-r4[n]) for n=1:grid4.N];
+    #   -----------------------------------------------------------------------------------------
+        o1 = grid_integration(f1, grid1); println("o1: ", o1)
+        o2 = grid_integration(f2, grid2); println("o2: ", o2)
+        o3 = grid_integration(f3, grid3); println("o3: ", o3)
+        o4 = grid_integration(f4, grid4); println("o4: ", o4)
+    #    @test o1 ≈ 1.0
+    #    @test o2 ≈ 1.0
+    #    @test o3 ≈ 1.0
+    #    @test o4 ≈ 1.0
+#   ========================================================================================= 
+#   f = exp(-r)  
+#   -----------------------------------------------------------------------------------------
     grid1 = castGrid(1, 1000, Float64; h = 0.01, rmax=25, msg=false);
     grid2 = castGrid(2, 1000, Float64; h = 0.01, rmax=25, p=6, msg=false);
     grid3 = castGrid(3, 1000, Float64; h = 0.01, rmax=25, msg=false);
