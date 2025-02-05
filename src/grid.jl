@@ -139,7 +139,7 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)
 
 * `ID = 1`: exponential grid function,
 ```math
-    g(t) = exp(t) - 1
+    g(t) = \rm{exp}(t) - 1
 ```
 * `ID = 2`: truncated-exponential grid function of degree `p` (linear grid for `p = 1`),
 ```math
@@ -605,7 +605,7 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 
     return _regularize_origin(f′, r′, k)
 
-    end
+end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
     N = grid.N

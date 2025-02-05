@@ -143,7 +143,7 @@ rev = CamiMath.rev
     @test grid_differentiation(f3, grid3, r, fwd) ≈ f′1
     @test grid_differentiation(f4, grid4, r, bwd) ≈ f′1
 #   ========================================================================================= 
-    exponential(r) = exp(-r);    
+#   f = exp(-r)  
 #   -----------------------------------------------------------------------------------------
     grid1 = castGrid(1, 1000, Float64; h = 0.01, rmax=25, msg=false);
     grid2 = castGrid(2, 1000, Float64; h = 0.01, rmax=25, p=6, msg=false);
@@ -220,7 +220,7 @@ rev = CamiMath.rev
     @test grid_differentiation(f3, grid3, r, fwd) ≈ -exp(-r)
     @test grid_differentiation(f4, grid4, r, bwd) ≈ -exp(-r)
 #   ========================================================================================= 
-    # f = exp(-r);    
+#   f = exp(-r)
 #   -----------------------------------------------------------------------------------------
     grid1 = castGrid(1, 250, Float64; h = 0.01, rmax=2.5, msg=false);
     grid2 = castGrid(2, 250, Float64; h = 0.01, rmax=2.5, p=6, msg=false);
