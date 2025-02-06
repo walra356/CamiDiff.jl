@@ -176,10 +176,10 @@ julia> β = [1,1,1,1,1];
 julia> revBk = fdiff_expansion_weights(β, bwd, rev); println("revBk = $(revBk)")
 revBk = [1, -5, 10, -10, 5]
 
-julia> sum(Fk .* f[7:11]) # inner product
+julia> Fk ⋅ f[7:11]
 25
 
-julia> sum(revBk .* f[1:5]) # inner product
+julia> revBk ⋅ f[1:5]
 25
 
 julia> f[6]
@@ -547,8 +547,7 @@ function trapezoidal_integration(f, x1, x2, weights)
     k = Base.length(weights)
     s = (x2-x1)/(n-1)
     a = Base.ones(n); a[1:k] = weights; a[end-k+1:end] = Base.reverse(weights)
-    #o = LinearAlgebra.dot(f, a) * s
-    o = sum(f .* a) * s
+    o = LinearAlgebra.dot(f, a) * s
 
     return o
 

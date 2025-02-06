@@ -32,7 +32,6 @@ bwd = CamiMath.bwd
 reg = CamiMath.reg
 rev = CamiMath.rev
 
-export sdot
 export _gridspecs
 export Grid
 export gridtypename
@@ -47,13 +46,10 @@ export grid_integration
 
 export fdiff_weight
 export fdiff_expansion_weights
-#export fdiff_expansion
 
 export fdiff_interpolation_expansion_polynom
-#export fdiff_interpolation_expansion_weights
-#export fdiff_interpolation
-
 export fdiff_differentiation_expansion_polynom
+
 export create_lagrange_differentiation_matrix
 export fdiff_adams_moulton_expansion_coeff
 export fdiff_adams_moulton_expansion_polynom
