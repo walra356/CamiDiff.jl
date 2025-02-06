@@ -8,7 +8,7 @@ CurrentModule = CamiDiff
 
 ---
 
-## Install
+### Install
 
 The package is installed using the Julia package manager
 
@@ -18,7 +18,7 @@ julia> using Pkg; Pkg.add("CamiDiff")
 julia> using CamiDiff
 ```
 
-## Introduction
+### Introduction
 
 `CamiDiff` has been developed to analyze mathematical functions, provided by the user 
 *in tabulated form*. The package is based on finite-difference analysis methods in one dimension. 
@@ -34,7 +34,7 @@ A set of four predefined [`gridfunction`](@ref)`s` is included in the package: '
 When applicable, we shall underline this restriction to the non-negative domain by using the variable ``r`` 
 rather than ``x``, writing ``f(r)`` rather than ``f(x)``, with the implicit condition ``r ≥ 0``.
 
-## Discretization
+### Discretization
 
 Mathematically, the discretization is based on the map ``n ↦ x,`` which defines the discrete function
 
@@ -66,7 +66,7 @@ than those on a fine grid, but the algorithm is identical, because the relevant 
 depend *implicitly* on ``h``. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
 convention implies ``f[1] = f(0)``.  
 
-## Grid
+### Grid
 
 The [`Grid`](@ref) object is the backbone for numerical procedures on the real domain ``[0, ∞)``. Its principal fields 
 are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N` elements representing the grid function 
