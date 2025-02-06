@@ -384,8 +384,7 @@ function gridPos(rval::T, grid::Grid{T}) where T<:Real
             n += Δn 
         elseif r[m-Δn] ≥ rval
             m -= Δn
-        else 
-            error("Error: search for intersection point undecided")
+        else  error("Error: search for intersection point undecided")
         end
         Δn = (m-n)÷2
     end
@@ -544,9 +543,9 @@ julia> f′ = [cos(grid.r[i]) for i=1:grid.N]
 julia> grid_differentiation(f, grid) ≈ f′
 true
 ```
-    grid_differentiation(f::Vector{T}, grid::Grid{T}, r::T, notation=fwd; k=5) where T<:Real
+    grid_differentiation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at position ``r``
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at position `rv`
 * `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
@@ -562,8 +561,8 @@ true
 ```
     grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
 
-``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at grid position ``n`` 
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points
+``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` at grid position `n`
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `fwd` using fwd-difference notation  
 * `bwd` using bwd-difference notation
 
@@ -582,7 +581,7 @@ true
     grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
 
 ``k^{th}``-order lagrangian *derivative* of the function ``f(r)`` over the grid range `n1 ≤ n ≤ n2`
-* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of ``N`` points
+* `f[1:N]` : the function `f(r)` tabulated in forward order on a [`Grid`](@ref) of `N` points
 * `n1=itr.start`, `n2=itr.stop`.  
 """
 function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
@@ -797,6 +796,7 @@ function grid_integration(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int) where T
     w = Base.ones(T,n)
     w[1:epn] = epw[epi]
     w[end-epn+1:end] = Base.reverse(epw[epi])
+
 
     return LinearAlgebra.dot(f .* r′, w)
 

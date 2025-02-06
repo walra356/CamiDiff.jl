@@ -32,7 +32,7 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
-    println("CamiDiff.jl  | 153 runtests | runtime 11.2s (estimated) | start")
+    println("CamiDiff.jl  | 161 runtests | runtime 11.2s (estimated) | start")
 
     @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, Ntot = 1000, h = 0.01, r0 = 2.0"
     @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, Ntot = 1000, p = 5, h = 0.01, r0 = 2.0"
@@ -145,27 +145,60 @@ rev = CamiMath.rev
 #   ========================================================================================= 
 #   f = exp(-r)  
 #   -----------------------------------------------------------------------------------------
-        grid1 = castGrid(1, 9, Float64; h = 0.01, rmax=25, msg=false);
-        grid2 = castGrid(2, 9, Float64; h = 0.01, rmax=25, p=6, msg=false);
-        grid3 = castGrid(3, 9, Float64; h = 0.01, rmax=25, msg=false);
-        grid4 = castGrid(4, 9, Float64; h = 0.01, rmax=25, polynom=[0,0,1], msg=false);
-        r1 = grid1.r;
-        r2 = grid2.r;
-        r3 = grid3.r;
-        r4 = grid4.r;
-        f1 = [exp(-r1[n]) for n=1:grid1.N];
-        f2 = [exp(-r2[n]) for n=1:grid2.N];
-        f3 = [exp(-r3[n]) for n=1:grid3.N];
-        f4 = [exp(-r4[n]) for n=1:grid4.N];
+    rmax = 5
+    N = 9
+    grid1 = castGrid(1, N, Float64; h = 0.01, rmax, msg=false);
+    grid2 = castGrid(2, N, Float64; h = 0.01, rmax, p=6, msg=false);
+    grid3 = castGrid(3, N, Float64; h = 0.01, rmax, msg=false);
+    grid4 = castGrid(4, N, Float64; h = 0.01, rmax, polynom=[0,0,1], msg=false);
+    r1 = grid1.r;
+    r2 = grid2.r;
+    r3 = grid3.r;
+    r4 = grid4.r;
+    f1 = [exp(-r1[n]) for n=1:grid1.N];
+    f2 = [exp(-r2[n]) for n=1:grid2.N];
+    f3 = [exp(-r3[n]) for n=1:grid3.N];
+    f4 = [exp(-r4[n]) for n=1:grid4.N];
+#   -----------------------------------------------------------------------------------------
+    o1 = grid_integration(f1, grid1); # println("o1: ", o1)
+    o2 = grid_integration(f2, grid2); # println("o2: ", o2)
+    o3 = grid_integration(f3, grid3); # println("o3: ", o3)
+    o4 = grid_integration(f4, grid4); # println("o4: ", o4) 
+    intf = 1.0 - exp(-rmax)
+    @test (o1 - intf) < 0.01
+    @test (o2 - intf) < 0.01
+    @test (o3 - intf) < 0.01
+    @test (o4 - intf) < 0.01
+#   ========================================================================================= 
+#   f = exp(-r)  
+#   -----------------------------------------------------------------------------------------
+    rmax = 5
+    N = 25
+    grid1 = castGrid(1, N, Float64; h = 0.01, rmax, msg=false);
+    grid2 = castGrid(2, N, Float64; h = 0.01, rmax, p=6, msg=false);
+    grid3 = castGrid(3, N, Float64; h = 0.01, rmax, msg=false);
+    grid4 = castGrid(4, N, Float64; h = 0.01, rmax, polynom=[0,0,1], msg=false);
+    r1 = grid1.r;
+    r2 = grid2.r;
+    r3 = grid3.r;
+    r4 = grid4.r;
+    f1 = [exp(-r1[n]) for n=1:grid1.N];
+    f2 = [exp(-r2[n]) for n=1:grid2.N];
+    f3 = [exp(-r3[n]) for n=1:grid3.N];
+    f4 = [exp(-r4[n]) for n=1:grid4.N];
     #   -----------------------------------------------------------------------------------------
-        o1 = grid_integration(f1, grid1); println("o1: ", o1)
-        o2 = grid_integration(f2, grid2); println("o2: ", o2)
-        o3 = grid_integration(f3, grid3); println("o3: ", o3)
-        o4 = grid_integration(f4, grid4); println("o4: ", o4) 
-    #    @test o1 ≈ 1.0
-    #    @test o2 ≈ 1.0
-    #    @test o3 ≈ 1.0
-    #    @test o4 ≈ 1.0
+    o1 = grid_integration(f1, grid1, 1:9); # println("o1: ", o1)
+    o2 = grid_integration(f2, grid2, 1:9); # println("o2: ", o2)
+    o3 = grid_integration(f3, grid3, 1:9); # println("o3: ", o3)
+    o4 = grid_integration(f4, grid4, 1:9); # println("o4: ", o4) 
+    intf1 = 1.0 - exp(-r1[9])
+    intf2 = 1.0 - exp(-r2[9])
+    intf3 = 1.0 - exp(-r3[9])
+    intf4 = 1.0 - exp(-r4[9])
+    @test (o1 - intf1) < 0.01
+    @test (o2 - intf2) < 0.01
+    @test (o3 - intf3) < 0.01
+    @test (o4 - intf4) < 0.01
 #   ========================================================================================= 
 #   f = exp(-r)  
 #   -----------------------------------------------------------------------------------------
