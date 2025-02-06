@@ -1,5 +1,5 @@
 # CamiDiff.jl
-A [Julia](http://julialang.org) package for one-dimensional finite-difference analysis. The package has been developed to study *regular* functions, provided by the user in *tabulated form*. 
+A [Julia](http://julialang.org) package for analyzing *regular* mathematical functions provided by the user in *tabulated* form. The package utilizes finite-difference analysis methods in one dimension on either a linear or nonlinear [`Grid`](@ref).
 
 | **Documentation**                         | **Build status**                         | **Code coverage**                              | **Tag status**                            | **Compatibility status**                  
 |:-----------------------------------------:|:----------------------------------------:|:-----------------------------------------------:|:-----------------------------------------:|:----------------------------------------:
