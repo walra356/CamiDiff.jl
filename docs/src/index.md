@@ -73,7 +73,7 @@ are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N
 and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function 
 ``r[n]``` = grid.r` represents the transformation by the [`gridfunction`](@ref). 
 
-Once the [`Grid`](@ref) is specified, three [`Grid`](@ref) operations are at our disposal - see [Manual](@ref)
+Once the [`Grid`](@ref) is specified, three [`Grid`](@ref) operations are at our disposal - see [Documentation](@ref)
 
 [`grid_interpolation(f, rval, grid)`](@ref)
 
