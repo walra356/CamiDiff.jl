@@ -1,5 +1,66 @@
 # Documentation
 
+## Discretization
+
+Mathematically, the discretization is based on the map ``n ↦ x,`` which defines the discrete function
+
+```math
+x[n] = s_0 * g(t[n]).
+```
+
+Here ``g(t)`` is called the [`gridfunction`](@ref) and ``s_0`` the *scaling factor*. The [`gridfunction`](@ref) 
+is defined as a (generally nonlinear) function *running through the origin*: ``g(0) = 0``. Its argument is 
+the *ticks function*
+
+```math
+t[n] ≡ (n−u) * h,
+```
+
+which is a discrete *linear* function, where ``u`` is called the *index base* and ``h`` the *step size*. Writing
+
+```math
+f[n] = f(x[n]),
+```
+
+we recognize in ``f[n]`` a discrete function representing the function ``f(x)`` at position ``x[n]``. This represents 
+the tabulated function to be provided by the user. 
+
+NB. The discrete function ``f[n]`` is defined on the *grid of natural numbers*, a uniform grid with unit step size. 
+This uniformity greatly simplifies the numerical analysis. The stepsize of the *ticks function*, ``h``, determines 
+the *coarseness* of the grid. The results of a finite-difference calculation on a coarse grid will be less accurate 
+than those on a fine grid, but the algorithm is identical, because the relevant finite-difference expansions only 
+depend *implicitly* on ``h``. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
+convention implies ``f[1] = f(0)``.  
+
+## Grid
+
+The [`Grid`](@ref) object is the backbone for numerical procedures on the real domain ``[0, ∞)``. Its principal fields 
+are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N` elements representing the grid function 
+and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function 
+``r[n]``` = grid.r` represents the transformation by the [`gridfunction`](@ref). 
+
+Once the [`Grid`](@ref) is specified, three basic [`Grid`](@ref) operations are at our disposal: for *interpolation*, *integration* and *differentiation of functions tabulated on this grid - see [Applications](@ref)
+
+```@docs
+Grid{T}
+castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
+```
+
+## Grid functions
+
+```@docs
+gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
+```
+
+## Grid navigation
+
+```@docs
+gridtypename(ID::Int)
+gridtypeID(name::String)
+gridPos(rval::T, grid::Grid{T}) where T<:Real
+fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
+```
+
 ## Finite differences
 
 Let ``f(x)`` be a real, regular function of the variable ``x``. 
