@@ -11,7 +11,7 @@ DocumenterInterLinks = "d12716ef-a0f6-4df4-a9f1-a5a34e75c656"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [compat]
-CamiMath = "0.1.13"
+CamiMath = "0.1.14"
 Documenter = "1.8.0"
 DocumenterInterLinks = "1.0.0"
 LinearAlgebra = "1.11.0"

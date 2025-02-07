@@ -19,9 +19,9 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md", 
-        "Documentation" => "pages/documentation.md",
-        "Applications" => "pages/applications.md",
-        "Index" => "pages/index.md"
+        "Documentation" => "man/documentation.md",
+        "Applications" => "man/applications.md",
+        "Index" => "man/index.md"
     ],
 )
 
