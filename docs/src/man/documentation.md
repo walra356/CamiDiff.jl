@@ -32,35 +32,6 @@ than those on a fine grid, but the algorithm is identical, because the relevant 
 depend *implicitly* on ``h``. Since [Julia](http://julialang.org) uses unit-based indexing (``u = 1``), the index 
 convention implies ``f[1] = f(0)``.  
 
-## Grid
-
-The [`Grid`](@ref) object is the backbone for numerical procedures on the real domain ``[0, ∞)``. Its principal fields 
-are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N` elements representing the grid function 
-and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function 
-``r[n]``` = grid.r` represents the transformation by the [`gridfunction`](@ref). 
-
-Once the [`Grid`](@ref) is specified, three basic [`Grid`](@ref) operations are at our disposal: for *interpolation*, *integration* and *differentiation of functions tabulated on this grid - see [Applications](@ref)
-
-```@docs
-Grid{T}
-castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], epn=5, k=5, msg=false)
-```
-
-## Grid functions
-
-```@docs
-gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
-```
-
-## Grid navigation
-
-```@docs
-gridtypename(ID::Int)
-gridtypeID(name::String)
-gridPos(rval::T, grid::Grid{T}) where T<:Real
-fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
-```
-
 ## Finite differences
 
 Let ``f(x)`` be a real, regular function of the variable ``x``. 

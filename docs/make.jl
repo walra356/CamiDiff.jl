@@ -20,7 +20,7 @@ makedocs(;
     pages=[
         "Home" => "index.md", 
         "Documentation" => "man/documentation.md",
-        "Applications" => "man/applications.md",
+        "Grid" => "man/grid.md",
         "Index" => "man/index.md"
     ],
 )
