@@ -1,7 +1,5 @@
 # Grid
 
-## Grid
-
 The [`Grid`](@ref) object is the backbone for numerical procedures on the real domain ``[0, ∞)``. Its principal fields 
 are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N` elements representing the grid function 
 and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function 
