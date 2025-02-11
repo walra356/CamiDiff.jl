@@ -45,7 +45,7 @@ rev = CamiMath.rev
     grid4 = castGrid("polynomial", 1000, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1], msg=false);
 
     grid1 = castGrid(1, 4, Float64; h = 0.1, rmax = 2.0, msg=false);
-    grid2 = castGrid(2, 4, Float64; h = 0.1, rmax = 2.0);
+    grid2 = castGrid(2, 4, Float64; h = 0.1, rmax = 2);
     grid3 = castGrid(3, 4, Float64; h = 0.1, rmax = 2.0);
     grid4 = castGrid("polynomial", 4, Float64; h = 0.1, rmax = 2.0, polynom=[0, 1]);
     @test [grid3.r, grid3.r′, grid3.r′′] ≈ [grid4.r, grid4.r′, grid4.r′′]

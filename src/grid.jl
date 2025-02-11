@@ -83,9 +83,9 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)
         
     end
     # ..............................................................................    
-    function _jooks_gridfunction(n::Int, T::Type; h=1, p=5, deriv=0)
+    function _truncated_exponential(n::Int, T::Type; h=1, p=5, deriv=0)
     # ==============================================================================
-    # jooks_gridfunction(n, h [; p=5 [, deriv=0]]) based on truncated exponential 
+    # _truncated_exponential(n, h [; p=5 [, deriv=0]]) based on truncated exponential 
     # ==============================================================================
         deriv ≥ 0 || return T(0)
         deriv ≤ p || return T(0)
@@ -188,7 +188,7 @@ r′′= [0.020000000000000004, 0.020000000000000004, 0.020000000000000004, 0.02
 function gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 
     return  ID == 1 ? _walterjohnson(n, T; h, deriv) :
-            ID == 2 ? _jooks_gridfunction(n, T; h, deriv, p) :
+            ID == 2 ? _truncated_exponential(n, T; h, deriv, p) :
             ID == 3 ? _linear_gridfunction(n, T; h, deriv) :
             ID == 4 ? _polynomial_gridfunction(n, T; h, polynom, deriv) : throw(DomainError(ID, "unknown gridfunction"))
 
@@ -264,7 +264,7 @@ function castGrid(ID::Int, N::Int, T::Type; h=1, rmax=10, p=5, polynom=[0,1], ep
 # ==============================================================================
 
     name = gridtypename(ID)
-    rmax = convert(T, rationalize(rmax))
+    rmax = convert(T, rmax)
     epw = [convert.(T, trapezoidal_epw(n; rationalize=true)) for n=1:2:epn]
     polynom = convert(Vector{T}, rationalize.(polynom))
     h = rationalize(h)
