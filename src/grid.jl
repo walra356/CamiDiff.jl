@@ -90,13 +90,12 @@ function _walterjohnson(n::Int, T::Type; h=1, deriv=0)
         deriv ≥ 0 || return T(0)
         deriv ≤ p || return T(0)
     
-        t = (n-1) * h
-        nul = typeof(t)(0)
+        tel = T((n-1) * h)
+        nul = T(0)
         
-        f = deriv > 0 ? h^(deriv)*CamiMath.texp(t, nul, p-deriv) : 
-                        CamiMath.texp(t, nul, p) - 1  # note: texp() not exp()
+        f = deriv > 0 ? h^(deriv)*CamiMath.texp(tel, nul, p-deriv) : 
+                        CamiMath.texp(tel, nul, p) - 1  # note: texp() not exp()
     
-        
     return T(f)
         
     end
