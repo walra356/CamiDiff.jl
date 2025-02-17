@@ -34,10 +34,10 @@ rev = CamiMath.rev
 
     println("CamiDiff.jl  | 161 runtests | runtime 11.2s (estimated) | start")  
 
-    @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, Ntot = 1000, h = 0.01, r0 = 2.0"
-    @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, Ntot = 1000, p = 5, h = 0.01, r0 = 2.0"
-    @test _gridspecs(3, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: linear (uniform), Float64, rmax = 199.8, Ntot = 1000, p = 1, h = 0.1, r0 = 2.0"
-    @test _gridspecs(4, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: polynomial of degree 1, Float64, rmax = 199.8, Ntot = 1000, polynom = [0, 1], h = 0.1, r0 = 2.0"
+    @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, N = 1000, h = 0.01, r0 = 2.0"
+    @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, N = 1000, p = 5, h = 0.01, r0 = 2.0"
+    @test _gridspecs(3, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: linear (uniform), Float64, rmax = 199.8, N = 1000, p = 1, h = 0.1, r0 = 2.0"
+    @test _gridspecs(4, 1000, Float64, 0.1, 2.0, 199.8) == "Grid: polynomial of degree 1, Float64, rmax = 199.8, N = 1000, polynom = [0, 1], h = 0.1, r0 = 2.0"
     
     grid1 = castGrid(1, 1000, Float64; h = 0.01, rmax = 2.0, msg=false);
     grid2 = castGrid(2, 1000, Float64; h = 0.01, rmax = 2.0, p=5, msg=false);
@@ -416,7 +416,7 @@ rev = CamiMath.rev
     @test o3 ≈ f′
     @test o4 ≈ f′
 #   ========================================================================================= 
-    T = Float64
+    T = BigFloat
     N=1000
     k = 5
     a = 1.001
@@ -444,10 +444,10 @@ rev = CamiMath.rev
     o2 = grid_integration(f2, grid2);
     o3 = grid_integration(f3, grid3);
     o4 = grid_integration(f4, grid4);
-    @test o1 ≈ int_f1; # println("o1 ", o1)
-    @test o2 ≈ int_f2; # println("o2 ", o2)
-    @test o3 ≈ int_f3; # println("o3 ", o3)
-    @test o4 ≈ int_f4; # println("o4 ", o4)
+    @test Float64(o1) ≈ Float64(int_f1); # println("o1 ", o1)
+    @test Float64(o2) ≈ Float64(int_f2); # println("o2 ", o2)
+    @test Float64(o3) ≈ Float64(int_f3); # println("o3 ", o3)
+    @test Float64(o4) ≈ Float64(int_f4); # println("o4 ", o4)
 #   -----------------------------------------------------------------------------------------        
     f′1 = [line(r1[n]) for n ∈ eachindex(r1)];
     f′2 = [line(r2[n]) for n ∈ eachindex(r2)]; 
@@ -457,10 +457,10 @@ rev = CamiMath.rev
     o2 = grid_differentiation(f2, grid2; k); # println("o2 ", o2[N÷2])
     o3 = grid_differentiation(f3, grid3; k); # println("o3 ", o3[N÷2])
     o4 = grid_differentiation(f4, grid4; k); # println("o4 ", o4[N÷2])
-    @test o1 ≈ f′1
-    @test o2 ≈ f′2
-    @test o3 ≈ f′3
-    @test o4 ≈ f′4
+    @test Float64.(o1) ≈ Float64.(f′1)
+    @test Float64.(o2) ≈ Float64.(f′2)
+    @test Float64.(o3) ≈ Float64.(f′3)
+    @test Float64.(o4) ≈ Float64.(f′4)
 #   -----------------------------------------------------------------------------------------
     f = [v^3 for v=1:10];
 #   -----------------------------------------------------------------------------------------

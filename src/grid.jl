@@ -206,7 +206,7 @@ function _gridspecs(ID::Int, N::Int, T::Type, h, r0, rmax; p=5, polynom=[0,1], e
     str_r0 = repr(r0, context=:compact => true)
     str_rmax = repr(rmax, context=:compact => true)
 
-    strA = "Grid: $(name), $(T), rmax = "  * str_rmax * ", Ntot = $N, "
+    strA = "Grid: $(name), $(T), rmax = "  * str_rmax * ", N = $N, "
     
     return ID == 1 ? strA * "h = " * str_h * ", r0 = " * str_r0 :
            ID == 2 ? strA * "p = $p, h = " * str_h * ", r0 = " * str_r0 :
@@ -230,19 +230,19 @@ Method to create a [`Grid`](@ref) object that covers the radial range [0, rmax] 
 
 ```
 julia> grid = castGrid(1, 1000, Float64; h = 0.005, rmax = 10, msg=true);
-Grid: exponential, Float64, rmax = 10.0, Ntot = 1000, h = 0.005, r0 = 0.0681789
+Grid: exponential, Float64, rmax = 10.0, N = 1000, h = 0.005, r0 = 0.0681789
 
 julia> grid = castGrid("exponential", 1000, Float64; h = 0.005, rmax = 10, msg=true);
-Grid: exponential, Float64, rmax = 10.0, Ntot = 1000, h = 0.005, r0 = 0.0681789
+Grid: exponential, Float64, rmax = 10.0, N = 1000, h = 0.005, r0 = 0.0681789
 
 julia> grid = castGrid(2, 1000, Float64; h = 0.005, rmax = 10, p=5, msg=true);
-Grid: truncated-exponential, Float64, rmax = 10.0, Ntot = 1000, p = 5, h = 0.005, r0 = 0.111
+Grid: truncated-exponential, Float64, rmax = 10.0, N = 1000, p = 5, h = 0.005, r0 = 0.111
 
 julia> grid = castGrid(3, 1000, Float64; h = 0.1, rmax = 10, msg=true);
-Grid: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1001
+Grid: linear (uniform), Float64, rmax = 10.0, N = 1000, p = 1, h = 0.1, r0 = 0.1001
 
 julia> grid = castGrid(4, 1000, Float64; h = 0.1, rmax = 10, polynom=[0,0,1], msg=true);
-Grid: polynomial of degree 2, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001002
+Grid: polynomial of degree 2, Float64, rmax = 10.0, N = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001002
 
 julia> r = grid.r[1:4]; println("r = ", r)
 r = [0.0, 1.002003004005006e-5, 4.008012016020024e-5, 9.018027036045053e-5]
@@ -710,16 +710,16 @@ For ``k=1`` the rule reduces to the ordinary trapezoidal rule (weights = [1/2]).
 julia> ftest(r) = sqrt(2.0/π) * exp(-r^2/2.0);
 
 julia> grid1 = castGrid(1, 1000, Float64; h = 0.005, r0 = 0.1, msg=true);
-Grid created: exponential, Float64, rmax = 14.7413, Ntot = 1000, h = 0.005, r0 = 0.1
+Grid created: exponential, Float64, rmax = 14.7413, N = 1000, h = 0.005, r0 = 0.1
 
 julia> grid2 = castGrid(2, 1000, Float64; h = 0.005, r0 = 0.1, p=5, msg=true);
-Grid created: truncated-exponential, Float64, rmax = 9.04167, Ntot = 1000, p = 5, h = 0.005, r0 = 0.1
+Grid created: truncated-exponential, Float64, rmax = 9.04167, N = 1000, p = 5, h = 0.005, r0 = 0.1
 
 julia> grid3 = castGrid(3, 1000, Float64; h = 0.1, r0 = 0.1, msg=true);
-Grid created: linear (uniform), Float64, rmax = 10.0, Ntot = 1000, p = 1, h = 0.1, r0 = 0.1
+Grid created: linear (uniform), Float64, rmax = 10.0, N = 1000, p = 1, h = 0.1, r0 = 0.1
 
 julia> grid4 = castGrid(4, 1000, Float64; h = 0.1, r0 = 0.001, polynom=[0,0,1], msg=true);
-Grid created: polynomial, Float64, rmax = 10.0, Ntot = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001
+Grid created: polynomial, Float64, rmax = 10.0, N = 1000, polynom = [0.0, 0.0, 1.0], h = 0.1, r0 = 0.001
 
 julia> r1 = grid1.r;
 julia> r2 = grid2.r;
