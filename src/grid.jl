@@ -408,8 +408,8 @@ julia> grid = castGrid("exponential", 4, Float64; h = 0.1, rmax = 2.0);
 julia> println(grid.r)
 [0.0, 0.6012192107114549, 1.265669197778149, 2.0]
 ```
-Te point r = 1.0 is located at approximate n n = 2, 
-with fractional position Δn = 0.6120806373655796.
+The point ``r = 1.0`` is located just above ``n = 2``, 
+with fractional position ``Δn = 0.6120806373655796``.
 ```
 julia> r = 1.0;
 
