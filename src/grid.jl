@@ -358,9 +358,9 @@ julia> grid = castGrid("exponential", 4, Float64; h = 0.1, rmax = 2.0);
 julia> println(grid.r)
 [0.0, 0.6012192107114549, 1.265669197778149, 2.0]
 ```
-The approximate grid position of the point ``r = 1.0`` is ``2`` (``n = 2``); 
-``r = 1.0`` is larger than ``0.6012192107114549`` (``n = 1``) but smaller than 
-``1.265669197778149`` (``n = 1``).
+The approximate grid position of the point ``r = 1.0`` is ``2`` (``n = 2``); i.e.,
+``r = 1.0`` is larger than ``0.6012192107114549`` (``n = 2``) but smaller than 
+``1.265669197778149`` (``n = 3``).
 ```
 julia> r = 1.0;
 
