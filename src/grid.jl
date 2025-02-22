@@ -455,44 +455,6 @@ function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
     
 end
 
-function getΔNcut(f0::T, f::Vector{T}, Ncut::Int, sense=fwd; ϵ = 1e-8, k = 7) where T<:Real
-
-    if CamiMath.isforward(sense)
-        imin, imax = T(0), T(1)
-        polynom = CamiMath.lagrange_polynom(f, Ncut, Ncut+k, fwd)
-        f1 = CamiMath.polynomial(polynom, imax)
-        f2 = CamiMath.polynomial(polynom, imin) 
-        f1 ≤ f0 ≤ f2 || error("Error: intersection condition 'f[Ncut] ≤ f0 ≤ f[Ncut+1]' violated")
-        o = (imax+imin)/two   # forward offset w.r.t. Ncut
-        while imax-imin > T(ϵ)
-            if CamiMath.polynomial(polynom, o) ≤ f0
-                imax = o
-            else
-                imin = o
-            end
-            o = (imax+imin)/two
-        end
-    else    
-        imin, imax = T(-1), T(0)
-        polynom = CamiMath.lagrange_polynom(f, Ncut-k, Ncut, bwd)
-        f1 = CamiMath.polynomial(polynom, imin)
-        f2 = CamiMath.polynomial(polynom, imax)  
-        f1 ≤ f0 ≤ f2 || error("Error: intersection condition 'f[Ncut-1] ≤ f0 ≤ f[Ncut]' violated")
-        o = (imax+imin)/two  # backward offset w.r.t. Ncut
-        while imax-imin > T(ϵ)
-            if CamiMath.polynomial(polynom, o) ≥ f0
-                imax = o
-            else
-                imin = o
-            end
-            o = (imax+imin)/two
-        end
-    end
-
-    return o
-    
-end
-
 # ------------------------------------------------------------------------------
 #                       grid_interpolation(f, grid, rv; k=5)
 # ------------------------------------------------------------------------------
