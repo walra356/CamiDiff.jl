@@ -27,7 +27,7 @@ gridPos(rval::T, grid::Grid{T}) where T<:Real
 fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 ```
 
-# Grid applications
+## Grid applications
 
 Three basic operations are available for functions defined on a [`Grid`](@ref).
 
