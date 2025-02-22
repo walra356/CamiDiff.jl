@@ -7,7 +7,7 @@ are `grid.r`, `grid.r′` and `grid.r′′`. These are discrete functions of `N
 and its first two derivatives. The function ``f[n]`` is tabulated on this [`Grid`](@ref) and the function 
 ``r[n]``` = grid.r` represents the transformation by the [`gridfunction`](@ref). 
 
-Once the [`Grid`](@ref) is specified, three basic [`Grid`](@ref) operations are at our disposal: for *interpolation*, *integration* and *differentiation of functions tabulated on this grid - see [Applications](@ref)
+Once the [`Grid`](@ref) is specified, three basic [`Grid`](@ref) operations are at our disposal: for *interpolation*, *integration* and *differentiation of functions tabulated on this grid - see [Grid applications](@ref)
 
 ```@docs
 Grid{T}
