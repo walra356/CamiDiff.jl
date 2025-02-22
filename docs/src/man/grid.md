@@ -23,14 +23,11 @@ gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 ## Grid navigation
 
 ```@docs
-regularize!(f::Vector{T}; k=3) where T<:Real
-gridtypename(ID::Int)
-gridtypeID(name::String)
 gridPos(rval::T, grid::Grid{T}) where T<:Real
 fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
 ```
 
-# Applications
+# Grid applications
 
 Three basic operations are available for functions defined on a [`Grid`](@ref).
 
@@ -41,6 +38,9 @@ Three basic operations are available for functions defined on a [`Grid`](@ref).
 * *differentiation* of the tabulated function `f` on all points of the [`Grid`](@ref), on part of the [`Grid`](@ref), at a given point on the [`Grid`](@ref) or at a position between two subsequent points on the [`Grid`](@ref) - see [`grid_differentiation(f, grid)`](@ref)
 
 ```@docs
+regularize!(f::Vector{T}; k=3) where T<:Real
+gridtypename(ID::Int)
+gridtypeID(name::String)
 grid_interpolation(f::Vector{T}, grid::Grid{T}, rv::T, notation=fwd; k=5) where T<:Real
 grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
 grid_integration(f::Vector{T}, grid::Grid{T}) where T<:Real 
