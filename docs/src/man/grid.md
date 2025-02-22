@@ -23,6 +23,7 @@ gridfunction(ID::Int, n::Int, T::Type; h=1, p=5, polynom=[0,1], deriv=0)
 ## Grid navigation
 
 ```@docs
+regularize!(f::Vector{T}; k=3) where T<:Real
 gridtypename(ID::Int)
 gridtypeID(name::String)
 gridPos(rval::T, grid::Grid{T}) where T<:Real

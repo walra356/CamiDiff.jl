@@ -43,6 +43,7 @@ export fracPos
 export grid_interpolation
 export grid_differentiation
 export grid_integration
+export regularize!
 
 export fdiff_weight
 export fdiff_expansion_weights

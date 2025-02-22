@@ -424,10 +424,8 @@ julia> t = (n+Δn-1)*grid.h;
 julia> grid.r0 * (exp(t)-1) ≈ r
 ```
 """
-function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:Real
+function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = 1e-8, k = 7) where T<:Real
     
-    nul = T(0)
-    one = T(1)
     two = T(2)
 
     ID = grid.ID
@@ -437,15 +435,14 @@ function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:R
     polynom = grid.polynom 
 
     polynom = [r0*gridfunction(ID, n, T; h, p, polynom, deriv=d)/T(factorial(d)) for d=0:k]
-
-    imin = nul   
-    imax = one   
+    
+    imin, imax = T(0), T(1)
     r1 = CamiMath.polynomial(polynom, imin)
     r2 = CamiMath.polynomial(polynom, imax) 
     r1 ≤ rval ≤ r2 || throw(DomainError(rval, "rval = $(rval) outside range $(r1) ≤ rval ≤ $(r2)"))
     
     Δn = (imax+imin)/two
-    while imax-imin > ϵ
+    while imax-imin > T(ϵ)
         if CamiMath.polynomial(polynom, Δn) ≤ rval
             imin = Δn
         else
@@ -455,6 +452,44 @@ function fracPos(n::Int, rval::T, grid::Grid{T}; ϵ = T(1e-8), k = 7) where T<:R
     end
 
     return Δn
+    
+end
+
+function getΔNcut(f0::T, f::Vector{T}, Ncut::Int, sense=fwd; ϵ = 1e-8, k = 7) where T<:Real
+
+    if CamiMath.isforward(sense)
+        imin, imax = T(0), T(1)
+        polynom = CamiMath.lagrange_polynom(f, Ncut, Ncut+k, fwd)
+        f1 = CamiMath.polynomial(polynom, imax)
+        f2 = CamiMath.polynomial(polynom, imin) 
+        f1 ≤ f0 ≤ f2 || error("Error: intersection condition 'f[Ncut] ≤ f0 ≤ f[Ncut+1]' violated")
+        o = (imax+imin)/two   # forward offset w.r.t. Ncut
+        while imax-imin > T(ϵ)
+            if CamiMath.polynomial(polynom, o) ≤ f0
+                imax = o
+            else
+                imin = o
+            end
+            o = (imax+imin)/two
+        end
+    else    
+        imin, imax = T(-1), T(0)
+        polynom = CamiMath.lagrange_polynom(f, Ncut-k, Ncut, bwd)
+        f1 = CamiMath.polynomial(polynom, imin)
+        f2 = CamiMath.polynomial(polynom, imax)  
+        f1 ≤ f0 ≤ f2 || error("Error: intersection condition 'f[Ncut-1] ≤ f0 ≤ f[Ncut]' violated")
+        o = (imax+imin)/two  # backward offset w.r.t. Ncut
+        while imax-imin > T(ϵ)
+            if CamiMath.polynomial(polynom, o) ≥ f0
+                imax = o
+            else
+                imin = o
+            end
+            o = (imax+imin)/two
+        end
+    end
+
+    return o
     
 end
 
@@ -514,19 +549,6 @@ end
 #                       grid_differentiation(f, grid; k=5)
 # ------------------------------------------------------------------------------
 
-function _regularize_origin(f′::Vector{T}, r′::Vector{T}, k::Int) where T<:Real
-
-    o = f′ ./ r′
-
-    if isinf(o[1])
-        α = fdiff_interpolation_expansion_polynom(1, k-1, fwd) 
-        Fk = convert(Vector{T}, fdiff_expansion_weights(α, fwd, reg))
-        o[1] = LinearAlgebra.dot(Fk, o[2:k+1]) 
-    end
-    
-    return o
-
-end
 @doc raw"""
     grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:real
 
@@ -602,7 +624,11 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}; k=5) where T<:Real
     g′= [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=N-k+1:N]
     f′= append!(f′, g′)
 
-    return _regularize_origin(f′, r′, k)
+    f′= f′./r′
+
+    f′= regularize!(f′; k)
+    
+    return f′ 
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, n::Int, notation=fwd; k=5) where T<:Real
@@ -678,9 +704,13 @@ function grid_differentiation(f::Vector{T}, grid::Grid{T}, n1::Int, n2::Int; k=5
         β = fdiff_differentiation_expansion_polynom(0, k, bwd)
         Bkrev = convert(Vector{T}, fdiff_expansion_weights(β, bwd, rev))
         f′ = [LinearAlgebra.dot(Bkrev, f[n-k:n]) for n=n1:n2]
-    end 
+    end
+
+    f′= f′./r′
+
+    f′= regularize!(f′; k) 
     
-    return _regularize_origin(f′, r′, k)
+    return f′
 
 end
 function grid_differentiation(f::Vector{T}, grid::Grid{T}, itr::UnitRange; k=5) where T<:Real
@@ -804,5 +834,30 @@ end
 function grid_integration(f::Vector{T}, grid::Grid{T}, itr::UnitRange) where T<:Real
 
     return grid_integration(f, grid, itr.start, itr.stop)
+
+end
+
+@doc raw"""
+    regularize!(f::Vector{T} [; k=3]) where T<:Real
+
+Regularization of a function with a non-analytic point in the origin.
+#### Example:
+```
+julia> r = [0,1,2,3,4,5];
+
+julia> f = r ./ r; println(f)
+[NaN, 1.0, 1.0, 1.0, 1.0, 1.0]
+
+julia> regularize!(f); ; println(f)
+[1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+```
+"""
+function regularize!(f::Vector{T}; k=3) where T<:Real
+
+    α = CamiDiff.fdiff_interpolation_expansion_polynom(1, k, fwd)
+    Fk = convert(Vector{T}, CamiDiff.fdiff_expansion_weights(α, fwd, reg))
+    f[1] = LinearAlgebra.dot(Fk, f[2:k+2])
+
+    return f
 
 end

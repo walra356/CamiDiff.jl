@@ -32,7 +32,7 @@ rev = CamiMath.rev
 
 @testset "CamiDiff.jl" begin 
 
-    println("CamiDiff.jl  | 161 runtests | runtime 11.2s (estimated) | start")  
+    println("CamiDiff.jl  | 162 runtests | runtime 20s (estimated) | start")  
 
     @test _gridspecs(1, 1000, Float64, 0.01, 2.0, 43612.6) == "Grid: exponential, Float64, rmax = 43612.6, N = 1000, h = 0.01, r0 = 2.0"
     @test _gridspecs(2, 1000, Float64, 0.01, 2.0, 2940.47) == "Grid: truncated-exponential, Float64, rmax = 2940.47, N = 1000, p = 5, h = 0.01, r0 = 2.0"
@@ -557,5 +557,6 @@ rev = CamiMath.rev
     @test fdiff_adams_bashford_expansion_coeff(20; msg=false) == 8136836498467582599787//33720021833328230400000
     @test create_adams_bashford_weights(5; rationalize=true, devisor=false) == Rational{Int64}[-95//288, 959//480, -3649//720, 4991//720, -2641//480, 4277//1440]
     @test create_adams_bashford_weights(5; rationalize=false) == [-0.3298611111111111, 1.9979166666666666, -5.0680555555555555, 6.9319444444444445, -5.502083333333333, 2.970138888888889]
-    
+    @test regularize!([0,1,2,3,4,5]./[0,1,2,3,4,5]) == [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+
 end
