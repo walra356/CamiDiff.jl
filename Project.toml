@@ -11,11 +11,11 @@ DocumenterInterLinks = "d12716ef-a0f6-4df4-a9f1-a5a34e75c656"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [compat]
-CamiMath = "0.1.20"
-Documenter = "1.14.1"
-DocumenterInterLinks = "1.1.0"
-LinearAlgebra = "1.12.0"
-julia = "1"
+CamiMath = "0.1.23"
+Documenter = "1.14"
+DocumenterInterLinks = "1.1"
+LinearAlgebra = "1.10"
+julia = "1.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
