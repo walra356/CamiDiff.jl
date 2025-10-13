@@ -5,8 +5,10 @@ version = "0.0.26"
 
 [deps]
 CamiMath = "d302b3f7-c8ae-418d-9fc2-2c0a42bddda0"
+# Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterInterLinks = "d12716ef-a0f6-4df4-a9f1-a5a34e75c656"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [compat]
 CamiMath = "0.1.23"
